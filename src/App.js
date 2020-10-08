@@ -74,8 +74,7 @@ const App = () => {
   // };
 
   useEffect(() => {
-    // listPhotos();
-    toAuthorize();
+    listPhotos();
   }, []);
 
   return (

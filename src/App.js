@@ -23,6 +23,8 @@ const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерир�
   "write_likes"
 ]);
 
+window.location.assign(authenticationUrl);// Отправляем пользователя по этому адресу
+
 const App = () => {
   const [images, setImages] = useState([]);//стейт списка фоток
   const [openedImage, setOpenedImage] = useState({});
@@ -58,12 +60,25 @@ const App = () => {
 
   const likePhoto = (id) => {
     console.log(`${id} liking is in process...`)
-    unsplash.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
-      .then(toJson)
-      .then(json => {//json это ответ в виде массива обьектов
+        unsplash.auth.userAuthentication('aiFVxQDGD3owdh0PVCDQDpLoKFJS13Bs02Ah2QO1y_Q')//отправляем запрос на получение токена
+      .then(res =>
+        res.json())
+      .then(json =>
+      {
+        unsplash.auth.setBearerToken(json.access_token);// Сохраняем полученный токен
+        console.log('access token is set:', json.access_token);
+        //Теперь можно сделать что-то от имени пользователя.
+        unsplash.photos.likePhoto(id);// Например, поставить лайк фотографии
         console.log(`${id} is liked`)
-      })
-  };
+      });
+  }
+
+  //   unsplash.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
+  //     .then(toJson)
+  //     .then(json => {//json это ответ в виде массива обьектов
+  //       console.log(`${id} is liked`)
+  //     })
+  // };
 
   // const unlikePhoto = (likedId) => {
   //   unsplash.photos.unlikePhoto({likedId})// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
@@ -95,14 +110,7 @@ const App = () => {
           />
           <Route exact path={'/auth'}
                  component={() =>
-                   <Auth
-                     add={listPhotos}
-                     images={images}
-                     getImageObj={getImageObj}
-                     pressed={pressed}
-                     setPressed={setPressed}
-                     setLikedId={setLikedId}
-                   />
+                   Auth()
                  }
           />
           <Route exact path={'/cardpage'}

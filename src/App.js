@@ -23,7 +23,7 @@ const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерир�
   "write_likes"
 ]);
 
-window.location.assign(authenticationUrl);// Отправляем пользователя по этому адресу
+// window.location.assign(authenticationUrl);// Отправляем пользователя по этому адресу
 
 const App = () => {
   const [images, setImages] = useState([]);//стейт списка фоток

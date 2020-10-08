@@ -5,6 +5,7 @@ import {Route, Switch} from "react-router-dom";
 import {Header} from "./components/Header/Header";
 import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
+import {Auth} from "./components/Auth/Auth";
 
 // const accessKey=process.env.REACT_APP_ACCESSKEY;//ключ прячем в рут(файл .env) дабы никто не мог его прочитать.
 // const accessKey = 'sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw';
@@ -64,18 +65,16 @@ const App = () => {
       })
   };
 
-  const unlikePhoto = (likedId) => {
-    unsplash.photos.unlikePhoto({likedId})// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
-      .then(toJson)
-      .then(json => {//json это ответ в виде массива обьектов
-        //code
-      });
-  };
+  // const unlikePhoto = (likedId) => {
+  //   unsplash.photos.unlikePhoto({likedId})// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
+  //     .then(toJson)
+  //     .then(json => {//json это ответ в виде массива обьектов
+  //       //code
+  //     });
+  // };
 
   useEffect(() => {
     listPhotos();
-    // likePhoto();
-    // unlikePhoto();
   }, []);
 
   return (
@@ -86,6 +85,7 @@ const App = () => {
                  component={() =>
                    <CardList
                      add={listPhotos}
+                     likePhoto={likePhoto}
                      images={images}
                      getImageObj={getImageObj}
                      pressed={pressed}
@@ -95,15 +95,14 @@ const App = () => {
           />
           <Route exact path={'/auth'}
                  component={() =>
-                   // <CardList
-                   //   add={listPhotos}
-                   //   images={images}
-                   //   getImageObj={getImageObj}
-                   //   pressed={pressed}
-                   //   setPressed={setPressed}
-                   //   setLikedId={setLikedId}
-                   // />
-                   <span>u r on auth page</span>
+                   <Auth
+                     add={listPhotos}
+                     images={images}
+                     getImageObj={getImageObj}
+                     pressed={pressed}
+                     setPressed={setPressed}
+                     setLikedId={setLikedId}
+                   />
                  }
           />
           <Route exact path={'/cardpage'}

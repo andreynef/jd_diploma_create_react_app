@@ -3,7 +3,7 @@ import styles from './CardList.module.css';
 import {Card} from "./Card/Card";
 import loader from '../../../src/assets/images/Gear.gif'
 
-export function CardList({add,images, getImageObj, pressed, setPressed, setLikedId}) {
+export function CardList({add,images, getImageObj, pressed, setPressed, setLikedId, likePhoto}) {
   let allCardsArr;
   if (images.length === 0) {
       allCardsArr=<img src={loader} alt={'loader'} className={styles.loader}/>
@@ -21,10 +21,10 @@ export function CardList({add,images, getImageObj, pressed, setPressed, setLiked
             ava={item.user.profile_image.small}
             description={item.alt_description}
             getImageObj={getImageObj}
-            // className ={styles.card}
             pressed={pressed}
             setPressed={setPressed}
             setLikedId={setLikedId}
+            likePhoto={likePhoto}
           />
       )
     })}

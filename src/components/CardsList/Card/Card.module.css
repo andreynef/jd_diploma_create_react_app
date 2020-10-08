@@ -1,0 +1,21 @@
+.card {
+    background-color: black;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5) ;
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 0 0 20px 0;
+    /*position: relative;!*for exit button*!*/
+    width: 32%;
+}
+@media all and (max-width: 1024px) {
+    .card {
+        width: 49%;
+    }
+}
+@media all and (max-width: 763px) {
+    .card {
+        width: 100%;
+    }
+}
+

@@ -1,0 +1,9 @@
+.mainContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    border: 1px solid grey;
+    background-color: #f1f1f1;
+    /*padding: 20px;*/
+    /*min-height: 500px;*/
+}

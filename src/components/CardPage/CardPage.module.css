@@ -1,0 +1,129 @@
+.cardPage {
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    font-family: Roboto;
+}
+.centralContainer {
+    max-width: 1024px;
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;/*для exit*/
+}
+
+.exitButton {
+    position: absolute;
+    top:20px;
+    right:20px;
+}
+.exitImgBlack{
+    width: 20px;
+ }
+
+.exitImgWhite{
+    width: 20px;
+    display: none;
+ }
+
+.imageContainer {
+    width:80%;
+}
+
+.imageContainer img {
+    width:100%;
+}
+
+.infoContainer {
+    width: 20%;
+    background-color: white;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+.metaContainer {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 20px;
+    border-bottom: 1px solid #f4f4f4;
+}
+.authorContainer {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+.createdAt {
+    color: #999999;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.avatarImg {
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+}
+
+.avatarText {
+    text-decoration: none;
+    color: black;
+    margin-left: 10px;
+}
+
+
+
+.likesContainer {
+    display:flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 20px;
+    border-top: 1px solid #f4f4f4;
+
+}
+.likesValue {
+    color: #999999;
+}
+
+.button {
+    background-color: transparent;
+    align-items: center;
+    margin-left:10px;
+    border:none;
+}
+
+.button:hover {
+    cursor:pointer;
+}
+
+@media all and (max-width: 1024px) {
+    .imageContainer{
+        width: 70%;
+    }
+    .infoContainer {
+        width: 30%;
+    }
+}
+@media all and (max-width: 760px) {
+    .centralContainer {
+        flex-flow: column nowrap;
+    }
+    .imageContainer{
+        width: 100%;
+    }
+    .infoContainer {
+        width: 100%;
+    }
+
+    .exitImgBlack{
+        width: 20px;
+        display:none;
+    }
+
+    .exitImgWhite{
+        width: 20px;
+        display: unset;
+    }
+
+}

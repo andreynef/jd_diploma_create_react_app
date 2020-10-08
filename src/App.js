@@ -108,11 +108,11 @@ const App = () => {
                      setLikedId={setLikedId}
                    />}
           />
-          <Route exact path={'/auth'}
-                 component={() =>
-                   Auth()
-                 }
-          />
+          {/*<Route exact path={'/auth'}*/}
+          {/*       component={() =>*/}
+          {/*         Auth()*/}
+          {/*       }*/}
+          {/*/>*/}
           <Route exact path={'/cardpage'}
                  component={() =>
                    <CardPage

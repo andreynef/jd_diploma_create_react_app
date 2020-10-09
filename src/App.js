@@ -84,7 +84,7 @@ const App = () => {
                  component={() =>
                    <CardList
                      add={listPhotos}
-                     likePhoto={likePhoto}
+                     // likePhoto={likePhoto}
                      images={images}
                      getImageObj={getOneImageObj}
                      pressed={pressed}
@@ -100,7 +100,7 @@ const App = () => {
                      getImageObj={getOneImageObj}
                      pressed={pressed}
                      setPressed={setPressed}
-                     setLikedId={setLikedId}
+                     // setLikedId={setLikedId}
                      // likePhoto={likePhoto}
                      setUnsplashState={setUnsplashState}
                      setCode={setCode}
@@ -119,8 +119,8 @@ const App = () => {
                      pressed={pressed}
                      setPressed={setPressed}
                      // likePhoto={likePhoto}
-                     likedId={likedId}
-                     setLikedId={setLikedId}
+                     // likedId={likedId}
+                     // setLikedId={setLikedId}
                    />
                  }
           />

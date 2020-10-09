@@ -49,8 +49,8 @@ export function Auth({setUserId, userId, setUserName, userName, unsplashState, s
     <>
       <Link to={'/'}>
           <h1 style={{margin:'0 auto'}}>Now you are authorized. Click here to get back to home page </h1>
-        <button type={'button'} onClick={getUserProfile}>get token and profile info</button>
       </Link>
+        <button type={'button'} onClick={getUserProfile}>get token and profile info</button>
     </>
   )
 }

@@ -34,10 +34,11 @@ export function Auth({setUserId, userId, setUserName, userName, unsplashState, s
           .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
             console.log('unsplash.currentUser.profile() -> json is:', json)
             console.log('profile_image.small is:', json.profile_image.small)
-            setUserId(json.id);
-            setUserName(json.name);
             const ava = json.profile_image.small;
             console.log('ava:', ava)
+            console.log('ava:', ava)
+            setUserId(json.id);
+            setUserName(json.name);
             setUserAva(ava);
           });
         // window.location.assign('https://jsdiploma.nef-an.ru/');

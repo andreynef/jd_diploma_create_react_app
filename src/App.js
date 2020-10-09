@@ -38,7 +38,7 @@ const App = () => {
   console.log(`userAva is:`, userAva);
 
   const execution = (victim)=>{
-    const freshBlood = images.map(item=>item.id===id ? victim : item);
+    const freshBlood = images.map(item=>item.id===victim.id ? victim : item);
     setImages(freshBlood);
     console.log('new imagesState:', freshBlood);
   }

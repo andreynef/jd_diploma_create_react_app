@@ -7,22 +7,6 @@ import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
 
-// const accessKey=process.env.REACT_APP_ACCESSKEY;//ключ прячем в рут(файл .env) дабы никто не мог его прочитать.
-// const accessKey = 'sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw';
-// const apiRoot = 'http://api.unsplash.com';
-
-// Создаем экземпляр объекта для доступа к API
-const unsplash = new Unsplash({
-  accessKey: "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw",// accesskey из настроек вашего приложения
-  secret: "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA",// Application Secret из настроек вашего приложения
-  callbackUrl: "https://jsdiploma.nef-an.ru/auth",// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-});
-
-const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
-  "public",// и указываем требуемые разрешения (permissions)
-  "write_likes"
-]);
-
 const App = () => {
   const [images, setImages] = useState([]);//стейт списка фоток
   const [openedImage, setOpenedImage] = useState({});
@@ -30,13 +14,21 @@ const App = () => {
   const [likedId, setLikedId] = useState('');
   const [open, setOpen] = useState(false);
   const [pressed, setPressed] = useState(false);
+  const [code, setCode] = useState('');
+  const [unsplash, setUnsplash] = useState(new Unsplash({
+    accessKey: "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw",// accesskey из настроек вашего приложения
+    secret: "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA",// Application Secret из настроек вашего приложения
+    callbackUrl: "https://jsdiploma.nef-an.ru/auth",// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
+  }));
 
   const toAuthorize=()=>{
-    // alert('auth is pressed')
+    const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
+      "public",// и указываем требуемые разрешения (permissions)
+      "write_likes"
+    ]);
     window.location.assign(authenticationUrl);// Отправляем пользователя по этому адресу
     //после подтверждения, всяк сюда нажавший перенаправляется на эту страницу - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
   };
-
 
   const getOneImageObj = (id) => {//повешен на preview
     const filteredImages = images.filter(eachElementOfArr => eachElementOfArr.id === id);
@@ -102,6 +94,8 @@ const App = () => {
                      setPressed={setPressed}
                      setLikedId={setLikedId}
                      // likePhoto={likePhoto}
+                     unsplash={unsplash}
+                     setCode={setCode}
                    />
                  }
           />

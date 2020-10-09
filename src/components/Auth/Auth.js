@@ -75,13 +75,10 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
   return (
     <>
       <CardList
-        add={add}
         images={images}
         getImageObj={getImageObj}
-        pressed={pressed}
-        setPressed={setPressed}
-        setLikedId={setLikedId}
         likePhoto={likePhoto}
+        userName={userName}
       />
 {/*<h1>now you are authorized</h1>*/}
 {/*      <Link to={'/'}>*/}

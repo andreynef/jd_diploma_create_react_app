@@ -8,6 +8,20 @@ import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
 
 const App = () => {
+  const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
+  const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
+  const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+  const [accessToken, setAccessToken] = useState('');
+  // const [unsplashState, setUnsplashState] = useState();
+
+  let unsplash = new Unsplash({
+    accessKey: accessKey,// accesskey из настроек вашего приложения
+    secret: secret,// Application Secret из настроек вашего приложения
+    callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
+    bearerToken: accessToken,
+  });
+  console.log(`initial unsplash is:`, unsplash);
+
   const [images, setImages] = useState([]);//стейт списка фоток
   const [openedImage, setOpenedImage] = useState({});
   const [page, setPage] = useState(1005);
@@ -15,54 +29,61 @@ const App = () => {
   const [open, setOpen] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [code, setCode] = useState('');
-  const [unsplashState, setUnsplashState] = useState(new Unsplash({
-    accessKey: "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw",// accesskey из настроек вашего приложения
-    secret: "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA",// Application Secret из настроек вашего приложения
-    callbackUrl: "https://jsdiploma.nef-an.ru/auth",// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-  }));
   const [userId, setUserId] = useState('айди');
   const [userName, setUserName] = useState('наме');
-  const [accessToken, setAccessToken] = useState('');
+  const [json, setJson] = useState('');
 
   const toAuthorize=()=>{
-    const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
+    const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
       "public",// и указываем требуемые разрешения (permissions)
       "write_likes"
     ]);
     window.location.assign(authenticationUrl);// Отправляем пользователя по этому адресу
-    //после подтверждения, всяк сюда нажавший перенаправляется на эту страницу - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
+    //после подтверждения, перенаправляется на эту страницу - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
   };
 
   const getOneImageObj = (id) => {//повешен на preview
-    const filteredImages = images.filter(eachElementOfArr => eachElementOfArr.id === id);
-    setOpenedImage(filteredImages[0]);
-    setOpen(true);
+    const filteredImages = images.filter(eachElementOfArr => eachElementOfArr.id === id);//оставить в стейте/списке только тот итем кот имеет этот id
+    setOpenedImage(filteredImages[0]);//установить стейт открытой картинки
+    setOpen(true);//установить стейт булинь статуса открытости картинки
   }
 
   const listPhotos = () => {//запрос данных с сервера Unsplash
-    unsplashState.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+    unsplash.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
         setImages([...images, ...json]);//установка нов стейта списка фоток
-        setPage(page + 1);
-        console.log('listPhotos, json is:', json)
-        console.log('images State is:', images)
+        setPage(page + 1);//установка нов стейта страницы
+        // console.log('listPhotos, json is:', json)
+        // console.log('images State is:', images)
+      });
+  };
+
+  const addPhotos = () => {
+    unsplash.photos.listPhotos(page+1, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+      .then(toJson)
+      .then(json => {//json это ответ в виде массива обьектов
+        setImages([...images, ...json]);//установка нов стейта списка фоток
+        setPage(page + 1);//установка нов стейта страницы
+        // console.log('listPhotos, json is:', json)
+        // console.log('images State is:', images)
       });
   };
 
   const likePhoto = (id) => {
-    const unsplash = new Unsplash({
-      accessKey: "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw",// accesskey из настроек вашего приложения
-      secret: "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA",// Application Secret из настроек вашего приложения
-      callbackUrl: "https://jsdiploma.nef-an.ru/auth",// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
+    unsplash = new Unsplash({//перезапись запроса но уже с доп параметром
+      accessKey: accessKey,// accesskey из настроек вашего приложения
+      secret: secret,// Application Secret из настроек вашего приложения
+      callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
       bearerToken: accessToken,
     });
-
-    console.log(`unsplash is:`, unsplash)
+    console.log(`new unsplash with bearerToken is:`, unsplash);
     unsplash.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
-      .then(json => {//json это ответ в виде массива обьектов
-        console.log(`${id} is liked`)
+      .then(json => {//json это ответ в виде одного обьекта
+        setImages(images.map(item=>item.id===id ? json : item));//установка нов стейта списка фоток
+        console.log('json is:', json);
+        console.log(`${id} is liked`);
       })
   };
 
@@ -83,7 +104,7 @@ const App = () => {
           <Route exact path={'/'}
                  component={() =>
                    <CardList
-                     add={listPhotos}
+                     add={addPhotos}
                      likePhoto={likePhoto}
                      images={images}
                      getImageObj={getOneImageObj}
@@ -95,15 +116,8 @@ const App = () => {
           <Route exact path={'/auth'}
                  component={() =>
                    <Auth
-                     add={listPhotos}
                      images={images}
-                     getImageObj={getOneImageObj}
-                     pressed={pressed}
-                     setPressed={setPressed}
-                     // setLikedId={setLikedId}
-                     likePhoto={likePhoto}
                      setAccessToken={setAccessToken}
-                     setCode={setCode}
                      userId={userId}
                      userName={userName}
                      setUserId={setUserId}

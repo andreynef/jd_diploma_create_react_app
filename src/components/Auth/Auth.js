@@ -28,6 +28,14 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
       });
     }
 
+    const getUserProfile =()=> {
+      unsplash.currentUser.profile()
+        .then(toJson)
+        .then(json => {
+          console.log('unsplash.currentUser.profile() -> json is:', json)
+        });
+    }
+
   return (
     <>
       {/*<CardList*/}
@@ -43,6 +51,7 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
       <Link to={'/'}>
         click me to go back to home page
       </Link>
+      <button type={'button'} onclose={()=>getUserProfile}>get user profile</button>
     </>
   )
 }

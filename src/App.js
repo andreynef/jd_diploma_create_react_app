@@ -6,31 +6,40 @@ import {Header} from "./components/Header/Header";
 import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
+// const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU
+// const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k
+
+
+// liked_by_user
+// ET8ClzU0niUQILM3fI_V5_TkJ3eJHaUhr6iiN9go35g
 
 const App = () => {
-  const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
-  const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
+  const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
+  const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
   const callbackUrl="https://jsdiploma.nef-an.ru/auth";
   const [accessToken, setAccessToken] = useState('');
-  const unsplash= new Unsplash({
+  const [unsplashState, setUnsplashState]= useState(
+    new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-    bearerToken: accessToken,
-  });
+    // bearerToken: accessToken,
+  })
+  );
 
-  console.log(`initial unsplash is:`, unsplash);
+  console.log(`initial unsplash is:`, unsplashState);
 
   const [images, setImages] = useState([]);//стейт списка фоток
   const [openedImage, setOpenedImage] = useState({});
-  const [page, setPage] = useState(1005);
+  const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [userId, setUserId] = useState('айди');
   const [userName, setUserName] = useState('наме');
+  const [userAva, setUserAva] = useState('');
 
   const toAuthorize=()=>{
-    const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
+    const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
       "public",// и указываем требуемые разрешения (permissions)
       "write_likes"
     ]);
@@ -45,25 +54,25 @@ const App = () => {
   }
 
   const addPhotos = () => {
-    unsplash.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+    unsplashState.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
         setImages([...images, ...json]);//установка нов стейта списка фоток
         setPage(page + 1);//установка нов стейта страницы
         console.log('listPhotos, json is:', json)
-        console.log('images State is:', images)
+        console.log('imagesState is:', images)
       });
   };
 
   const likePhoto = (id) => {
-    const unsplash = new Unsplash({//нов запрос но уже с доп параметром
+    setUnsplashState(new Unsplash({//нов запрос но уже с доп параметром
       accessKey: accessKey,// accesskey из настроек вашего приложения
       secret: secret,// Application Secret из настроек вашего приложения
       callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
       bearerToken: accessToken,
-    });
-    console.log(`new unsplash with bearerToken is:`, unsplash);
-    unsplash.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
+    }))
+    console.log(`new unsplashState with bearerToken is:`, unsplashState);
+    unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде одного обьекта
         setImages(images.map(item=>item.id===id ? json : item));//установка нов стейта списка фоток
@@ -84,6 +93,8 @@ const App = () => {
         userName={userName}
         setUserId={setUserId}
         setUserName={setUserName}
+        userAva={userAva}
+        setUserAva={setUserAva}
       />
         <Switch>{/*рендерится в зависимости от Route path*/}
           <Route exact path={'/'}

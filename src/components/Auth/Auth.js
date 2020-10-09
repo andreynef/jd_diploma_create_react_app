@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import Unsplash, {toJson} from 'unsplash-js';
 import {Link} from "react-router-dom";
 
-export function Auth({setUserId, userId, setUserName, userName, unsplashState, setUnsplashState, setAccessToken}) {
+export function Auth({setUserId, userId, setUserName, userName, unsplashState, setUnsplashState, setAccessToken, setUserAva}) {
 
   const getUserProfile =()=> {
     const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
@@ -29,19 +29,20 @@ export function Auth({setUserId, userId, setUserName, userName, unsplashState, s
             console.log('unsplash.currentUser.profile() -> json is:', json)
             setUserId(json.id);
             setUserName(json.name);
-            // setUserAva(json.name)
+            setUserAva(json.profile_image.small)
           });
         // window.location.assign('https://jsdiploma.nef-an.ru/');
       });
     }
-  useEffect(() => {
-    getUserProfile()//componentDidMount
-  }, []);
+  // useEffect(() => {
+  //   // getUserProfile()//componentDidMount
+  // }, []);
 
   return (
     <>
       <Link to={'/'}>
           <h1 style={{margin:'0 auto'}}>Now you are authorized. Click here to get back to home page </h1>
+        <button type={'button'} onClick={getUserProfile}>get token and profile info</button>
       </Link>
     </>
   )

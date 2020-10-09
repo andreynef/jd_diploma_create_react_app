@@ -68,7 +68,7 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
               console.log('name state is:', userName)
 
             });
-          window.location.assign('https://jsdiploma.nef-an.ru/');
+          // window.location.assign('https://jsdiploma.nef-an.ru/');
         });
     // }
 

@@ -15,7 +15,7 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
         setAccessToken(json.access_token);
         //Теперь можно сделать что-то от имени пользователя. Например, поставить лайк фотографии unsplash.photos.likePhoto("kBJEJqWNtNY");
         console.log(`Теперь можно сделать что-то от имени пользователя`)
-        unsplash.currentUser.profile()
+        unsplashState.currentUser.profile()
           .then(toJson)
           .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
             console.log('unsplash.currentUser.profile() -> json is:', json)

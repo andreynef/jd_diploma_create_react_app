@@ -34,7 +34,14 @@ const App = () => {
   const [userId, setUserId] = useState('айди');
   const [userName, setUserName] = useState('наме');
   const [userAva, setUserAva] = useState(undefined);
+  const [likeJson, setLikeJson] = useState(undefined);
   console.log(`userAva is:`, userAva);
+
+  const execution = (victim)=>{
+    const freshBlood = images.map(item=>item.id===id ? victim : item);
+    setImages(freshBlood);
+    console.log('new imagesState:', freshBlood);
+  }
 
   const toAuthorize=()=>{
     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
@@ -69,7 +76,7 @@ const App = () => {
       .then(toJson)
       .then(json => {//json это ответ в виде одного обьекта
         // setImages(images.map(item=>item.id===id ? json : item));//установка нов стейта списка фоток
-        setImages(images.map(item=>item.id===id ? json : item));//установка нов стейта списка фоток
+        execution(json);
         console.log(`images state is:`, images);
         console.log('json is:', json);
         console.log('liked_by_user', json.photo.liked_by_user)

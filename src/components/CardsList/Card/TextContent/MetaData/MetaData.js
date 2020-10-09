@@ -2,7 +2,7 @@ import React from 'react';
 import styles from "./Metadata.module.css";
 
 export function MetaData({created, profile, name, ava}) {
-  const date = created.slice(0,9);
+  const date = created.slice(0,10);
   // const time = created.slice(11,15);
   // const formattedDate = [date, time].join("/")
 

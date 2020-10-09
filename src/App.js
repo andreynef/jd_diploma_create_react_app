@@ -65,17 +65,12 @@ const App = () => {
   };
 
   const likePhoto = (id) => {
-    setUnsplashState(new Unsplash({//нов запрос но уже с доп параметром
-      accessKey: accessKey,// accesskey из настроек вашего приложения
-      secret: secret,// Application Secret из настроек вашего приложения
-      callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-      bearerToken: accessToken,
-    }))
-    console.log(`new unsplashState with bearerToken is:`, unsplashState);
+    console.log(`unsplashState with bearerToken is:`, unsplashState);
     unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде одного обьекта
-        setImages(images.map(item=>item.id===id ? json : item));//установка нов стейта списка фоток
+        // setImages(images.map(item=>item.id===id ? json : item));//установка нов стейта списка фоток
+        console.log('liked_by_user', json.liked_by_user)
         console.log('json is:', json);
         console.log(`${id} is liked`);
       })

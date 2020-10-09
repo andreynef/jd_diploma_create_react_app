@@ -21,12 +21,6 @@ export function Auth({setUserId, userId, setUserName, userName, unsplashState, s
       .then(json => {
         console.log('setBearerToken is setting. It is:', json.access_token);
         unsplash.auth.setBearerToken(json.access_token);// Сохраняем полученный токен
-        setUnsplashState(new Unsplash({
-          accessKey: accessKey,// accesskey из настроек вашего приложения
-          secret: secret,// Application Secret из настроек вашего приложения
-          callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-          bearerToken: json.access_token
-        }));
         setAccessToken(json.access_token);
         //Теперь можно сделать что-то от имени пользователя. Например, поставить лайк фотографии unsplash.photos.likePhoto("kBJEJqWNtNY");
         unsplash.currentUser.profile()
@@ -47,7 +41,7 @@ export function Auth({setUserId, userId, setUserName, userName, unsplashState, s
   return (
     <>
       <Link to={'/'}>
-          <h1 style={{margin:'0 auto'}}>Now you are authorized. Click here to go back to home page </h1>
+          <h1 style={{margin:'0 auto'}}>Now you are authorized. Click here to get back to home page </h1>
       </Link>
     </>
   )

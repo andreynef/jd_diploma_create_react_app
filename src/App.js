@@ -54,12 +54,12 @@ const App = () => {
       });
   };
 
-  const likePhoto = () => {
-    console.log(`${chosenId} liking is in process...`)
-    unsplashState.photos.likePhoto(chosenId)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
+  const likePhoto = (id) => {
+    console.log(`${id} liking is in process...`)
+    unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
-        console.log(`${chosenId} is liked`)
+        console.log(`${id} is liked`)
       })
   };
 
@@ -89,7 +89,7 @@ const App = () => {
                  component={() =>
                    <CardList
                      add={listPhotos}
-                     // likePhoto={likePhoto}
+                     likePhoto={likePhoto}
                      images={images}
                      getImageObj={getOneImageObj}
                      pressed={pressed}

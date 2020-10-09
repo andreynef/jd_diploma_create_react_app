@@ -13,7 +13,6 @@ const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
 const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
-// liked_by_user
 // ET8ClzU0niUQILM3fI_V5_TkJ3eJHaUhr6iiN9go35g
 
 const App = () => {
@@ -23,7 +22,7 @@ const App = () => {
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-    // bearerToken: accessToken,
+    bearerToken: 'cUAvba2ScZGeLA3nbGxwZfELCM4ejR6gWfyHnycLl_c',
   })
   );
 
@@ -34,7 +33,7 @@ const App = () => {
   const [pressed, setPressed] = useState(false);
   const [userId, setUserId] = useState('айди');
   const [userName, setUserName] = useState('наме');
-  const [userAva, setUserAva] = useState('');
+  const [userAva, setUserAva] = useState(undefined);
   console.log(`userAva is:`, userAva);
 
   const toAuthorize=()=>{
@@ -70,6 +69,7 @@ const App = () => {
       .then(toJson)
       .then(json => {//json это ответ в виде одного обьекта
         // setImages(images.map(item=>item.id===id ? json : item));//установка нов стейта списка фоток
+        setImages(images.map(item=>item.id===id ? json : item));//установка нов стейта списка фоток
         console.log(`images state is:`, images);
         console.log('json is:', json);
         console.log('liked_by_user', json.photo.liked_by_user)

@@ -11,7 +11,7 @@ const App = () => {
   const [images, setImages] = useState([]);//стейт списка фоток
   const [openedImage, setOpenedImage] = useState({});
   const [page, setPage] = useState(1005);
-  const [likedId, setLikedId] = useState('');
+  const [chosenId, setChosenId] = useState('');
   const [open, setOpen] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [code, setCode] = useState('');
@@ -49,12 +49,12 @@ const App = () => {
       });
   };
 
-  const likePhoto = (id) => {
-    console.log(`${id} liking is in process...`)
-    unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
+  const likePhoto = () => {
+    console.log(`${chosenId} liking is in process...`)
+    unsplashState.photos.likePhoto(chosenId)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
-        console.log(`${id} is liked`)
+        console.log(`${chosenId} is liked`)
       })
   };
 
@@ -89,7 +89,7 @@ const App = () => {
                      getImageObj={getOneImageObj}
                      pressed={pressed}
                      setPressed={setPressed}
-                     setLikedId={setLikedId}
+                     setChosenId={setChosenId}
                    />}
           />
           <Route exact path={'/auth'}

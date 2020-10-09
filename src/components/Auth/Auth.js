@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Unsplash, {toJson} from 'unsplash-js';
 import {CardList} from "../CardsList/CardList";
 
 export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, unsplash, setCode, code}) {
   const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
-  setCode(codeFromUrl);
-  console.log(`setting code in state:`, code)
+  console.log(`code from url:`, codeFromUrl);
+  console.log(`bearerToken from unsplashState:`, unsplash.bearerToken);
+  console.log(`accessKey from unsplashState:`, unsplash.accessKey);
+  console.log(`secret from unsplashState:`, unsplash.secret);
+  useEffect(() => {
+    setCode(codeFromUrl);  }, []);
+  console.log(`setting code in state. CodeState is:`, code)
 
   const likePhoto = (id) => {
     unsplash.auth.userAuthentication(code)//отправляем запрос на получение токена
@@ -25,16 +30,19 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
 
   return (
     <>
-      <CardList
-        add={add}
-        images={images}
-        getImageObj={getImageObj}
-        pressed={pressed}
-        setPressed={setPressed}
-        setLikedId={setLikedId}
-        likePhoto={likePhoto}
-      />
-
+      {/*<CardList*/}
+      {/*  add={add}*/}
+      {/*  images={images}*/}
+      {/*  getImageObj={getImageObj}*/}
+      {/*  pressed={pressed}*/}
+      {/*  setPressed={setPressed}*/}
+      {/*  setLikedId={setLikedId}*/}
+      {/*  likePhoto={likePhoto}*/}
+      {/*/>*/}
+<h1>now you are authorized</h1>
+      <Link to={'/'}>
+        click me to go back to home page
+      </Link>
     </>
   )
 }

@@ -3,7 +3,7 @@ import Unsplash, {toJson} from 'unsplash-js';
 import {CardList} from "../CardsList/CardList";
 import {Link} from "react-router-dom";
 
-export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, setCode, code, setUserId, userId, setUserName, userName, setUnsplashState}) {
+export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, setCode, code, setUserId, userId, setUserName, userName, setUnsplashState, setAccessToken}) {
   // console.log(`code from url:`, codeFromUrl);
   // console.log(`bearerToken from unsplashState:`, unsplash.bearerToken);
   // console.log(`accessKey from unsplashState:`, unsplash.accessKey);
@@ -28,7 +28,7 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
   //     });
   //   }
 
-    const getUserProfile =()=> {
+    // const getUserProfile =()=> {
       const unsplash = new Unsplash({
         accessKey: "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw",// accesskey из настроек вашего приложения
         secret: "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA",// Application Secret из настроек вашего приложения
@@ -39,17 +39,17 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
       unsplash.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
         .then(toJson)
         .then(json => {
-          const accessToken = json.access_token;
+          // const accessToken = json.access_token;
           console.log('setBearerToken is setting. It is:', json.access_token);
-          const newUnsplash = new Unsplash ({
-            accessKey: "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw",// accesskey из настроек вашего приложения
-            secret: "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA",// Application Secret из настроек вашего приложения
-            callbackUrl: "https://jsdiploma.nef-an.ru/auth",// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-            bearerToken: accessToken,
-          })
-          setUnsplashState (newUnsplash);
-          // unsplashState.auth.setBearerToken(json.access_token);// Сохраняем полученный токен
-
+          // const newUnsplash = new Unsplash ({
+          //   accessKey: "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw",// accesskey из настроек вашего приложения
+          //   secret: "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA",// Application Secret из настроек вашего приложения
+          //   callbackUrl: "https://jsdiploma.nef-an.ru/auth",// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
+          //   bearerToken: accessToken,
+          // })
+          // setUnsplashState (newUnsplash);
+          unsplash.auth.setBearerToken(json.access_token);// Сохраняем полученный токен
+          setAccessToken(json.access_token);
           //Теперь можно сделать что-то от имени пользователя. Например, поставить лайк фотографии unsplash.photos.likePhoto("kBJEJqWNtNY");
           console.log(`Теперь можно сделать что-то от имени пользователя`)
           // unsplash.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
@@ -58,7 +58,7 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
           //     console.log(`${id} is liked`)
           //   })
 
-          newUnsplash.currentUser.profile()
+          unsplash.currentUser.profile()
             .then(toJson)
             .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
               console.log('unsplash.currentUser.profile() -> json is:', json)
@@ -68,8 +68,9 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
               console.log('name state is:', userName)
 
             });
+          window.location.assign('https://jsdiploma.nef-an.ru/');
         });
-    }
+    // }
 
   return (
     <>

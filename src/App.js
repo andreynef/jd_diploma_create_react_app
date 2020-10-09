@@ -66,6 +66,7 @@ const App = () => {
 
   const likePhoto = (id) => {
     console.log(`unsplashState with bearerToken is:`, unsplashState);
+    console.log(`images state is:`, images);
     unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде одного обьекта

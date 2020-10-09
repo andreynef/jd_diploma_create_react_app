@@ -49,14 +49,14 @@ const App = () => {
       });
   };
 
-  // const likePhoto = (id) => {
-    // console.log(`${id} liking is in process...`)
-    // unsplash.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
-    //   .then(toJson)
-    //   .then(json => {//json это ответ в виде массива обьектов
-    //     console.log(`${id} is liked`)
-    //   })
-  // };
+  const likePhoto = (id) => {
+    console.log(`${id} liking is in process...`)
+    unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
+      .then(toJson)
+      .then(json => {//json это ответ в виде массива обьектов
+        console.log(`${id} is liked`)
+      })
+  };
 
   // const unlikePhoto = (likedId) => {
   //   unsplash.photos.unlikePhoto({likedId})// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
@@ -84,7 +84,7 @@ const App = () => {
                  component={() =>
                    <CardList
                      add={listPhotos}
-                     // likePhoto={likePhoto}
+                     likePhoto={likePhoto}
                      images={images}
                      getImageObj={getOneImageObj}
                      pressed={pressed}
@@ -102,7 +102,7 @@ const App = () => {
                      setPressed={setPressed}
                      setLikedId={setLikedId}
                      // likePhoto={likePhoto}
-                     unsplash={unsplash}
+                     setUnsplashState={setUnsplashState}
                      setCode={setCode}
                      userId={userId}
                      userName={userName}

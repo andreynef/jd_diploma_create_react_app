@@ -18,8 +18,7 @@
     "eject": "react-scripts eject",
     "add": "git add .",
     "commit": "git commit -m 'test' ",
-    "push": "git push",
-    "send": "npm run add commit push"
+    "push": "git push"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './Header.module.css';
+import {Auth} from "../Auth/Auth";
 
-export function Header({openedThread, bookmark, toAuthorize}) {
+export function Header({userId,userName,setUserId,setUserName,toAuthorize}) {
 
   return (
     <header className={styles.headerContainer}>
@@ -25,7 +26,7 @@ export function Header({openedThread, bookmark, toAuthorize}) {
             src="https://copypast.ru/fotografii/foto_zhivotnih/jivotnye_v_obraze_znamenitostej_0_/jivotnye_v_obraze_znamenitostej_0_027.jpg"
             alt="avatar"
           />
-          <a className={styles.avatarText} href={'https://unsplash.com/'}>User</a>
+          <a className={styles.avatarText} href={'https://unsplash.com/'}> {userName}</a>
         </div>
 
       </div>

@@ -30,6 +30,7 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
     }
 
     const getUserProfile =()=> {
+      console.log('unsplash is:', unsplash)
       unsplash.currentUser.profile()
         .then(toJson)
         .then(json => {
@@ -52,7 +53,7 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
       <Link to={'/'}>
         click me to go back to home page
       </Link>
-      <button type={'button'} onClick={()=>getUserProfile}>get user profile</button>
+      <button type={'button'} onClick={getUserProfile}>get user profile</button>
     </>
   )
 }

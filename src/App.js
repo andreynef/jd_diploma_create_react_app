@@ -97,7 +97,7 @@ const App = () => {
                    <Auth
                      add={listPhotos}
                      images={images}
-                     getImageObj={getImageObj}
+                     getImageObj={getOneImageObj}
                      pressed={pressed}
                      setPressed={setPressed}
                      setLikedId={setLikedId}

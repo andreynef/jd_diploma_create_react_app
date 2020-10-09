@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import Unsplash, {toJson} from 'unsplash-js';
 import {CardList} from "../CardsList/CardList";
+import {Link} from "react-router-dom";
 
 export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, unsplash, setCode, code}) {
   const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...

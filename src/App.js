@@ -66,13 +66,13 @@ const App = () => {
 
   const likePhoto = (id) => {
     console.log(`unsplashState with bearerToken is:`, unsplashState);
-    console.log(`images state is:`, images);
     unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде одного обьекта
         // setImages(images.map(item=>item.id===id ? json : item));//установка нов стейта списка фоток
-        console.log('liked_by_user', json.liked_by_user)
+        console.log(`images state is:`, images);
         console.log('json is:', json);
+        console.log('liked_by_user', json.photo.liked_by_user)
         console.log(`${id} is liked`);
       })
   };

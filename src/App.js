@@ -71,7 +71,6 @@ const App = () => {
       bearerToken: accessToken,
     });
 
-    console.log(`${id} liking is in process...`)
     console.log(`unsplash is:`, unsplash)
     unsplash.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
@@ -79,14 +78,6 @@ const App = () => {
         console.log(`${id} is liked`)
       })
   };
-
-  // const unlikePhoto = (likedId) => {
-  //   unsplash.photos.unlikePhoto({likedId})// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
-  //     .then(toJson)
-  //     .then(json => {//json это ответ в виде массива обьектов
-  //       //code
-  //     });
-  // };
 
   useEffect(() => {
     listPhotos();

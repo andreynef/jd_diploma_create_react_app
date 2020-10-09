@@ -83,7 +83,7 @@ const App = () => {
 
   useEffect(() => {
     addPhotos();//= componentDidMount
-  }, [images]);
+  }, []);
 
   return (
     <>

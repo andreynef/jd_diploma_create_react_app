@@ -74,20 +74,20 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
 
   return (
     <>
-      {/*<CardList*/}
-      {/*  add={add}*/}
-      {/*  images={images}*/}
-      {/*  getImageObj={getImageObj}*/}
-      {/*  pressed={pressed}*/}
-      {/*  setPressed={setPressed}*/}
-      {/*  setLikedId={setLikedId}*/}
-      {/*  likePhoto={likePhoto}*/}
-      {/*/>*/}
-<h1>now you are authorized</h1>
-      <Link to={'/'}>
-        click me to go back to home page
-      </Link>
-      <button type={'button'} onClick={getUserProfile}>get user profile</button>
+      <CardList
+        add={add}
+        images={images}
+        getImageObj={getImageObj}
+        pressed={pressed}
+        setPressed={setPressed}
+        setLikedId={setLikedId}
+        // likePhoto={likePhoto}
+      />
+{/*<h1>now you are authorized</h1>*/}
+{/*      <Link to={'/'}>*/}
+{/*        click me to go back to home page*/}
+{/*      </Link>*/}
+{/*      <button type={'button'} onClick={getUserProfile}>get user profile</button>*/}
     </>
   )
 }

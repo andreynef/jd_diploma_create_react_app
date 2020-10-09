@@ -12,12 +12,12 @@ const unsplash = new Unsplash({
   secret: "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA",// Application Secret из настроек вашего приложения
   callbackUrl: "https://jsdiploma.nef-an.ru/auth",// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
 })
-
-const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
-  "public",// и указываем требуемые разрешения (permissions)
-  "write_likes"
-]);
-window.location.assign(authenticationUrl);// Отправляем пользователя по этому адресу
+//
+// const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
+//   "public",// и указываем требуемые разрешения (permissions)
+//   "write_likes"
+// ]);
+// window.location.assign(authenticationUrl);// Отправляем пользователя по этому адресу
 //после подтверждения, всяк сюда нажавший перенаправляется на эту страницу - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
 
 const App = () => {
@@ -37,14 +37,14 @@ const App = () => {
   const [userName, setUserName] = useState('наме');
   const [accessToken, setAccessToken] = useState('');
 
-  // const toAuthorize=()=>{
-  //   const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
-  //     "public",// и указываем требуемые разрешения (permissions)
-  //     "write_likes"
-  //   ]);
-  //   window.location.assign(authenticationUrl);// Отправляем пользователя по этому адресу
-  //   //после подтверждения, всяк сюда нажавший перенаправляется на эту страницу - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
-  // };
+  const toAuthorize=()=>{
+    const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
+      "public",// и указываем требуемые разрешения (permissions)
+      "write_likes"
+    ]);
+    window.location.assign(authenticationUrl);// Отправляем пользователя по этому адресу
+    //после подтверждения, всяк сюда нажавший перенаправляется на эту страницу - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
+  };
 
   const getOneImageObj = (id) => {//повешен на preview
     const filteredImages = images.filter(eachElementOfArr => eachElementOfArr.id === id);
@@ -64,13 +64,15 @@ const App = () => {
   };
 
   const likePhoto = (id) => {
-    console.log(`${id} liking is in process...`)
     const unsplash = new Unsplash({
       accessKey: "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw",// accesskey из настроек вашего приложения
       secret: "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA",// Application Secret из настроек вашего приложения
       callbackUrl: "https://jsdiploma.nef-an.ru/auth",// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
       bearerToken: accessToken,
     });
+
+    console.log(`${id} liking is in process...`)
+    console.log(`unsplash is:`, unsplash)
     unsplash.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
@@ -123,7 +125,6 @@ const App = () => {
                      // setLikedId={setLikedId}
                      // likePhoto={likePhoto}
                      setAccessToken={setAccessToken}
-                     setUnsplashState={setUnsplashState}
                      setCode={setCode}
                      userId={userId}
                      userName={userName}

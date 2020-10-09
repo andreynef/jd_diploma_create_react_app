@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import Unsplash, {toJson} from 'unsplash-js';
 import {Link} from "react-router-dom";
 
@@ -13,7 +13,6 @@ export function Auth({setUserId, userId, setUserName, userName, unsplashState, s
       accessKey: accessKey,// accesskey из настроек вашего приложения
       secret: secret,// Application Secret из настроек вашего приложения
       callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-      bearerToken: accessToken,
     });
 
     const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
@@ -28,6 +27,7 @@ export function Auth({setUserId, userId, setUserName, userName, unsplashState, s
           callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
           bearerToken: json.access_token
         }));
+        setAccessToken(json.access_token);
         //Теперь можно сделать что-то от имени пользователя. Например, поставить лайк фотографии unsplash.photos.likePhoto("kBJEJqWNtNY");
         unsplash.currentUser.profile()
           .then(toJson)

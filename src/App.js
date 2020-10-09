@@ -12,7 +12,7 @@ const App = () => {
   const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
   const callbackUrl="https://jsdiploma.nef-an.ru/auth";
   const [accessToken, setAccessToken] = useState('');
-  // const [unsplashState, setUnsplashState] = useState();
+  const [unsplashState, setUnsplashState] = useState({});
 
   let unsplash = new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения

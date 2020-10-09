@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './Header.module.css';
-import {Auth} from "../Auth/Auth";
 
 export function Header({userId,userName,setUserId,setUserName,toAuthorize}) {
 

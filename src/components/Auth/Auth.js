@@ -3,7 +3,7 @@ import Unsplash, {toJson} from 'unsplash-js';
 import {CardList} from "../CardsList/CardList";
 import {Link} from "react-router-dom";
 
-export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, setCode, code, setUserId, userId, setUserName, userName, setUnsplashState, setAccessToken}) {
+export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, likePhoto, code, setUserId, userId, setUserName, userName, setUnsplashState, setAccessToken}) {
   // console.log(`code from url:`, codeFromUrl);
   // console.log(`bearerToken from unsplashState:`, unsplash.bearerToken);
   // console.log(`accessKey from unsplashState:`, unsplash.accessKey);
@@ -81,7 +81,7 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
         pressed={pressed}
         setPressed={setPressed}
         setLikedId={setLikedId}
-        // likePhoto={likePhoto}
+        likePhoto={likePhoto}
       />
 {/*<h1>now you are authorized</h1>*/}
 {/*      <Link to={'/'}>*/}

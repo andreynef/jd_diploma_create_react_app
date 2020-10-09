@@ -123,7 +123,7 @@ const App = () => {
                      pressed={pressed}
                      setPressed={setPressed}
                      // setLikedId={setLikedId}
-                     // likePhoto={likePhoto}
+                     likePhoto={likePhoto}
                      setAccessToken={setAccessToken}
                      setCode={setCode}
                      userId={userId}

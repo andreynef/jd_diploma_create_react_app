@@ -8,26 +8,24 @@ import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
 // const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU
 // const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k
+const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
+const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
+const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 // liked_by_user
 // ET8ClzU0niUQILM3fI_V5_TkJ3eJHaUhr6iiN9go35g
 
 const App = () => {
-  const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
-  const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
-  const callbackUrl="https://jsdiploma.nef-an.ru/auth";
   const [accessToken, setAccessToken] = useState('');
   const [unsplashState, setUnsplashState]= useState(
     new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-    bearerToken: accessToken,
+    // bearerToken: accessToken,
   })
   );
-
-  console.log(`initial unsplash is:`, unsplashState);
 
   const [images, setImages] = useState([]);//стейт списка фоток
   const [openedImage, setOpenedImage] = useState({});
@@ -37,6 +35,7 @@ const App = () => {
   const [userId, setUserId] = useState('айди');
   const [userName, setUserName] = useState('наме');
   const [userAva, setUserAva] = useState('');
+  console.log(`userAva is:`, userAva);
 
   const toAuthorize=()=>{
     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
@@ -54,6 +53,7 @@ const App = () => {
   }
 
   const addPhotos = () => {
+    console.log(`initial unsplash is:`, unsplashState);
     unsplashState.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов

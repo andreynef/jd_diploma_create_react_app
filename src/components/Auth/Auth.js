@@ -12,9 +12,13 @@ export function Auth({add,images, getImageObj, pressed, setPressed, setLikedId, 
       .then(json => {
         console.log('setBearerToken is setting. It is:', json.access_token);
         unsplashState.auth.setBearerToken(json.access_token);// Сохраняем полученный токен
-        setAccessToken(json.access_token);
+        setUnsplashState(new Unsplash({
+          accessKey: "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw",// accesskey из настроек вашего приложения
+          secret: "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA",// Application Secret из настроек вашего приложения
+          callbackUrl: "https://jsdiploma.nef-an.ru/auth",// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
+          bearerToken: json.access_token
+        }));
         //Теперь можно сделать что-то от имени пользователя. Например, поставить лайк фотографии unsplash.photos.likePhoto("kBJEJqWNtNY");
-        console.log(`Теперь можно сделать что-то от имени пользователя`)
         unsplashState.currentUser.profile()
           .then(toJson)
           .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}

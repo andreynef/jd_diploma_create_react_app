@@ -40,7 +40,7 @@ const App = () => {
   }
 
   const listPhotos = () => {//запрос данных с сервера Unsplash
-    unsplash.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+    unsplashState.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
         setImages([...images, ...json]);//установка нов стейта списка фоток

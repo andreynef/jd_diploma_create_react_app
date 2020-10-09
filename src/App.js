@@ -38,8 +38,8 @@ const App = () => {
   };
 
 
-  const getImageObj = (chosenId) => {//повешен на preview
-    const filteredImages = images.filter(eachElementOfArr => eachElementOfArr.id === chosenId);
+  const getOneImageObj = (id) => {//повешен на preview
+    const filteredImages = images.filter(eachElementOfArr => eachElementOfArr.id === id);
     setOpenedImage(filteredImages[0]);
     setOpen(true);
   }
@@ -50,9 +50,8 @@ const App = () => {
       .then(json => {//json это ответ в виде массива обьектов
         setImages([...images, ...json]);//установка нов стейта списка фоток
         setPage(page + 1);
-        console.log('page is:', page)
-        console.log('json is:', json)
-        console.log('images is:', images)
+        console.log('listPhotos, json is:', json)
+        console.log('images State is:', images)
       });
   };
 
@@ -87,7 +86,7 @@ const App = () => {
                      add={listPhotos}
                      // likePhoto={likePhoto}
                      images={images}
-                     getImageObj={getImageObj}
+                     getImageObj={getOneImageObj}
                      pressed={pressed}
                      setPressed={setPressed}
                      setLikedId={setLikedId}

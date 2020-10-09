@@ -5,11 +5,11 @@ import {Link} from "react-router-dom";
 export function Auth({setUserId, userId, setUserName, userName, unsplashState, setUnsplashState, setAccessToken, setUserAva}) {
 
   const getUserProfile =()=> {
-    const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
-    const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
+    const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
+    const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
     const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
-    let unsplash = new Unsplash({
+    const unsplash = new Unsplash({
       accessKey: accessKey,// accesskey из настроек вашего приложения
       secret: secret,// Application Secret из настроек вашего приложения
       callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers

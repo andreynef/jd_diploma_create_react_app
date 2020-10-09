@@ -83,7 +83,7 @@ const App = () => {
 
   useEffect(() => {
     addPhotos();//= componentDidMount
-  }, []);
+  }, [images]);
 
   return (
     <>
@@ -115,6 +115,8 @@ const App = () => {
                      userName={userName}
                      setUserId={setUserId}
                      setUserName={setUserName}
+                     setUnsplashState={setUnsplashState}
+                     unsplashState={unsplashState}
                    />
                  }
           />

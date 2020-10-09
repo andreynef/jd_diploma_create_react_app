@@ -56,6 +56,7 @@ const App = () => {
 
   const likePhoto = (id) => {
     console.log(`${id} liking is in process...`)
+    console.log(`state unsplash is:`, unsplashState)
     unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов

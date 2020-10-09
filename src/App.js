@@ -23,7 +23,7 @@ const App = () => {
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-    // bearerToken: accessToken,
+    bearerToken: accessToken,
   })
   );
 

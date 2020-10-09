@@ -39,7 +39,7 @@ export function Auth({setUserId, userId, setUserName, userName, unsplashState, s
             setUserName(json.name);
             console.log('name is set', json.name);
             setUserAva(json.profile_image.small);
-            console.log('ava is set:', json.profile_image.small);
+            console.log('ava is set::::', json.profile_image.small);
 
           });
         // window.location.assign('https://jsdiploma.nef-an.ru/');

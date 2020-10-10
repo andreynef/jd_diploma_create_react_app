@@ -8,85 +8,137 @@ import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
 // const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU
 // const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k
-const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
-const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
+const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
+const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
 const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+// const accessToken='vbKAwkyLljDNXAI1G2REP_tYUhFn8_LT7cz5bXrskmY';
 
-
-// ET8ClzU0niUQILM3fI_V5_TkJ3eJHaUhr6iiN9go35g
 
 const App = () => {
-  const [accessToken, setAccessToken] = useState('');
+  // const [accessToken, setAccessToken] = useState('');
   const [unsplashState, setUnsplashState]= useState(
     new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-    bearerToken: 'cUAvba2ScZGeLA3nbGxwZfELCM4ejR6gWfyHnycLl_c',
+    // bearerToken: accessToken,
   })
   );
 
   const [images, setImages] = useState([]);//стейт списка фоток
+  const [newImages, setNewImages] = useState([]);//стейт списка фоток
   const [openedImage, setOpenedImage] = useState({});
   const [page, setPage] = useState(1);
+  const [amountOfItemsOnPage, setAmountOfItemsOnPage] = useState(10);
   const [open, setOpen] = useState(false);
-  const [pressed, setPressed] = useState(false);
-  const [userId, setUserId] = useState('айди');
-  const [userName, setUserName] = useState('наме');
+  const [pressedId, setPressedId] = useState('');
+  const [userId, setUserId] = useState('айди мое');
+  const [userName, setUserName] = useState('имя мое');
   const [userAva, setUserAva] = useState(undefined);
+  const [listJson, setListJson] = useState(undefined);
   const [likeJson, setLikeJson] = useState(undefined);
-  console.log(`userAva is:`, userAva);
-
-  const execution = (victim)=>{
-    const freshBlood = images.map(item=>item.id===victim.id ? victim : item);
-    setImages(freshBlood);
-    console.log('new imagesState:', freshBlood);
-  }
+  const [unlikeJson, setUnlikeJson] = useState(undefined);
+  const [userJson, setUserJson] = useState(undefined);
 
   const toAuthorize=()=>{
     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
       "public",// и указываем требуемые разрешения (permissions)
-      "write_likes"
+      "write_likes",
+      "read_user",
     ]);
-    window.location.assign(authenticationUrl);// Отправляем пользователя по этому адресу
-    //после подтверждения, перенаправляется на эту страницу - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
+    window.location.assign(authenticationUrl);// Отправляем пользователя на авторизацию сайта Unsplash а потом он пепенаправит пользователя на - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
   };
 
-  const getOneImageObj = (id) => {//повешен на preview
-    const filteredImages = images.filter(eachElementOfArr => eachElementOfArr.id === id);//оставить в стейте/списке только тот итем кот имеет этот id
-    setOpenedImage(filteredImages[0]);//установить стейт открытой картинки
-    setOpen(true);//установить стейт булинь статуса открытости картинки
-  }
-
-  const addPhotos = () => {
-    console.log(`initial unsplash is:`, unsplashState);
-    unsplashState.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+  const getFirstTenPhotos = ()=>{
+    unsplashState.photos.listPhotos(page, amountOfItemsOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
-        setImages([...images, ...json]);//установка нов стейта списка фоток
-        setPage(page + 1);//установка нов стейта страницы
-        console.log('listPhotos, json is:', json)
-        console.log('imagesState is:', images)
+        setImages([...json]);//установка нов стейта списка фоток (после этой ф).
       });
   };
 
-  const likePhoto = (id) => {
-    console.log(`unsplashState with bearerToken is:`, unsplashState);
+  const addPhotos = () => {
+    handleListPhotos(page+1);
+    setPage(page + 1);//сохраняем стейт посл страницы. но только после заверш этой ф!
+  };
+
+  const updateImagesState = (result, from)=>{
+    if (from === 'handleListPhotos') {
+      const newDirtyArr = [...images, ...result];//мешаем все в кучу
+      const newCleanArr = [...new Set(newDirtyArr)];//избавляемся от дублирования элементов. ES6. Альтернатива Array.from(new Set (newDirtyArr))
+      // const newCleanArr2 = newDirtyArr.filter((item,index)=>newDirtyArr.indexOf(item===index));//способ 2 через filter
+      // const newCleanArr3 = newDirtyArr.reduce((unique,item)=>unique.includes((item) ? unique:[...unique, item], []));//способ 3 через reduce
+      setImages(newCleanArr);//обновляем стейт после завершения этой ф.
+      console.log('updating imagesList with not repeating items is done');
+    }
+
+    // if (from === 'handlePressHeart') {
+    //   console.log('like to server is done');
+    //   console.log('result from handlePressHeart is:', result);
+    //   const newDirtyArr = [...images, ...result];//мешаем все в кучу
+    //   const newCleanArr = [...new Set(newDirtyArr)];//избавляемся от дублирования элементов. ES6. Альтернатива Array.from(new Set (newDirtyArr))
+    //   setImages(newCleanArr);//обновляем стейт после завершения этой ф.
+    // }
+  }
+
+  const getOneImageObj = (id) => {//повешен на preview
+    const filteredImages = images.filter(eachElementOfArr => eachElementOfArr.id === id);//оставить только тот итем кот имеет этот id
+      console.log(`sorting images is done`);
+    setOpenedImage(filteredImages[0]);//установить стейт открытой картинки
+      console.log(`setOpenedImage is done`);
+    setOpen(true);//установить стейт булинь статуса открытости картинки
+      console.log(`setOpen is done`);
+  };
+
+  const handleListPhotos = (pageToShow) => {
+    unsplashState.photos.listPhotos(pageToShow, amountOfItemsOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+      .then(toJson)
+      .then(json => {//json это ответ в виде массива обьектов в количестве указанном в переменной amountOfItemsOnPage.
+        updateImagesState(json, 'handleListPhotos');
+      });
+  };
+
+  const handleLikePhoto =(id)=> {
     unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
-      .then(json => {//json это ответ в виде одного обьекта
-        // setImages(images.map(item=>item.id===id ? json : item));//установка нов стейта списка фоток
-        execution(json);
-        console.log(`images state is:`, images);
-        console.log('json is:', json);
-        console.log('liked_by_user', json.photo.liked_by_user)
-        console.log(`${id} is liked`);
+      .then(json => {//json это ответ в виде одного обьекта {photo:{}, user:{}}
       })
   };
 
+  const handleUnlikePhoto =(id)=> {
+    unsplashState.photos.unlikePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
+      .then(toJson)
+      .then(json => {//json это ответ в виде одного обьекта {photo:{}, user:{}}
+      })
+  };
+
+  const handlePressHeart = (id) => {
+    const chosenItemObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
+    console.log(`chosenItem likeStatus from state is: `, chosenItemObj.liked_by_user);
+    console.log(`chosenId is: `, id);
+
+    if (chosenItemObj.liked_by_user === true) {//если у выбранного итема стоит like=true...
+      console.log(`true! = запрос на анлайк`);
+      handleUnlikePhoto(id);//...то запрос на анлайк
+      console.log(`+ замена стейта итема на противоположный`);
+      const filteredImages = images.filter(item => item.id === id ? item.liked_by_user = !item.liked_by_user: item);//переписать статус лайка в стейте
+      setImages(filteredImages);//установить нов список с измененным итемом.
+      console.log(images);
+} else {//иначе, тобишь false...
+      console.log(`false! = запрос на лайк`);
+      handleLikePhoto(id);//...запрос на лайк
+      console.log(`+ замена стейта итема на противоположный`);
+      const filteredImages = images.filter(item => item.id === id ? item.liked_by_user = !item.liked_by_user: item);//переписать статус лайка в стейте
+      setImages(filteredImages);//установить нов список с измененным итемом.
+      console.log(images);
+
+    };
+  };
+
   useEffect(() => {
-    addPhotos();//= componentDidMount
+    getFirstTenPhotos();//= componentDidMount
   }, []);
+
 
   return (
     <>
@@ -104,7 +156,7 @@ const App = () => {
                  component={() =>
                    <CardList
                      add={addPhotos}
-                     likePhoto={likePhoto}
+                     handlePressHeart={handlePressHeart}
                      images={images}
                      getImageObj={getOneImageObj}
                    />}
@@ -113,7 +165,7 @@ const App = () => {
                  component={() =>
                    <Auth
                      images={images}
-                     setAccessToken={setAccessToken}
+                     // setAccessToken={setAccessToken}
                      userId={userId}
                      userName={userName}
                      setUserId={setUserId}
@@ -128,7 +180,7 @@ const App = () => {
                    <CardPage
                      openedImage={openedImage}
                      open={open}
-                     likePhoto={likePhoto}
+                     handlePressHeart={handlePressHeart}
                    />
                  }
           />

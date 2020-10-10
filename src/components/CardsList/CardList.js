@@ -3,7 +3,7 @@ import styles from './CardList.module.css';
 import {Card} from "./Card/Card";
 import loader from '../../../src/assets/images/Gear.gif'
 
-export function CardList({add,images, getImageObj, pressed, setPressed, setLikedId, likePhoto}) {
+export function CardList({add,images, getImageObj, pressed, setPressed, setLikedId, likePhoto, handlePressHeart}) {
   let allCardsArr;
   if (images.length === 0) {
       allCardsArr=<img src={loader} alt={'loader'} className={styles.loader}/>
@@ -24,7 +24,8 @@ export function CardList({add,images, getImageObj, pressed, setPressed, setLiked
             pressed={pressed}
             setPressed={setPressed}
             setLikedId={setLikedId}
-            likePhoto={likePhoto}
+            handlePressHeart={handlePressHeart}
+            isLiked={item.liked_by_user}
           />
       )
     })}

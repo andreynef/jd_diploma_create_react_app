@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Unsplash, {toJson} from 'unsplash-js';
 import {Link} from "react-router-dom";
 
@@ -29,19 +29,19 @@ export function Auth({setUserId, userId, setUserName, userName, unsplashState, s
           bearerToken: json.access_token,
         }));
         //Теперь можно сделать что-то от имени пользователя. Например, поставить лайк фотографии unsplash.photos.likePhoto("kBJEJqWNtNY");
-        unsplash.currentUser.profile()
-          .then(toJson)
-          .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
-            console.log('unsplash.currentUser.profile() -> json is:', json);
-            console.log('profile_image.small is:', json.profile_image.small);
-            setUserId(json.id);
-            console.log('id is set', json.id);
-            setUserName(json.name);
-            console.log('name is set', json.name);
-            setUserAva(json.profile_image.small);
-            console.log('ava is set::::', json.profile_image.small);
-
-          });
+        // unsplash.currentUser.profile()
+        //   .then(toJson)
+        //   .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
+        //     console.log('unsplash.currentUser.profile() -> json is:', json);
+        //     console.log('profile_image.small is:', json.profile_image.small);
+        //     setUserId(json.id);
+        //     console.log('id is set', json.id);
+        //     setUserName(json.name);
+        //     console.log('name is set', json.name);
+        //     setUserAva(json.profile_image.small);
+        //     console.log('ava is set::::', json.profile_image.small);
+        //
+        //   });
         // window.location.assign('https://jsdiploma.nef-an.ru/');
       });
     }

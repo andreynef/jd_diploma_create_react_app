@@ -4,3 +4,24 @@
 
 }
 
+.likesCounter {
+    display:flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 50px;
+}
+.likesValue {
+    color: white;
+}
+
+.button {
+    background-color: transparent;
+    align-items: center;
+    margin-left:10px;
+    border:none;
+}
+
+.button:hover {
+    cursor:pointer;
+}

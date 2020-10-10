@@ -6,7 +6,7 @@ import cross2 from '../../assets/images/cross2.svg';
 import HeartIconPressed from "../../assets/images/HeartIconPressed.svg";
 import HeartIconUnpressed from "../../assets/images/HeartIconUnpressed.svg";
 
-export function CardPage({openedImage, open, pressed, likePhoto, setLikedId, likedId}) {
+export function CardPage({openedImage, open, pressed, likePhoto, setLikedId, likedId, handlePressHeart}) {
   const date = openedImage.created_at.slice(0,9);
 
   return (
@@ -32,7 +32,7 @@ export function CardPage({openedImage, open, pressed, likePhoto, setLikedId, lik
           </div>
           <div className={styles.likesContainer}>
             <span className={styles.likesValue}>{openedImage.likes}</span>
-            <button className={styles.button} onClick={()=>{console.log('btn is pressed')}}>
+            <button className={styles.button} onClick={()=>handlePressHeart(openedImage.id)}>
               <img src={pressed? HeartIconPressed: HeartIconUnpressed} alt={'heart'}/>
             </button>
           </div>

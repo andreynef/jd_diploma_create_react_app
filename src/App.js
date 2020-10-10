@@ -6,39 +6,45 @@ import {Header} from "./components/Header/Header";
 import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
+
 // const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU
 // const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k
+// const accessToken='EiX9328pnKxXI7LluL34jVSfE_BkRWnRMIOSs84H9gY';
+// const accessToken='vbKAwkyLljDNXAI1G2REP_tYUhFn8_LT7cz5bXrskmY';
+// const accessKey=process.env.REACT_APP_ACCESSKEY;//ключ прячем в рут(файл .env) дабы никто не мог его прочитать.
+// const secret=process.env.REACT_APP_SECRET;//ключ прячем в рут(файл .env) дабы никто не мог его прочитать.
 const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
 const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
 const callbackUrl="https://jsdiploma.nef-an.ru/auth";
-// const accessToken='vbKAwkyLljDNXAI1G2REP_tYUhFn8_LT7cz5bXrskmY';
 
 
 const App = () => {
-  // const [accessToken, setAccessToken] = useState('');
-  const [unsplashState, setUnsplashState]= useState(
-    new Unsplash({
+  const [accessToken, setAccessToken] = useState(undefined);
+  const [unsplashState, setUnsplashState]= useState(new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-    // bearerToken: accessToken,
-  })
-  );
-
+    bearerToken: accessToken,//приватный токен юзера
+  }));
   const [images, setImages] = useState([]);//стейт списка фоток
-  const [newImages, setNewImages] = useState([]);//стейт списка фоток
   const [openedImage, setOpenedImage] = useState({});
   const [page, setPage] = useState(1);
-  const [amountOfItemsOnPage, setAmountOfItemsOnPage] = useState(10);
+  const [isAuth, setIsAuth] = useState(false);
   const [open, setOpen] = useState(false);
-  const [pressedId, setPressedId] = useState('');
-  const [userId, setUserId] = useState('айди мое');
-  const [userName, setUserName] = useState('имя мое');
+  const [userId, setUserId] = useState('');
+  const [userName, setUserName] = useState('');
   const [userAva, setUserAva] = useState(undefined);
-  const [listJson, setListJson] = useState(undefined);
-  const [likeJson, setLikeJson] = useState(undefined);
-  const [unlikeJson, setUnlikeJson] = useState(undefined);
-  const [userJson, setUserJson] = useState(undefined);
+
+  const getUserProfile =()=> {
+    unsplashState.currentUser.profile()
+      .then(toJson)
+      .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
+        console.log('unsplash.currentUser.profile() -> json is:', json);
+        setUserId(json.id);
+        setUserName(json.name);
+        setUserAva(json.profile_image.small);
+      });
+  };
 
   const toAuthorize=()=>{
     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
@@ -50,11 +56,14 @@ const App = () => {
   };
 
   const getFirstTenPhotos = ()=>{
-    unsplashState.photos.listPhotos(page, amountOfItemsOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+    console.log(unsplashState);
+    isAuth && getUserProfile();
+    unsplashState.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
         setImages([...json]);//установка нов стейта списка фоток (после этой ф).
       });
+    console.log('getFirstTenPhotos is done')
   };
 
   const addPhotos = () => {
@@ -62,23 +71,12 @@ const App = () => {
     setPage(page + 1);//сохраняем стейт посл страницы. но только после заверш этой ф!
   };
 
-  const updateImagesState = (result, from)=>{
-    if (from === 'handleListPhotos') {
-      const newDirtyArr = [...images, ...result];//мешаем все в кучу
+  const updateImagesState = (jsonRespond)=>{
+      const newDirtyArr = [...images, ...jsonRespond];//мешаем все в кучу
       const newCleanArr = [...new Set(newDirtyArr)];//избавляемся от дублирования элементов. ES6. Альтернатива Array.from(new Set (newDirtyArr))
       // const newCleanArr2 = newDirtyArr.filter((item,index)=>newDirtyArr.indexOf(item===index));//способ 2 через filter
       // const newCleanArr3 = newDirtyArr.reduce((unique,item)=>unique.includes((item) ? unique:[...unique, item], []));//способ 3 через reduce
-      setImages(newCleanArr);//обновляем стейт после завершения этой ф.
-      console.log('updating imagesList with not repeating items is done');
-    }
-
-    // if (from === 'handlePressHeart') {
-    //   console.log('like to server is done');
-    //   console.log('result from handlePressHeart is:', result);
-    //   const newDirtyArr = [...images, ...result];//мешаем все в кучу
-    //   const newCleanArr = [...new Set(newDirtyArr)];//избавляемся от дублирования элементов. ES6. Альтернатива Array.from(new Set (newDirtyArr))
-    //   setImages(newCleanArr);//обновляем стейт после завершения этой ф.
-    // }
+      setImages(newCleanArr);//обновляем стейт списка картинок.
   }
 
   const getOneImageObj = (id) => {//повешен на preview
@@ -91,10 +89,10 @@ const App = () => {
   };
 
   const handleListPhotos = (pageToShow) => {
-    unsplashState.photos.listPhotos(pageToShow, amountOfItemsOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+    unsplashState.photos.listPhotos(pageToShow, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов в количестве указанном в переменной amountOfItemsOnPage.
-        updateImagesState(json, 'handleListPhotos');
+        updateImagesState(json);
       });
   };
 
@@ -114,29 +112,29 @@ const App = () => {
 
   const handlePressHeart = (id) => {
     const chosenItemObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
-    console.log(`chosenItem likeStatus from state is: `, chosenItemObj.liked_by_user);
-    console.log(`chosenId is: `, id);
+    const chosenItemLikes = chosenItemObj.likes;//вытащить количество лайков из обьекта для дальнейшего их изменения ниже.
 
-    if (chosenItemObj.liked_by_user === true) {//если у выбранного итема стоит like=true...
-      console.log(`true! = запрос на анлайк`);
-      handleUnlikePhoto(id);//...то запрос на анлайк
-      console.log(`+ замена стейта итема на противоположный`);
-      const filteredImages = images.filter(item => item.id === id ? item.liked_by_user = !item.liked_by_user: item);//переписать статус лайка в стейте
-      setImages(filteredImages);//установить нов список с измененным итемом.
-      console.log(images);
-} else {//иначе, тобишь false...
-      console.log(`false! = запрос на лайк`);
-      handleLikePhoto(id);//...запрос на лайк
-      console.log(`+ замена стейта итема на противоположный`);
-      const filteredImages = images.filter(item => item.id === id ? item.liked_by_user = !item.liked_by_user: item);//переписать статус лайка в стейте
-      setImages(filteredImages);//установить нов список с измененным итемом.
-      console.log(images);
-
+    if (chosenItemObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
+      handleLikePhoto(id);//...то запрос на сервер на лайк
+      const filteredImages = images.filter(item =>//создать копию стейта с измененными данными выбранного элемента
+        item.id === id
+          ? (item.liked_by_user=true, item.likes=chosenItemLikes+1)
+          : item
+      );
+      setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
+    } else {//иначе, тобишь true...
+      handleUnlikePhoto(id);//...запрос на сервер на анлайк
+      const filteredImages = images.filter(item =>//создать копию стейта с измененными данными выбранного элемента
+        item.id === id
+          ? (item.liked_by_user=false, item.likes=chosenItemLikes-1)
+          : item
+      );
+      setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
     };
   };
 
   useEffect(() => {
-    getFirstTenPhotos();//= componentDidMount
+    getFirstTenPhotos();//= componentDidMount. Выполняется только 1 раз при монтаже ибо добавлен [].
   }, []);
 
 
@@ -150,6 +148,7 @@ const App = () => {
         setUserName={setUserName}
         userAva={userAva}
         setUserAva={setUserAva}
+        isAuth={isAuth}
       />
         <Switch>{/*рендерится в зависимости от Route path*/}
           <Route exact path={'/'}
@@ -164,28 +163,25 @@ const App = () => {
           <Route exact path={'/auth'}
                  component={() =>
                    <Auth
-                     images={images}
-                     // setAccessToken={setAccessToken}
-                     userId={userId}
-                     userName={userName}
-                     setUserId={setUserId}
-                     setUserName={setUserName}
                      setUnsplashState={setUnsplashState}
                      unsplashState={unsplashState}
+                     setIsAuth={setIsAuth}
                    />
                  }
           />
           <Route exact path={'/cardpage'}
-                 component={() =>
-                   <CardPage
-                     openedImage={openedImage}
-                     open={open}
-                     handlePressHeart={handlePressHeart}
-                   />
-                 }
+             component={() =>
+               <CardPage
+                 openedImage={openedImage}
+                 open={open}
+                 handlePressHeart={handlePressHeart}
+               />
+             }
           />
         </Switch>
-        <Footer/>
+          {isAuth && (
+          <Footer/>
+          )}
     </>
   );
 

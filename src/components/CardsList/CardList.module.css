@@ -4,7 +4,7 @@
     flex-flow: column nowrap;
     align-items: center;
     margin:0;
-    padding: 20px 0;
+    padding: 20px 10px;
     font-family: Roboto;
 }
 .centralContainer {
@@ -25,27 +25,17 @@
     background-color: orange;
     color: white;
     border-radius: 5px;
-    font-weight: 700;
+    font-weight: 500;
+    font-size: 20px;
+    padding:10px;
 }
 .button:hover {
     cursor: pointer;
 }
 
-/*.card {*/
-/*    max-width: 1024px;*/
-/*    width: 500px*/
-/*}*/
-/*@media all and (min-width: 1024px) {*/
-/*    .cardList{*/
-/*        padding: 20px 0 0 0;*/
-/*    }*/
-/*    .cardList {*/
-/*        background-color: white;*/
-/*        border-radius: 7px;*/
-/*    }*/
-/*}*/
-/*@media all and (min-width: 1540px) {*/
-/*    .cardList{*/
-/*        padding: 48px 0;*/
-/*    }*/
-/*}*/
+
+@media all and (min-width: 1024px) {
+}
+
+@media all and (min-width: 1540px) {
+}

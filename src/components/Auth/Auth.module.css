@@ -1,0 +1,16 @@
+
+.button {
+    margin: 200px auto;
+    font-size: 16px;
+    background-color: transparent;
+    outline: none;
+    border:none;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.button:hover {
+    cursor: pointer;
+    color: orange;
+}

@@ -7,6 +7,7 @@
     border-bottom: 1px solid lightgrey;
     font-family: Roboto;
     font-size: 20px;
+    position:sticky;
 }
 
 .centralContainer {
@@ -26,19 +27,15 @@
     width:100%;
 }
 
-.authButtonContainer {
-    align-items: center;
-    display: flex;
-}
+/*.authButtonContainer {*/
+/*    align-items: center;*/
+/*    display: flex;*/
+/*}*/
 
 .button{
-    background-color: #f4f4f4;
-    border-radius: 5px;
-    padding: 7px;
-    box-shadow: 0 0 5px;
-}
-.button:hover{
-    box-shadow: 0 0 5px orange;
+    background-color: transparent;
+    border: none;
+    outline: none;
 }
 
 .button:active {
@@ -62,7 +59,13 @@
     text-decoration: none;
     color: black;
     margin-left: 10px;
+    font-family: Roboto;
+    font-size: 20px;
 }
+.avatarText:hover{
+    color: orange;
+}
+
 
 
 @media all and (max-width: 1024px) {

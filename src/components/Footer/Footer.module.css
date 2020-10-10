@@ -7,4 +7,6 @@
     font-size: 14px;
     color: #696969;
     font-family: Roboto;
+    position: sticky;
+    bottom:0;
 }

@@ -40,7 +40,7 @@ export function Header({userId,userName,setUserId,setUserName,toAuthorize, userA
             type="button"
             onClick={toAuthorize}
           >
-            <a className={styles.avatarText} href={'https://unsplash.com/'}> Login</a>
+            <span className={styles.avatarText}> Login</span>
           </button>
         </div>
 

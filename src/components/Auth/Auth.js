@@ -40,7 +40,7 @@ export function Auth({unsplashState, setUnsplashState, setIsAuth}) {
     };
 
   useEffect(() => {
-    getAccessToken();//componentDidMount
+    setTimeout(getAccessToken(), 10000);//componentDidMount
   }, []);
 
   return (

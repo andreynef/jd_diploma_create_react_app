@@ -5,8 +5,10 @@ import {Link} from "react-router-dom";
 export function Auth({setUserId, userId, setUserName, userName, unsplashState, setUnsplashState, setAccessToken, setUserAva}) {
 
   const getUserProfile =()=> {
-    const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
-    const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
+    const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
+    const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
+    // const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
+    // const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
     const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
     const unsplash = new Unsplash({

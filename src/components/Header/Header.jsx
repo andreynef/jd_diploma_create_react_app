@@ -20,18 +20,27 @@ export function Header({userId,userName,setUserId,setUserName,toAuthorize, userA
         {/*</div>*/}
         <div className={styles.userContainer}>
           {isAuth && (
+            <>
             <img
             className={styles.avatarImg}
             src={userAva ? userAva : "https://copypast.ru/fotografii/foto_zhivotnih/jivotnye_v_obraze_znamenitostej_0_/jivotnye_v_obraze_znamenitostej_0_027.jpg"}
             alt="avatar"
             />
+
+          <button
+            className={styles.button}
+            type="button"
+          >
+            <a className={styles.avatarText} href={'https://unsplash.com/'}> {userName}</a>
+          </button>
+            </>
           )}
           <button
             className={styles.button}
             type="button"
             onClick={toAuthorize}
           >
-            <a className={styles.avatarText} href={'https://unsplash.com/'}> {isAuth? userName:'Login'}</a>
+            <a className={styles.avatarText} href={'https://unsplash.com/'}> Login</a>
           </button>
         </div>
 

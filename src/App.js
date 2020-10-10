@@ -158,6 +158,7 @@ const App = () => {
                      handlePressHeart={handlePressHeart}
                      images={images}
                      getImageObj={getOneImageObj}
+                     isAuth={isAuth}
                    />}
           />
           <Route exact path={'/auth'}

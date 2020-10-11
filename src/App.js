@@ -21,7 +21,7 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
-  const [accessToken, setAccessToken] = useState(JSON.parse(localStorage.getItem('accessTokenForUnsplash')));
+  const [accessToken, setAccessToken] = useState(JSON.parse(localStorage.getItem('accessTokenForUnsplash')));//если есть в локале то берем оттуда иначе undefined
   const [unsplashState, setUnsplashState]= useState(new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
@@ -35,13 +35,12 @@ const App = () => {
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState('empty');
 
-
-  const getAccessToken =()=> {
+  const getAccessTokenFromUrl =()=> {
     const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
     unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
       .then(toJson)
       .then(json => {
-        console.log('setBearerToken is:', json.access_token);
+        console.log('json answer from url is:', json);
         setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера
           accessKey: accessKey,// accesskey из настроек вашего приложения
           secret: secret,// Application Secret из настроек вашего приложения
@@ -50,9 +49,11 @@ const App = () => {
         }));
         console.log('setUnsplashState with token is done');
         setIsAuth(true);
-        console.log('setAuth is done');
+        console.log('setAuth to true is done:', isAuth);
         setAccessTokenToLocalStorage(json.access_token);
         console.log('setAccessTokenToLocalStorage is done');
+        // getUserProfile();
+        console.log('getUserProfile is done');
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
   };
@@ -67,19 +68,8 @@ const App = () => {
 
   const getUserProfile =()=> {
     console.log('getting UserProfile...');
-
-    // if (isAuth === true) {
-    //   unsplashState.currentUser.profile()
-    //     .then(toJson)
-    //     .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
-    //       console.log('unsplash.currentUser.profile() -> json is:', json);
-    //       setUserProfile(json);
-    //       console.log('setUserProfile is done');
-    //     });
-    // }
-
-    if (unsplashState._bearerToken) {
-      console.log('state has tokenAcces key! Sending request...');
+    if (unsplashState._bearerToken) {//если в стейте есть ключ
+      console.log('your app is already has tokenAccess key! Sending request...');
       unsplashState.currentUser.profile()
         .then(toJson)
         .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
@@ -90,8 +80,8 @@ const App = () => {
           console.log('setIsAuth to true is done:', isAuth);
         });
     }
-    else {
-      console.log('getting UserProfile is failed');
+    else {//иначе ничего не делать
+      console.log('getting UserProfile from server is failed');
     }
   };
 
@@ -122,13 +112,12 @@ const App = () => {
   };
 
   const getFirstTenPhotos = ()=>{
-    // console.log(unsplashState);
     unsplashState.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
         setImages([...json]);//установка нов стейта списка фоток (после этой ф).
+        console.log('getFirstTenPhotos is done')
       });
-    console.log('getFirstTenPhotos is done')
   };
 
   const addPhotos = () => {
@@ -197,10 +186,13 @@ const App = () => {
   };
 
   useEffect(() => {
-    // getAccessTokenFromLocalStorage();
     getUserProfile();
+  }, [userProfile]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
+
+  useEffect(() => {
     getFirstTenPhotos();
-  }, [isAuth]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении [].
+  }, []);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
+
 
 
   return (
@@ -231,7 +223,7 @@ const App = () => {
                      unsplashState={unsplashState}
                      setIsAuth={setIsAuth}
                      setUserProfile={setUserProfile}
-                     getAccessToken={getAccessToken}
+                     getAccessTokenFromUrl={getAccessTokenFromUrl}
                    />
                  }
           />

@@ -133,9 +133,9 @@ const App = () => {
     <>
       <Header
         toAuthorize={toAuthorize}
-        userId={userProfile.id}
-        userName={userProfile.name}
-        userAva={userProfile.profile_image.small}
+        userId={isAuth? userProfile.id: 'user id'}
+        userName={isAuth?userProfile.name:'user name'}
+        userAva={isAuth?userProfile.profile_image.small:'img ava'}
         isAuth={isAuth}
         checkLogs={checkLogs}
       />

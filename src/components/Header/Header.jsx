@@ -21,34 +21,22 @@ export function Header({userId,userName,setUserId,setUserName,toAuthorizePage, u
         <div className={styles.userContainer}>
           {isAuth && (
             <>
-              <button
-                className={styles.button}
-                type="button"
-                onClick={toLogout}
-              >
-                <span className={styles.avatarText}> Logout</span>
+              <button className={styles.button} type="button" onClick={toLogout}>
+                <span className={styles.avatarText}>Logout</span>
               </button>
               <img
-              className={styles.avatarImg}
-              src={userAva ? userAva : "https://copypast.ru/fotografii/foto_zhivotnih/jivotnye_v_obraze_znamenitostej_0_/jivotnye_v_obraze_znamenitostej_0_027.jpg"}
-              alt="avatar"
+                className={styles.avatarImg}
+                src={userAva ? userAva : "https://copypast.ru/fotografii/foto_zhivotnih/jivotnye_v_obraze_znamenitostej_0_/jivotnye_v_obraze_znamenitostej_0_027.jpg"}
+                alt="avatar"
               />
-
-              <button
-                className={styles.button}
-                type="button"
-              >
+              <button className={styles.button} type="button">
                 <a className={styles.avatarText} href={'https://unsplash.com/'}> {userName}</a>
               </button>
             </>
           )}
           {!isAuth && (
-            <button
-            className={styles.button}
-            type="button"
-            onClick={toAuthorizePage}
-            >
-            <span className={styles.avatarText}> Login</span>
+            <button className={styles.button} type="button" onClick={toAuthorizePage}>
+              <span className={styles.avatarText}> Login</span>
             </button>
           )}
         </div>

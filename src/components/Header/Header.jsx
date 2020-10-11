@@ -19,7 +19,7 @@ export function Header({toAuthorizePage, isAuth, checkLogs, toLogout, userProfil
           </button>
         </div>
         <div className={styles.userContainer}>
-          {isAuth===true && (
+          {isAuth && userProfile && (
             <>
               <button className={styles.button} type="button" onClick={toLogout}>
                 <span className={styles.logoutText}>Logout</span>
@@ -34,7 +34,7 @@ export function Header({toAuthorizePage, isAuth, checkLogs, toLogout, userProfil
               </button>
             </>
           )}
-          {isAuth===false && (
+          {!isAuth && (
             <button className={styles.button} type="button" onClick={toAuthorizePage}>
               <span className={styles.avatarText}>Login</span>
             </button>

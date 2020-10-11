@@ -44,24 +44,24 @@ const App = () => {
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState('');
 
-  const getAccessTokenFromUrlCode =()=> {
-    const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
-    unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
-      .then(toJson)
-      .then(json => {
-        console.log('json answer from url is:', json);
-        setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера. Сработает только при завершении ф контейнера.
-          accessKey: accessKey,// accesskey из настроек вашего приложения
-          secret: secret,// Application Secret из настроек вашего приложения
-          callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-          bearerToken: json.access_token,//приватный токен юзера
-        }));
-        console.log('setUnsplashState with accessToken from getAccessTokenFromUrlCode is done');
-        setAccessTokenToLocalStorage(json.access_token);
-        console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
-        window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
-      });
-  };
+  // const getAccessTokenFromUrlCode =()=> {
+  //   const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
+  //   unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
+  //     .then(toJson)
+  //     .then(json => {
+  //       console.log('json answer from url is:', json);
+  //       setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера. Сработает только при завершении ф контейнера.
+  //         accessKey: accessKey,// accesskey из настроек вашего приложения
+  //         secret: secret,// Application Secret из настроек вашего приложения
+  //         callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
+  //         bearerToken: json.access_token,//приватный токен юзера
+  //       }));
+  //       console.log('setUnsplashState with accessToken from getAccessTokenFromUrlCode is done');
+  //       setAccessTokenToLocalStorage(json.access_token);
+  //       console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
+  //       window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
+  //     });
+  // };
 
   const checkLogs =()=> {
      console.log('unsplashState is:', unsplashState);
@@ -90,9 +90,9 @@ const App = () => {
     }
   };
 
-  const setAccessTokenToLocalStorage= (accessToken) => {
-    localStorage.setItem('accessTokenForUnsplash', JSON.stringify(accessToken));
-  };
+  // const setAccessTokenToLocalStorage= (accessToken) => {
+  //   localStorage.setItem('accessTokenForUnsplash', JSON.stringify(accessToken));
+  // };
 
   const deleteAccessTokenFromLocalStorage= () => {
     localStorage.removeItem('accessTokenForUnsplash');
@@ -205,7 +205,10 @@ const App = () => {
                    />}
           />
           <Route exact path={'/auth'} component={() =>
-                   <Auth getAccessTokenFromUrlCode={getAccessTokenFromUrlCode} unsplashState={unsplashState}/>
+                   <Auth
+                     unsplashState={unsplashState}
+                     setUnsplashState={setUnsplashState}
+                   />
                  }
           />
           <Route exact path={'/cardpage'}

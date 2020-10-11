@@ -79,13 +79,16 @@ const App = () => {
 
   const setAccessTokenToLocalStorage= (accessToken) => {
     localStorage.setItem('accessTokenForUnsplash', JSON.stringify(accessToken));
+    console.log('setAccessTokenToLocalStorage is done');
   };
 
   const getAccessTokenFromLocalStorage = () => {//при любом изменении полей идет обновление состояния
     if (localStorage.accessTokenForUnsplash) {
       const token = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));// считать массив в JSON формате('text','text') из localeStorage а если его там нет то просто установить пустой массив
       setAccessToken(token);
+      console.log('setAccessToken is done:', token);
       setIsAuth(true);
+      console.log('setIsAuth is done:', isAuth);
     } else {
       return false
     }

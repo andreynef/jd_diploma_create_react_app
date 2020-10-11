@@ -48,8 +48,6 @@ const App = () => {
         console.log('setUnsplashState with token is done');
         setIsAuth(true);
         console.log('setAuth is done');
-        getUserProfile();
-        console.log('getUserProfile is done');
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
   };
@@ -160,7 +158,7 @@ const App = () => {
   useEffect(() => {
     getFirstTenPhotos();//= componentDidMount. Выполняется только 1 раз при монтаже ибо добавлен [].
     getUserProfile();
-  }, []);
+  }, [isAuth]);
 
 
   return (

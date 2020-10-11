@@ -7,15 +7,17 @@ import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
 
-// const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU
-// const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k
-// const accessToken='EiX9328pnKxXI7LluL34jVSfE_BkRWnRMIOSs84H9gY';
-// const accessToken='vbKAwkyLljDNXAI1G2REP_tYUhFn8_LT7cz5bXrskmY';
-// const accessKey=process.env.REACT_APP_ACCESSKEY;//ключ прячем в рут(файл .env) дабы никто не мог его прочитать.
-// const secret=process.env.REACT_APP_SECRET;//ключ прячем в рут(файл .env) дабы никто не мог его прочитать.
-const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
-const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
+const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
+const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
 const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+
+// const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
+// const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
+// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+
+// const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
+// const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
+// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {

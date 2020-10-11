@@ -203,7 +203,7 @@ const App = () => {
                      add={addPhotos}
                      handlePressHeart={handlePressHeart}
                      images={images}
-                     getChosenImageObj={getChosenImageObj}
+                     setOpenedImageObj={setOpenedImageObj}
                      isAuth={isAuth}
                    />}
           />

@@ -30,7 +30,7 @@ export function Header({toAuthorizePage, isAuth, checkLogs, toLogout, userProfil
                 alt="avatar"
               />
               <button className={styles.button} type="button">
-                <a className={styles.avatarText} href={'https://unsplash.com/'}> {userProfile.name}</a>
+                <a className={styles.avatarText} href={userProfile.links.html}> {userProfile.name}</a>
               </button>
             </>
           )}

@@ -33,6 +33,27 @@ const App = () => {
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState('empty');
 
+  const getAccessToken =()=> {
+    const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
+    unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
+      .then(toJson)
+      .then(json => {
+        console.log('setBearerToken is:', json.access_token);
+        setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера
+          accessKey: accessKey,// accesskey из настроек вашего приложения
+          secret: secret,// Application Secret из настроек вашего приложения
+          callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
+          bearerToken: json.access_token,//приватный токен юзера
+        }));
+        console.log('setUnsplashState with token is done');
+        setIsAuth(true);
+        console.log('setAuth is done');
+        getUserProfile();
+        console.log('getUserProfile is done');
+        // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
+      });
+  };
+
   const checkLogs =()=> {
      console.log('unsplashState is:', unsplashState);
      console.log('isAuth is:', isAuth);
@@ -147,8 +168,8 @@ const App = () => {
       <Header
         toAuthorizePage={toAuthorizePage}
         userId={isAuth? userProfile.id: 'user id'}
-        userName={isAuth?userProfile.name:'user name'}
-        userAva={isAuth?userProfile.profile_image.small:'img ava'}
+        userName={isAuth? userProfile.name:'user name'}
+        // userAva={isAuth? userProfile.profile_image.small:'img ava'}
         isAuth={isAuth}
         checkLogs={checkLogs}
       />
@@ -170,6 +191,7 @@ const App = () => {
                      unsplashState={unsplashState}
                      setIsAuth={setIsAuth}
                      setUserProfile={setUserProfile}
+                     getAccessToken={getAccessToken}
                    />
                  }
           />

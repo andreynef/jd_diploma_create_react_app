@@ -48,9 +48,7 @@ const App = () => {
           callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
           bearerToken: json.access_token,//приватный токен юзера
         }));
-        console.log('setUnsplashState with token is done');
-        setIsAuth(true);
-        console.log('setAuth to true is done:', isAuth);
+        console.log('setUnsplashState with accessToken is done');
         setAccessTokenToLocalStorage(json.access_token);
         console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
@@ -72,7 +70,7 @@ const App = () => {
       unsplashState.currentUser.profile()
         .then(toJson)
         .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
-          console.log('json answer is:', json);
+          console.log('json profile answer is:', json);
           setUserProfile(json);
           console.log('setting UserProfile to state is done');
           setIsAuth(true);
@@ -80,27 +78,23 @@ const App = () => {
         });
     }
     else {//иначе ничего не делать
-      console.log('getting UserProfile from server is failed');
+      console.log('getting UserProfile from server is skipped = no key is state');
     }
   };
 
   const setAccessTokenToLocalStorage= (accessToken) => {
     localStorage.setItem('accessTokenForUnsplash', JSON.stringify(accessToken));
-    console.log('setAccessTokenToLocalStorage is done');
   };
 
-  const getAccessTokenFromLocalStorage = () => {//при любом изменении полей идет обновление состояния
-    console.log('getting token from local storage...');
-    if (localStorage.accessTokenForUnsplash) {
-      const token = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));// считать массив в JSON формате('text','text') из localeStorage а если его там нет то просто установить пустой массив
-      setAccessToken(token);
-      console.log('gloc setAccessToken to state is done:', token);
-      setIsAuth(true);
-      console.log('gloc setIsAuth to true is done:', isAuth);
-    } else {
-      console.log('gloc getting token is failed');
-    }
+  const deleteAccessTokenFromLocalStorage= () => {
+    localStorage.setItem('accessTokenForUnsplash', JSON.stringify(undefined));
   };
+
+  const toLogout= () => {
+    setIsAuth(false);
+    deleteAccessTokenFromLocalStorage();
+  };
+
 
   const toAuthorizePage=()=>{
     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
@@ -198,6 +192,7 @@ const App = () => {
         // userAva={isAuth? userProfile.profile_image.small:'img ava'}
         isAuth={isAuth}
         checkLogs={checkLogs}
+        toLogout={toLogout}
       />
         <Switch>{/*рендерится в зависимости от Route path*/}
           <Route exact path={'/'}

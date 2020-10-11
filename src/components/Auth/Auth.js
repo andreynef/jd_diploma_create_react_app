@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Unsplash, {toJson} from 'unsplash-js';
 import {Link} from "react-router-dom";
 import styles from './Auth.module.css';
@@ -16,7 +16,7 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 // const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
-export function Auth({unsplashState, setUnsplashState, setIsAuth}) {
+export function Auth({unsplashState, setUnsplashState, setIsAuth, setUserProfile}) {
 
   const getAccessToken =()=> {
     const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
@@ -42,8 +42,12 @@ export function Auth({unsplashState, setUnsplashState, setIsAuth}) {
   // }, []);
 
   return (
+    <>
       <Link to={'/'}>
           <button className={styles.button} onClick={getAccessToken}>Now you are authorized. Click here to get back to home page </button>
+          {/*<button className={styles.button}>Authorizing... </button>*/}
+          {/*<p className={styles.button}>get token and profile info</p>*/}
       </Link>
+    </>
   )
 }

@@ -42,7 +42,7 @@ const App = () => {
   const amountOnPage = 5;
   const [isAuth, setIsAuth] = useState(false);
   const [open, setOpen] = useState(false);
-  const [userProfile, setUserProfile] = useState('empty');
+  const [userProfile, setUserProfile] = useState({});
 
   const getAccessTokenFromUrlCode =()=> {
     const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...

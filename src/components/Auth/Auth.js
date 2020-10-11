@@ -18,15 +18,6 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 export function Auth({unsplashState, setUnsplashState, setIsAuth, setUserProfile}) {
 
-  unsplashState.currentUser.profile()
-    .then(toJson)
-    .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
-      console.log('unsplash.currentUser.profile() -> json is:', json);
-      setUserProfile(json);
-      setIsAuth(true);
-      console.log('setAuth is done');
-    });
-
   const getAccessToken =()=> {
     const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
     unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена

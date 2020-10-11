@@ -31,7 +31,7 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [isAuth, setIsAuth] = useState(false);
   const [open, setOpen] = useState(false);
-  const [userProfile, setUserProfile] = useState('');
+  const [userProfile, setUserProfile] = useState('empty');
 
   const checkLogs =()=> {
      console.log('unsplashState is:', unsplashState);

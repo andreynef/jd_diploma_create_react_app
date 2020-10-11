@@ -34,8 +34,10 @@ export function Auth({unsplashState, setUnsplashState, setIsAuth}) {
           callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
           bearerToken: json.access_token,//приватный токен юзера
         }));
+        console.log('setUnsplashState with token is done');
         setIsAuth(true);
-        window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
+        console.log('setAuth is done');
+        // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
     };
 
@@ -46,8 +48,8 @@ export function Auth({unsplashState, setUnsplashState, setIsAuth}) {
   return (
     <>
       <Link to={'/'}>
-          {/*<button className={styles.button}>Now you are authorized. Click here to get back to home page </button>*/}
-          <button className={styles.button}>Authorizing... </button>
+          <button className={styles.button}>Now you are authorized. Click here to get back to home page </button>
+          {/*<button className={styles.button}>Authorizing... </button>*/}
           {/*<p className={styles.button}>get token and profile info</p>*/}
       </Link>
     </>

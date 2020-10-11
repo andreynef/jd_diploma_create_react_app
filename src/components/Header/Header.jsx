@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Header.module.css';
 
-export function Header({userId,userName,setUserId,setUserName,toAuthorizePage, userAva, isAuth, checkLogs, toLogout}) {
+export function Header({toAuthorizePage, isAuth, checkLogs, toLogout, userProfile}) {
 
   return (
     <header className={styles.headerContainer}>
@@ -26,17 +26,17 @@ export function Header({userId,userName,setUserId,setUserName,toAuthorizePage, u
               </button>
               <img
                 className={styles.avatarImg}
-                src={userAva ? userAva : "https://copypast.ru/fotografii/foto_zhivotnih/jivotnye_v_obraze_znamenitostej_0_/jivotnye_v_obraze_znamenitostej_0_027.jpg"}
+                src={userProfile.profile_image.small}
                 alt="avatar"
               />
               <button className={styles.button} type="button">
-                <a className={styles.avatarText} href={'https://unsplash.com/'}> {userName}</a>
+                <a className={styles.avatarText} href={'https://unsplash.com/'}> {userProfile.name}</a>
               </button>
             </>
           )}
           {!isAuth && (
             <button className={styles.button} type="button" onClick={toAuthorizePage}>
-              <span className={styles.avatarText}> Login</span>
+              <span className={styles.avatarText}>Login</span>
             </button>
           )}
         </div>

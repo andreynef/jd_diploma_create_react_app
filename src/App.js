@@ -8,13 +8,14 @@ import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
 // 'xGHYVNYkr6A' id foto to like
 
-// const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
-// const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
-// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
-
-const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
-const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
+const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
+const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
 const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+
+// const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
+// const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
+// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+const accessToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//если есть в локале то берем оттуда иначе undefined
 
 // const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
 // const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
@@ -22,7 +23,6 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
-  const [accessToken, setAccessToken] = useState(JSON.parse(localStorage.getItem('accessTokenForUnsplash')));//если есть в локале то берем оттуда иначе undefined
   const [unsplashState, setUnsplashState]= useState(new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
@@ -78,7 +78,7 @@ const App = () => {
         });
     }
     else {//иначе ничего не делать
-      console.log('getting UserProfile from server is skipped = no key is state');
+      console.log('getting UserProfile from server is skipped = no key in state');
     }
   };
 
@@ -187,12 +187,10 @@ const App = () => {
     <>
       <Header
         toAuthorizePage={toAuthorizePage}
-        userId={isAuth? userProfile.id: 'user id'}
-        userName={isAuth? userProfile.name:'user name'}
-        // userAva={isAuth? userProfile.profile_image.small:'img ava'}
-        isAuth={isAuth}
         checkLogs={checkLogs}
         toLogout={toLogout}
+        isAuth={isAuth}
+        userProfile={userProfile}
       />
         <Switch>{/*рендерится в зависимости от Route path*/}
           <Route exact path={'/'}

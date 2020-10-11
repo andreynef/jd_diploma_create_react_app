@@ -59,7 +59,6 @@ const App = () => {
         console.log('setUnsplashState with accessToken is done');
         setAccessTokenToLocalStorage(json.access_token);
         console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
-        // setTimeout(setIsAuth(true),5000);
         setIsAuth(true);
         console.log('setIsAuth to true is done:', isAuth);
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
@@ -84,6 +83,8 @@ const App = () => {
           console.log('json profile answer is:', json);
           setUserProfile(json);
           console.log('setting UserProfile to state is done');
+          setIsAuth(true);
+          console.log('setIsAuth to true is done:', isAuth);
         });
     }
     else {//иначе ничего не делать

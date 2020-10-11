@@ -69,6 +69,7 @@ const App = () => {
      console.log('isAuth is:', isAuth);
      console.log('userProfile is:', userProfile);
      console.log('localStorage.accessTokenForUnsplash is:', localStorage.accessTokenForUnsplash);
+     console.log('unsplashState._bearerToken is:', unsplashState._bearerToken);
   };
 
   const getUserProfile =()=> {

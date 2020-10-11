@@ -6,31 +6,36 @@ import Unsplash, {toJson} from "unsplash-js";
 export function Auth({unsplashState, setUnsplashState}) {
 
   const getAccessTokenFromUrlCode =()=> {
-    if (unsplashState._bearerToken===null) {//если в стейте нет ключа
+    console.log('getting token...');
+    if (!unsplashState._bearerToken) {//если в стейте нет ключа
       console.log('check bearer token in state:', unsplashState._bearerToken);
       const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
-    unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
-      .then(toJson)
-      .then(json => {
-        console.log('json answer from url is:', json);
-        setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера. Сработает только при завершении ф контейнера.
-          accessKey: unsplashState.users._accessKey,// accesskey из настроек вашего приложения
-          secret: unsplashState._secret,// Application Secret из настроек вашего приложения
-          callbackUrl: unsplashState.users._callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-          bearerToken: json.access_token,//приватный токен юзера
-        }));
-        console.log('setUnsplashState with accessToken from getAccessTokenFromUrlCode is done');
-        localStorage.setItem('accessTokenForUnsplash', JSON.stringify(json.access_token));//соханить код в локал
-        console.log('set to local from getAccessTokenFromUrl is done');
-      });
+      console.log('check codeFromUrl:', codeFromUrl);
+      unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
+        .then(toJson)
+        .then(json => {
+          console.log('json answer from url is:', json);
+          setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера. Сработает только при завершении ф контейнера.
+            accessKey: unsplashState.users._accessKey,// accesskey из настроек вашего приложения
+            secret: unsplashState._secret,// Application Secret из настроек вашего приложения
+            callbackUrl: unsplashState.users._callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
+            bearerToken: json.access_token,//приватный токен юзера
+          }));
+          console.log('setUnsplashState with accessToken from getAccessTokenFromUrlCode is done');
+          localStorage.setItem('accessTokenForUnsplash', JSON.stringify(json.access_token));//соханить код в локал
+          console.log('set to local from getAccessTokenFromUrl is done');
+        });
+    } else {//иначе с вещами на вылет.
+      console.log('getting token skipped');
     }
-  };
+  }
 
   const goToRoot =()=>{
+    console.log('going to root...');
     if (unsplashState._bearerToken) {//если в стейте есть ключ
       window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
     } else {//иначе с вещами на вылет.
-        console.log('go to rood is skipped = no token yet');
+        console.log('go to root is skipped');
       }
     }
 

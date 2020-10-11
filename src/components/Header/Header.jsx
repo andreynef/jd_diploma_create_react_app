@@ -19,7 +19,7 @@ export function Header({toAuthorizePage, isAuth, checkLogs, toLogout, userProfil
           </button>
         </div>
         <div className={styles.userContainer}>
-          {isAuth && userProfile!=={} && (
+          {isAuth && (
             <>
               <button className={styles.button} type="button" onClick={toLogout}>
                 <span className={styles.logoutText}>Logout</span>

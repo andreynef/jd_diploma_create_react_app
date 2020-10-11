@@ -59,8 +59,6 @@ const App = () => {
         console.log('setUnsplashState with accessToken is done');
         setAccessTokenToLocalStorage(json.access_token);
         console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
-        setIsAuth(true);
-        console.log('setIsAuth to true is done:', isAuth);
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
   };
@@ -83,8 +81,6 @@ const App = () => {
           console.log('json profile answer is:', json);
           setUserProfile(json);
           console.log('setting UserProfile to state is done');
-          setIsAuth(true);
-          console.log('setIsAuth to true is done:', isAuth);
         });
     }
     else {//иначе ничего не делать
@@ -103,6 +99,13 @@ const App = () => {
   const toLogout= () => {
     setIsAuth(false);
     deleteAccessTokenFromLocalStorage();
+  };
+
+  const authCheck= () => {
+    if(userProfile!=={}){
+      setIsAuth(true);
+      console.log('setIsAuth from check to true is done:', isAuth);
+    }
   };
 
   const toAuthorizePage=()=>{
@@ -183,9 +186,10 @@ const App = () => {
   };
 
   useEffect(() => {
+    authCheck();
     getUserProfile();
     getFirstTenPhotos();
-  }, [isAuth]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
+  }, []);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 
   return (
     <>

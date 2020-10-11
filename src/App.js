@@ -21,7 +21,7 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
-  const [accessToken, setAccessToken] = useState(undefined);
+  const [accessToken, setAccessToken] = useState(JSON.parse(localStorage.getItem('accessTokenForUnsplash')));
   const [unsplashState, setUnsplashState]= useState(new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
@@ -66,14 +66,30 @@ const App = () => {
   };
 
   const getUserProfile =()=> {
-    if (isAuth === true) {
+    console.log('getting UserProfile...');
+
+    // if (isAuth === true) {
+    //   unsplashState.currentUser.profile()
+    //     .then(toJson)
+    //     .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
+    //       console.log('unsplash.currentUser.profile() -> json is:', json);
+    //       setUserProfile(json);
+    //       console.log('setUserProfile is done');
+    //     });
+    // }
+
+    if (unsplashState._bearerToken) {
+      console.log('state has token! Sending request...');
       unsplashState.currentUser.profile()
         .then(toJson)
         .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
-          console.log('unsplash.currentUser.profile() -> json is:', json);
+          console.log('json answer is:', json);
           setUserProfile(json);
           console.log('setUserProfile is done');
         });
+    }
+    else {
+      console.log('getting UserProfile is failed');
     }
   };
 
@@ -83,15 +99,15 @@ const App = () => {
   };
 
   const getAccessTokenFromLocalStorage = () => {//при любом изменении полей идет обновление состояния
-    console.log('getting token from local storage......');
+    console.log('getting token from local storage...');
     if (localStorage.accessTokenForUnsplash) {
       const token = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));// считать массив в JSON формате('text','text') из localeStorage а если его там нет то просто установить пустой массив
       setAccessToken(token);
-      console.log('setAccessToken is done:', token);
+      console.log('gloc setAccessToken to state is done:', token);
       setIsAuth(true);
-      console.log('setIsAuth is done:', isAuth);
+      console.log('gloc setIsAuth to true is done:', isAuth);
     } else {
-      console.log('getting is badly failed');
+      console.log('gloc getting token is failed');
     }
   };
 
@@ -179,9 +195,9 @@ const App = () => {
   };
 
   useEffect(() => {
-    getAccessTokenFromLocalStorage();
-    getFirstTenPhotos();
+    // getAccessTokenFromLocalStorage();
     getUserProfile();
+    getFirstTenPhotos();
   }, [isAuth]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении [].
 
 

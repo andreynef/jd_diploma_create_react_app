@@ -21,17 +21,20 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
+  const [accessToken, setAccessToken] = useState(undefined);
   const [unsplashState, setUnsplashState]= useState(new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
+    bearerToken: accessToken,//приватный токен юзера
   }));
   const [images, setImages] = useState([]);//стейт списка фоток
-  const [openedImage, setOpenedImage] = useState({});
+  const [openedImageInfo, setOpenedImageInfo] = useState({});
   const [page, setPage] = useState(1);
   const [isAuth, setIsAuth] = useState(false);
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState('empty');
+
 
   const getAccessToken =()=> {
     const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
@@ -48,14 +51,18 @@ const App = () => {
         console.log('setUnsplashState with token is done');
         setIsAuth(true);
         console.log('setAuth is done');
+        setAccessTokenToLocalStorage(json.access_token);
+        console.log('setAccessTokenToLocalStorage is done');
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
   };
 
   const checkLogs =()=> {
      console.log('unsplashState is:', unsplashState);
+     console.log('images State is:', images);
      console.log('isAuth is:', isAuth);
      console.log('userProfile is:', userProfile);
+     console.log('localStorage.accessTokenForUnsplash is:', localStorage.accessTokenForUnsplash);
   };
 
   const getUserProfile =()=> {
@@ -67,6 +74,20 @@ const App = () => {
           setUserProfile(json);
           console.log('setUserProfile is done');
         });
+    }
+  };
+
+  const setAccessTokenToLocalStorage= (accessToken) => {
+    localStorage.setItem('accessTokenForUnsplash', JSON.stringify(accessToken));
+  };
+
+  const getAccessTokenFromLocalStorage = () => {//при любом изменении полей идет обновление состояния
+    if (localStorage.accessTokenForUnsplash) {
+      const token = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));// считать массив в JSON формате('text','text') из localeStorage а если его там нет то просто установить пустой массив
+      setAccessToken(token);
+      setIsAuth(true);
+    } else {
+      return false
     }
   };
 
@@ -101,11 +122,9 @@ const App = () => {
       setImages(newCleanArr);//обновляем стейт списка картинок.
   }
 
-  const getOneImageObj = (id) => {//повешен на preview
-    const filteredImages = images.filter(eachElementOfArr => eachElementOfArr.id === id);//оставить только тот итем кот имеет этот id
-      console.log(`sorting images is done`);
-    setOpenedImage(filteredImages[0]);//установить стейт открытой картинки
-      console.log(`setOpenedImage is done`);
+  const getChosenImage = (id) => {//повешен на preview
+    const chosenItemObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
+    setOpenedImageInfo(chosenItemObj);//установить стейт открытой картинки
     setOpen(true);//установить стейт булинь статуса открытости картинки
       console.log(`setOpen is done`);
   };
@@ -156,9 +175,10 @@ const App = () => {
   };
 
   useEffect(() => {
-    getFirstTenPhotos();//= componentDidMount. Выполняется только 1 раз при монтаже ибо добавлен [].
+    getAccessTokenFromLocalStorage();
+    getFirstTenPhotos();
     getUserProfile();
-  }, [isAuth]);
+  }, [isAuth]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении [].
 
 
   return (
@@ -178,7 +198,7 @@ const App = () => {
                      add={addPhotos}
                      handlePressHeart={handlePressHeart}
                      images={images}
-                     getImageObj={getOneImageObj}
+                     getChosenImage={getChosenImage}
                      isAuth={isAuth}
                    />}
           />
@@ -196,9 +216,10 @@ const App = () => {
           <Route exact path={'/cardpage'}
              component={() =>
                <CardPage
-                 openedImage={openedImage}
+                 openedImageInfo={openedImageInfo}
                  open={open}
                  handlePressHeart={handlePressHeart}
+                 images={images}
                />
              }
           />

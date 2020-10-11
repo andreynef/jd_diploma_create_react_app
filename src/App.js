@@ -35,6 +35,14 @@ const App = () => {
   const [userName, setUserName] = useState('');
   const [userAva, setUserAva] = useState(undefined);
 
+  const checkLogs =()=> {
+     console.log('unsplashState is:', unsplashState);
+     console.log('isAuth is:', isAuth);
+     console.log('userId is:', userId);
+     console.log('userName is:', userName);
+     console.log('userAva is:', userAva);
+  };
+
   const getUserProfile =()=> {
     unsplashState.currentUser.profile()
       .then(toJson)
@@ -148,6 +156,7 @@ const App = () => {
         userAva={userAva}
         setUserAva={setUserAva}
         isAuth={isAuth}
+        checkLogs={checkLogs}
       />
         <Switch>{/*рендерится в зависимости от Route path*/}
           <Route exact path={'/'}

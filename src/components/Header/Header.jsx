@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Header.module.css';
 
-export function Header({userId,userName,setUserId,setUserName,toAuthorize, userAva, isAuth}) {
+export function Header({userId,userName,setUserId,setUserName,toAuthorize, userAva, isAuth, checkLogs}) {
 
   return (
     <header className={styles.headerContainer}>
@@ -9,15 +9,15 @@ export function Header({userId,userName,setUserId,setUserName,toAuthorize, userA
         <div className={styles.logoContainer}>
           <img src={'https://www.flaticon.com/svg/static/icons/svg/1/1394.svg'} alt={'logo'}/>
         </div>
-        {/*<div className={styles.authButtonContainer}>*/}
-        {/*  <button*/}
-        {/*    className={styles.button}*/}
-        {/*    type="button"*/}
-        {/*    onClick={toAuthorize}*/}
-        {/*  >*/}
-        {/*    Авторизоваться*/}
-        {/*  </button>*/}
-        {/*</div>*/}
+        <div className={styles.authButtonContainer}>
+          <button
+            className={styles.buttonCheck}
+            type="button"
+            onClick={checkLogs}
+          >
+            show stats in console
+          </button>
+        </div>
         <div className={styles.userContainer}>
           {isAuth && (
             <>
@@ -35,13 +35,15 @@ export function Header({userId,userName,setUserId,setUserName,toAuthorize, userA
           </button>
             </>
           )}
-          <button
+          {!isAuth && (
+            <button
             className={styles.button}
             type="button"
             onClick={toAuthorize}
           >
             <span className={styles.avatarText}> Login</span>
           </button>
+          )}
         </div>
 
       </div>

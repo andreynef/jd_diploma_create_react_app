@@ -18,6 +18,7 @@ import {Auth} from "./components/Auth/Auth";
 const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
 const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
 const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+// const accessToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//если есть в локале то берем оттуда иначе undefined
 
 // const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
 // const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
@@ -29,12 +30,11 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
-  const accessToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//если есть в локале то берем оттуда иначе undefined
   const [unsplashState, setUnsplashState]= useState(new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-    bearerToken: accessToken,//приватный токен юзера
+    bearerToken: JSON.parse(localStorage.getItem('accessTokenForUnsplash')),//приватный токен юзера
   }));
   const [images, setImages] = useState([]);//стейт списка фоток
   const [clickedImageObj, setClickedImageObj] = useState({});
@@ -186,50 +186,101 @@ const App = () => {
   }, [unsplashState]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 
   return (
-    <>
-      <Header
-        toAuthorizePage={toAuthorizePage}
-        checkLogs={checkLogs}
-        toLogout={toLogout}
-        isAuth={isAuth}
-        userProfile={userProfile}
-      />
-        <Switch>{/*рендерится в зависимости от Route path*/}
-          <Route exact path={'/'}
-                 component={() =>
-                   <CardList
-                     add={addPhotos}
-                     handleClickHeart={handleClickHeart}
-                     images={images}
-                     getClickedImageObj={getClickedImageObj}
-                     isAuth={isAuth}
-                   />}
+      <Switch>{/*рендерится в зависимости от Route path*/}
+        <Route exact path={'/auth'} component={() =>
+          <Auth
+            unsplashState={unsplashState}
+            setUnsplashState={setUnsplashState}
           />
-          <Route exact path={'/auth'} component={() =>
-                   <Auth
-                     unsplashState={unsplashState}
-                     setUnsplashState={setUnsplashState}
-                   />
-                 }
-          />
-          <Route exact path={'/cardpage'}
-             component={() =>
-               <CardPage
-                 clickedImageObj={clickedImageObj}
-                 open={open}
-                 handleClickHeart={handleClickHeart}
-                 images={images}
-               />
-             }
-          />
+        }
+        />
+        <Route exact path={'/'}
+               component={() =>
+                 <>
+                 <Header
+                   toAuthorizePage={toAuthorizePage}
+                   checkLogs={checkLogs}
+                   toLogout={toLogout}
+                   isAuth={isAuth}
+                   userProfile={userProfile}
+                 />
+                 <CardList
+                   add={addPhotos}
+                   handleClickHeart={handleClickHeart}
+                   images={images}
+                   getClickedImageObj={getClickedImageObj}
+                   isAuth={isAuth}
+                 />
+                 <Footer/>
+                 </>
+               }
+        />
+        <Route exact path={'/cardpage'}
+               component={() =>
+                 <>
+                 <Header
+                   toAuthorizePage={toAuthorizePage}
+                   checkLogs={checkLogs}
+                   toLogout={toLogout}
+                   isAuth={isAuth}
+                   userProfile={userProfile}
+                 />
+                 <CardPage
+                   clickedImageObj={clickedImageObj}
+                   open={open}
+                   handleClickHeart={handleClickHeart}
+                   images={images}
+                 />
+                 <Footer/>
+                 </>
+               }
+        />
         </Switch>
-          {isAuth && (
-          <Footer/>
-          )}
-    </>
   );
-
 }
+
+
+// <>
+//   <Header
+//     toAuthorizePage={toAuthorizePage}
+//     checkLogs={checkLogs}
+//     toLogout={toLogout}
+//     isAuth={isAuth}
+//     userProfile={userProfile}
+//   />
+//   <Switch>{/*рендерится в зависимости от Route path*/}
+//     <Route exact path={'/'}
+//            component={() =>
+//              <CardList
+//                add={addPhotos}
+//                handleClickHeart={handleClickHeart}
+//                images={images}
+//                getClickedImageObj={getClickedImageObj}
+//                isAuth={isAuth}
+//              />}
+//     />
+//     <Route exact path={'/auth'} component={() =>
+//       <Auth
+//         unsplashState={unsplashState}
+//         setUnsplashState={setUnsplashState}
+//       />
+//     }
+//     />
+//     <Route exact path={'/cardpage'}
+//            component={() =>
+//              <CardPage
+//                clickedImageObj={clickedImageObj}
+//                open={open}
+//                handleClickHeart={handleClickHeart}
+//                images={images}
+//              />
+//            }
+//     />
+//   </Switch>
+//   {isAuth && (
+//     <Footer/>
+//   )}
+// </>
 
 // <InfiniteScroll
 //   dataLength={images.length}

@@ -6,7 +6,7 @@ import {Header} from "./components/Header/Header";
 import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
-import { clone } from "ramda";
+// import { clone } from "ramda";
 // const fastClone = require('rfdc')(); // Returns the deep copy function
 
 // 'xGHYVNYkr6A' id foto to like
@@ -37,7 +37,7 @@ const App = () => {
     bearerToken: accessToken,//приватный токен юзера
   }));
   const [images, setImages] = useState([]);//стейт списка фоток
-  const [openedImageObj, setOpenedImageObj] = useState({});
+  const [clickedImageObj, setClickedImageObj] = useState({});
   const [page, setPage] = useState(1);
   const amountOnPage = 5;
   const [isAuth, setIsAuth] = useState(false);
@@ -138,9 +138,9 @@ const App = () => {
     setPage(page + 1);//на последок сохраняем стейт последней запрашиваемой страницы.
   };
 
-  const getChosenImageObj = (id) => {//повешен на preview
-    const chosenImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
-    setOpenedImageObj(chosenImageObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
+  const getClickedImageObj = (id) => {//повешен на preview
+    const clickedImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
+    setClickedImageObj(clickedImageObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
     setOpen(true);//установить стейт булинь статуса открытости картинки
       console.log(`setOpen is done`);
   };
@@ -159,15 +159,15 @@ const App = () => {
       })
   };
 
-  const handlePressHeart = (id) => {
-    const chosenImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
-    const chosenItemLikes = chosenImageObj.likes;//вытащить число лайков из обьекта для дальнейшего их изменения ниже.
+  const handleClickHeart = (id) => {
+    const clickedImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
+    const clickedImageLikes = clickedImageObj.likes;//вытащить число лайков из обьекта для дальнейшего их изменения ниже.
 
-    if (chosenImageObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
+    if (clickedImageObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
       likePhotoRequest(id);//...то запрос на сервер на лайк
       const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
         item.id === id
-          ? (item.liked_by_user=true, item.likes=chosenItemLikes+1)
+          ? (item.liked_by_user=true, item.likes=clickedImageLikes+1)
           : item
       );
       setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
@@ -175,7 +175,7 @@ const App = () => {
       unlikePhotoRequest(id);//...запрос на сервер на анлайк
       const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
         item.id === id
-          ? (item.liked_by_user=false, item.likes=chosenItemLikes-1)
+          ? (item.liked_by_user=false, item.likes=clickedImageLikes-1)
           : item
       );
       setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
@@ -201,9 +201,9 @@ const App = () => {
                  component={() =>
                    <CardList
                      add={addPhotos}
-                     handlePressHeart={handlePressHeart}
+                     handleClickHeart={handleClickHeart}
                      images={images}
-                     setOpenedImageObj={setOpenedImageObj}
+                     getClickedImageObj={getClickedImageObj}
                      isAuth={isAuth}
                    />}
           />
@@ -214,9 +214,9 @@ const App = () => {
           <Route exact path={'/cardpage'}
              component={() =>
                <CardPage
-                 openedImageObj={openedImageObj}
+                 clickedImageObj={clickedImageObj}
                  open={open}
-                 handlePressHeart={handlePressHeart}
+                 handleClickHeart={handleClickHeart}
                  images={images}
                />
              }

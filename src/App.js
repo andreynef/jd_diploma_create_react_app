@@ -7,7 +7,7 @@ import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
 import { clone } from "ramda";
-const fastClone = require('rfdc')(); // Returns the deep copy function
+// const fastClone = require('rfdc')(); // Returns the deep copy function
 
 // 'xGHYVNYkr6A' id foto to like
 
@@ -116,7 +116,7 @@ const App = () => {
       unsplashState.photos.listPhotos(page, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
         .then(toJson)
         .then(json => {//json это ответ в виде массива обьектов
-          setImages([...fastClone(json)]);//установка нов стейта списка фоток (после этой ф).
+          setImages([...json]);//установка нов стейта списка фоток (после этой ф).
           // setImages([...json]);//установка нов стейта списка фоток (после этой ф).
           console.log('getFirstTenPhotos is done')
         });
@@ -127,7 +127,7 @@ const App = () => {
     unsplashState.photos.listPhotos(page+1, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов в количестве указанном в переменной amountOfItemsOnPage.
-        const newImagesArr = [...images, ...fastClone(json)];//создаем новый массив добавляя к старым новые фотки.
+        const newImagesArr = [...images, ...json];//создаем новый массив добавляя к старым новые фотки.
         // const newCleanArr = [...new Set(newDirtyArr)];//избавляемся от дублирования элементов. ES6. Альтернатива Array.from(new Set (newDirtyArr))
         // const newCleanArr2 = newDirtyArr.filter((item,index)=>newDirtyArr.indexOf(item===index));//способ 2 через filter
         // const newCleanArr3 = newDirtyArr.reduce((unique,item)=>unique.includes((item) ? unique:[...unique, item], []));//способ 3 через reduce
@@ -138,7 +138,7 @@ const App = () => {
 
   const getChosenImageObj = (id) => {//повешен на preview
     const chosenImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
-    setOpenedImageObj(fastClone(chosenImageObj));//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
+    setOpenedImageObj(chosenImageObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
     setOpen(true);//установить стейт булинь статуса открытости картинки
       console.log(`setOpen is done`);
   };
@@ -168,7 +168,7 @@ const App = () => {
           ? (item.liked_by_user=true, item.likes=chosenItemLikes+1)
           : item
       );
-      setImages(fastClone(filteredImages));//установить нов фильтрованый список с измененным итемом.
+      setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
     } else {//иначе, тобишь true...
       unlikePhotoRequest(id);//...запрос на сервер на анлайк
       const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
@@ -176,7 +176,7 @@ const App = () => {
           ? (item.liked_by_user=false, item.likes=chosenItemLikes-1)
           : item
       );
-      setImages(fastClone(filteredImages));//установить нов фильтрованый список с измененным итемом.
+      setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
     };
   };
 

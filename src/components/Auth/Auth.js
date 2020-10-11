@@ -8,8 +8,6 @@ export function Auth({getAccessTokenFromUrl}) {
     <>
       <Link to={'/'}>
           <button className={styles.button} onClick={getAccessTokenFromUrl}>Now you are authorized. Click here to get back to home page </button>
-          {/*<button className={styles.button}>Authorizing... </button>*/}
-          {/*<p className={styles.button}>get token and profile info</p>*/}
       </Link>
     </>
   )

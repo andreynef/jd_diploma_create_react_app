@@ -36,6 +36,7 @@ const App = () => {
   const [images, setImages] = useState([]);//стейт списка фоток
   const [openedImageInfo, setOpenedImageInfo] = useState({});
   const [page, setPage] = useState(1);
+  const amountOnPage = 10;
   const [isAuth, setIsAuth] = useState(false);
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState('empty');
@@ -211,10 +212,6 @@ const App = () => {
           <Route exact path={'/auth'}
                  component={() =>
                    <Auth
-                     setUnsplashState={setUnsplashState}
-                     unsplashState={unsplashState}
-                     setIsAuth={setIsAuth}
-                     setUserProfile={setUserProfile}
                      getAccessTokenFromUrl={getAccessTokenFromUrl}
                    />
                  }

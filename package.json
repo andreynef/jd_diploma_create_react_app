@@ -1,5 +1,5 @@
 {
-  "name": "react-way-of-samurai",
+  "name": "andrey_js_diploma",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,11 +11,16 @@
     "redux": "^4.0.1",
     "unsplash-js": "^6.3.0"
   },
+  "devDependencies": {
+    "gh-pages": "^3.1.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -25,5 +30,6 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "homepage": "andreynef.github.io/module-f-git"
 }

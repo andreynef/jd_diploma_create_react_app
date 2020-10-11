@@ -175,6 +175,7 @@ const App = () => {
                      setUnsplashState={setUnsplashState}
                      unsplashState={unsplashState}
                      setIsAuth={setIsAuth}
+                     getUserProfile={getUserProfile}
                    />
                  }
           />

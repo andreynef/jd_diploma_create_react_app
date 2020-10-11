@@ -18,7 +18,6 @@ import {Auth} from "./components/Auth/Auth";
 // const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
 // const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
 // const callbackUrl="https://jsdiploma.nef-an.ru/auth";
-const accessToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//если есть в локале то берем оттуда иначе undefined
 
 const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
 const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
@@ -30,6 +29,7 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
+  const accessToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//если есть в локале то берем оттуда иначе undefined
   const [unsplashState, setUnsplashState]= useState(new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
@@ -50,17 +50,15 @@ const App = () => {
       .then(toJson)
       .then(json => {
         console.log('json answer from url is:', json);
-        setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера
+        setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера. Сработает только при завершении ф контейнера.
           accessKey: accessKey,// accesskey из настроек вашего приложения
           secret: secret,// Application Secret из настроек вашего приложения
           callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
           bearerToken: json.access_token,//приватный токен юзера
         }));
-        console.log('setUnsplashState with accessToken is done');
+        console.log('setUnsplashState with accessToken from getAccessTokenFromUrlCode is done');
         setAccessTokenToLocalStorage(json.access_token);
         console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
-        getUserProfile();
-        console.log('getUserProfile from getAccessTokenFromUrl is done');
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
   };
@@ -87,7 +85,7 @@ const App = () => {
           console.log('setIsAuth from getUserProfile is done');
         });
     }
-    else {//иначе ничего не делать
+    else {//иначе с вещами на вылет.
       console.log('getting UserProfile from server is skipped = no key in state');
     }
   };
@@ -182,9 +180,9 @@ const App = () => {
   };
 
   useEffect(() => {
-    getUserProfile();
-    getFirstTenPhotos();
-  }, []);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
+    getUserProfile();//сначала unsplashState без ключа. Сработает пока вхолостую. (Внутри имеется проверка на наличие ключа). Когда из авторизации getAccessTokenFromUrlCode установится новый unsplashState то перезапустит эту ф.
+    getFirstTenPhotos();//загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
+  }, [unsplashState]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 
   return (
     <>

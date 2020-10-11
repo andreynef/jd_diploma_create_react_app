@@ -8,9 +8,9 @@ import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
 // 'xGHYVNYkr6A' id foto to like
 
-const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
-const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
-const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+// const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
+// const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
+// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 // const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
 // const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
@@ -20,6 +20,10 @@ const accessToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));/
 // const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
 // const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
 // const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+
+const accessKey= "Awhepytu0JPZujZW7f97BMriVV8gKVO9_i2cM82Z1YU";
+const secret = "6LfA1BzLZz3Z2_Co9uWJJB4_fkpZvXZAUCxdQEAHP5o";
+const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
@@ -105,7 +109,7 @@ const App = () => {
   };
 
   const getFirstTenPhotos = ()=>{
-    unsplashState.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+    unsplashState.photos.listPhotos(page, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
         setImages([...json]);//установка нов стейта списка фоток (после этой ф).
@@ -134,7 +138,7 @@ const App = () => {
   };
 
   const handleListPhotos = (pageToShow) => {
-    unsplashState.photos.listPhotos(pageToShow, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+    unsplashState.photos.listPhotos(pageToShow, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов в количестве указанном в переменной amountOfItemsOnPage.
         updateImagesState(json);
@@ -156,6 +160,7 @@ const App = () => {
   };
 
   const handlePressHeart = (id) => {
+    //   const item = getItem(this.state.list, item.id) // Method to get item in list through comparison (IE: find some item with item.id), it has to return ITEM and INDEX in array
     const chosenItemObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
     const chosenItemLikes = chosenItemObj.likes;//вытащить количество лайков из обьекта для дальнейшего их изменения ниже.
 
@@ -312,16 +317,6 @@ const App = () => {
 
 
 export default App
-// componentDidMount() {
-// 	this.timerID = setInterval(
-// 		() => this.tick(),
-// 		1000
-// 	);
-// }
-
-// componentWillUnmount() {
-// 	clearInterval(this.timerID);
-// }
 
 // axios
 //   .get(`${apiRoot}/photos/random?client_id=${accessKey}&count=10`)

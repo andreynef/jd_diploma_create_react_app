@@ -79,13 +79,15 @@ const App = () => {
     // }
 
     if (unsplashState._bearerToken) {
-      console.log('state has token! Sending request...');
+      console.log('state has tokenAcces key! Sending request...');
       unsplashState.currentUser.profile()
         .then(toJson)
         .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
           console.log('json answer is:', json);
           setUserProfile(json);
-          console.log('setUserProfile is done');
+          console.log('setting UserProfile to state is done');
+          setIsAuth(true);
+          console.log('setIsAuth to true is done:', isAuth);
         });
     }
     else {

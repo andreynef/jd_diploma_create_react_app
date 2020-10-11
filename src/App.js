@@ -6,6 +6,7 @@ import {Header} from "./components/Header/Header";
 import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
+// 'xGHYVNYkr6A' id foto to like
 
 // const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
 // const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
@@ -52,8 +53,6 @@ const App = () => {
         console.log('setAuth to true is done:', isAuth);
         setAccessTokenToLocalStorage(json.access_token);
         console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
-        getUserProfile();
-        console.log('getUserProfile from getAccessTokenFromUrl is done');
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
   };
@@ -187,13 +186,8 @@ const App = () => {
 
   useEffect(() => {
     getUserProfile();
-  }, [userProfile]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
-
-  useEffect(() => {
     getFirstTenPhotos();
   }, [isAuth]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
-
-
 
   return (
     <>

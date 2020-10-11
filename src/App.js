@@ -20,13 +20,13 @@ import {Auth} from "./components/Auth/Auth";
 // const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 const accessToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//если есть в локале то берем оттуда иначе undefined
 
-// const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
-// const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
-// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
-
-const accessKey= "Awhepytu0JPZujZW7f97BMriVV8gKVO9_i2cM82Z1YU";
-const secret = "6LfA1BzLZz3Z2_Co9uWJJB4_fkpZvXZAUCxdQEAHP5o";
+const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
+const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
 const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+
+// const accessKey= "Awhepytu0JPZujZW7f97BMriVV8gKVO9_i2cM82Z1YU";
+// const secret = "6LfA1BzLZz3Z2_Co9uWJJB4_fkpZvXZAUCxdQEAHP5o";
+// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {

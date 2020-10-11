@@ -6,7 +6,9 @@ import Unsplash, {toJson} from "unsplash-js";
 export function Auth({unsplashState, setUnsplashState}) {
 
   const getAccessTokenFromUrlCode =()=> {
-    const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
+    if (!unsplashState._bearerToken) {//если в стейте нет ключа
+      console.log('check bearer token in state:', unsplashState._bearerToken);
+      const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
     unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
       .then(toJson)
       .then(json => {
@@ -21,6 +23,7 @@ export function Auth({unsplashState, setUnsplashState}) {
         localStorage.setItem('accessTokenForUnsplash', JSON.stringify(json.access_token));//соханить код в локал
         console.log('set to local from getAccessTokenFromUrl is done');
       });
+    }
   };
 
   const goToRoot =()=>{
@@ -33,7 +36,7 @@ export function Auth({unsplashState, setUnsplashState}) {
 
   useEffect(() => {
     goToRoot();//выполнился вхолостую ибо нет ключа в стейте. Но далее, когда выполнится след ф = обновится unsplashState = выполнится заново и сработает.
-    getAccessTokenFromUrlCode();//выполнится при первом монтаже и изменит unsplashState.
+    setTimeout(getAccessTokenFromUrlCode,10000);//выполнится при первом монтаже и изменит unsplashState.
   }, [unsplashState]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 
   return (

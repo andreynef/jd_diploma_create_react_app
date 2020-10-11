@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Header.module.css';
 
-export function Header({userId,userName,setUserId,setUserName,toAuthorize, userAva, isAuth, checkLogs}) {
+export function Header({userId,userName,setUserId,setUserName,toAuthorizePage, userAva, isAuth, checkLogs}) {
 
   return (
     <header className={styles.headerContainer}>
@@ -39,7 +39,7 @@ export function Header({userId,userName,setUserId,setUserName,toAuthorize, userA
             <button
             className={styles.button}
             type="button"
-            onClick={toAuthorize}
+            onClick={toAuthorizePage}
           >
             <span className={styles.avatarText}> Login</span>
           </button>

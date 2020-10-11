@@ -39,7 +39,19 @@ const App = () => {
      console.log('userProfile is:', userProfile);
   };
 
-  const toAuthorize=()=>{
+  const getUserProfile =()=> {
+    if (isAuth === true) {
+      unsplashState.currentUser.profile()
+        .then(toJson)
+        .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
+          console.log('unsplash.currentUser.profile() -> json is:', json);
+          setUserProfile(json);
+          console.log('setUserProfile is done');
+        });
+    }
+  };
+
+  const toAuthorizePage=()=>{
     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
       "public",// и указываем требуемые разрешения (permissions)
       "write_likes",
@@ -126,13 +138,14 @@ const App = () => {
 
   useEffect(() => {
     getFirstTenPhotos();//= componentDidMount. Выполняется только 1 раз при монтаже ибо добавлен [].
+    getUserProfile();
   }, []);
 
 
   return (
     <>
       <Header
-        toAuthorize={toAuthorize}
+        toAuthorizePage={toAuthorizePage}
         userId={isAuth? userProfile.id: 'user id'}
         userName={isAuth?userProfile.name:'user name'}
         userAva={isAuth?userProfile.profile_image.small:'img ava'}

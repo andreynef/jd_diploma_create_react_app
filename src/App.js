@@ -51,8 +51,9 @@ const App = () => {
         setIsAuth(true);
         console.log('setAuth to true is done:', isAuth);
         setAccessTokenToLocalStorage(json.access_token);
-        // getUserProfile();
-        console.log('getUserProfile is done');
+        console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
+        getUserProfile();
+        console.log('getUserProfile from getAccessTokenFromUrl is done');
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
   };

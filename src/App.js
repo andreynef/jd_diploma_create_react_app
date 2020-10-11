@@ -6,6 +6,9 @@ import {Header} from "./components/Header/Header";
 import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
+import { clone } from "ramda";
+const fastClone = require('rfdc')(); // Returns the deep copy function
+
 // 'xGHYVNYkr6A' id foto to like
 
 // const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
@@ -34,14 +37,14 @@ const App = () => {
     bearerToken: accessToken,//приватный токен юзера
   }));
   const [images, setImages] = useState([]);//стейт списка фоток
-  const [openedImageInfo, setOpenedImageInfo] = useState({});
+  const [openedImageObj, setOpenedImageObj] = useState({});
   const [page, setPage] = useState(1);
-  const amountOnPage = 10;
+  const amountOnPage = 5;
   const [isAuth, setIsAuth] = useState(false);
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState('empty');
 
-  const getAccessTokenFromUrl =()=> {
+  const getAccessTokenFromUrlCode =()=> {
     const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
     unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
       .then(toJson)
@@ -56,6 +59,8 @@ const App = () => {
         console.log('setUnsplashState with accessToken is done');
         setAccessTokenToLocalStorage(json.access_token);
         console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
+        setIsAuth(true);
+        console.log('setIsAuth to true is done:', isAuth);
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
   };
@@ -71,15 +76,13 @@ const App = () => {
   const getUserProfile =()=> {
     console.log('getting UserProfile...');
     if (unsplashState._bearerToken) {//если в стейте есть ключ
-      console.log('your app is already has tokenAccess key! Sending request...');
+      console.log('your app already has tokenAccess key! Sending request...');
       unsplashState.currentUser.profile()
         .then(toJson)
         .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
           console.log('json profile answer is:', json);
           setUserProfile(json);
           console.log('setting UserProfile to state is done');
-          setIsAuth(true);
-          console.log('setIsAuth to true is done:', isAuth);
         });
     }
     else {//иначе ничего не делать
@@ -92,14 +95,13 @@ const App = () => {
   };
 
   const deleteAccessTokenFromLocalStorage= () => {
-    localStorage.setItem('accessTokenForUnsplash', JSON.stringify(undefined));
+    localStorage.removeItem('accessTokenForUnsplash');
   };
 
   const toLogout= () => {
     setIsAuth(false);
     deleteAccessTokenFromLocalStorage();
   };
-
 
   const toAuthorizePage=()=>{
     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
@@ -110,50 +112,45 @@ const App = () => {
   };
 
   const getFirstTenPhotos = ()=>{
-    unsplashState.photos.listPhotos(page, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
-      .then(toJson)
-      .then(json => {//json это ответ в виде массива обьектов
-        setImages([...json]);//установка нов стейта списка фоток (после этой ф).
-        console.log('getFirstTenPhotos is done')
-      });
+    if (images.length === 0) {//на всякий случай. Если в списке уже есть фотки, то не загружать новые.
+      unsplashState.photos.listPhotos(page, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+        .then(toJson)
+        .then(json => {//json это ответ в виде массива обьектов
+          setImages([...fastClone(json)]);//установка нов стейта списка фоток (после этой ф).
+          // setImages([...json]);//установка нов стейта списка фоток (после этой ф).
+          console.log('getFirstTenPhotos is done')
+        });
+    }
   };
 
   const addPhotos = () => {
-    handleListPhotos(page+1);
-    setPage(page + 1);//сохраняем стейт посл страницы. но только после заверш этой ф!
+    unsplashState.photos.listPhotos(page+1, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+      .then(toJson)
+      .then(json => {//json это ответ в виде массива обьектов в количестве указанном в переменной amountOfItemsOnPage.
+        const newImagesArr = [...images, ...fastClone(json)];//создаем новый массив добавляя к старым новые фотки.
+        // const newCleanArr = [...new Set(newDirtyArr)];//избавляемся от дублирования элементов. ES6. Альтернатива Array.from(new Set (newDirtyArr))
+        // const newCleanArr2 = newDirtyArr.filter((item,index)=>newDirtyArr.indexOf(item===index));//способ 2 через filter
+        // const newCleanArr3 = newDirtyArr.reduce((unique,item)=>unique.includes((item) ? unique:[...unique, item], []));//способ 3 через reduce
+        setImages(newImagesArr);//обновляем стейт списка картинок.
+      });
+    setPage(page + 1);//на последок сохраняем стейт последней запрашиваемой страницы.
   };
 
-  const updateImagesState = (jsonRespond)=>{
-      const newDirtyArr = [...images, ...jsonRespond];//мешаем все в кучу
-      const newCleanArr = [...new Set(newDirtyArr)];//избавляемся от дублирования элементов. ES6. Альтернатива Array.from(new Set (newDirtyArr))
-      // const newCleanArr2 = newDirtyArr.filter((item,index)=>newDirtyArr.indexOf(item===index));//способ 2 через filter
-      // const newCleanArr3 = newDirtyArr.reduce((unique,item)=>unique.includes((item) ? unique:[...unique, item], []));//способ 3 через reduce
-      setImages(newCleanArr);//обновляем стейт списка картинок.
-  }
-
-  const getChosenImage = (id) => {//повешен на preview
-    const chosenItemObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
-    setOpenedImageInfo(chosenItemObj);//установить стейт открытой картинки
+  const getChosenImageObj = (id) => {//повешен на preview
+    const chosenImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
+    setOpenedImageObj(fastClone(chosenImageObj));//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
     setOpen(true);//установить стейт булинь статуса открытости картинки
       console.log(`setOpen is done`);
   };
 
-  const handleListPhotos = (pageToShow) => {
-    unsplashState.photos.listPhotos(pageToShow, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
-      .then(toJson)
-      .then(json => {//json это ответ в виде массива обьектов в количестве указанном в переменной amountOfItemsOnPage.
-        updateImagesState(json);
-      });
-  };
-
-  const handleLikePhoto =(id)=> {
+  const likePhotoRequest =(id)=> {
     unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде одного обьекта {photo:{}, user:{}}
       })
   };
 
-  const handleUnlikePhoto =(id)=> {
+  const unlikePhotoRequest =(id)=> {
     unsplashState.photos.unlikePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде одного обьекта {photo:{}, user:{}}
@@ -161,26 +158,25 @@ const App = () => {
   };
 
   const handlePressHeart = (id) => {
-    //   const item = getItem(this.state.list, item.id) // Method to get item in list through comparison (IE: find some item with item.id), it has to return ITEM and INDEX in array
-    const chosenItemObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
-    const chosenItemLikes = chosenItemObj.likes;//вытащить количество лайков из обьекта для дальнейшего их изменения ниже.
+    const chosenImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
+    const chosenItemLikes = chosenImageObj.likes;//вытащить число лайков из обьекта для дальнейшего их изменения ниже.
 
-    if (chosenItemObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
-      handleLikePhoto(id);//...то запрос на сервер на лайк
-      const filteredImages = images.filter(item =>//создать копию стейта с измененными данными выбранного элемента
+    if (chosenImageObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
+      likePhotoRequest(id);//...то запрос на сервер на лайк
+      const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
         item.id === id
           ? (item.liked_by_user=true, item.likes=chosenItemLikes+1)
           : item
       );
-      setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
+      setImages(fastClone(filteredImages));//установить нов фильтрованый список с измененным итемом.
     } else {//иначе, тобишь true...
-      handleUnlikePhoto(id);//...запрос на сервер на анлайк
-      const filteredImages = images.filter(item =>//создать копию стейта с измененными данными выбранного элемента
+      unlikePhotoRequest(id);//...запрос на сервер на анлайк
+      const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
         item.id === id
           ? (item.liked_by_user=false, item.likes=chosenItemLikes-1)
           : item
       );
-      setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
+      setImages(fastClone(filteredImages));//установить нов фильтрованый список с измененным итемом.
     };
   };
 
@@ -205,21 +201,18 @@ const App = () => {
                      add={addPhotos}
                      handlePressHeart={handlePressHeart}
                      images={images}
-                     getChosenImage={getChosenImage}
+                     getChosenImageObj={getChosenImageObj}
                      isAuth={isAuth}
                    />}
           />
-          <Route exact path={'/auth'}
-                 component={() =>
-                   <Auth
-                     getAccessTokenFromUrl={getAccessTokenFromUrl}
-                   />
+          <Route exact path={'/auth'} component={() =>
+                   <Auth getAccessTokenFromUrlCode={getAccessTokenFromUrlCode}/>
                  }
           />
           <Route exact path={'/cardpage'}
              component={() =>
                <CardPage
-                 openedImageInfo={openedImageInfo}
+                 openedImageObj={openedImageObj}
                  open={open}
                  handlePressHeart={handlePressHeart}
                  images={images}

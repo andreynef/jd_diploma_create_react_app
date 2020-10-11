@@ -6,16 +6,16 @@ import cross2 from '../../assets/images/cross2.svg';
 import HeartIconPressed from "../../assets/images/HeartIconPressed.svg";
 import HeartIconUnpressed from "../../assets/images/HeartIconUnpressed.svg";
 
-export function CardPage({openedImageInfo, isPressedHeart, handlePressHeart}) {
-  const date = openedImageInfo.created_at.slice(0,10);
+export function CardPage({openedImageObj, handlePressHeart}) {
+  const date = openedImageObj.created_at.slice(0,10);//срезать лишние цифры из даты
 
   return (
     <div className={styles.cardPage}>
       <div className={styles.centralContainer}>
         <div className={styles.imageContainer}>
           <img
-            src={openedImageInfo.urls.regular}
-            alt={openedImageInfo.alt_description}
+            src={openedImageObj.urls.regular}
+            alt={openedImageObj.alt_description}
           />
         </div>
         <div className={styles.infoContainer}>
@@ -23,17 +23,17 @@ export function CardPage({openedImageInfo, isPressedHeart, handlePressHeart}) {
             <div className={styles.authorContainer}>
               <img
                 className={styles.avatarImg}
-                src={openedImageInfo.user.profile_image.small}
+                src={openedImageObj.user.profile_image.small}
                 alt="avatar"
               />
-              <a className={styles.avatarText} href={openedImageInfo.user.links.html}>{openedImageInfo.user.first_name}</a>
+              <a className={styles.avatarText} href={openedImageObj.user.links.html}>{openedImageObj.user.first_name}</a>
             </div>
             <span className={styles.createdAt}>{date}</span>
           </div>
           <div className={styles.likesContainer}>
-            <span className={styles.likesValue}>{openedImageInfo.likes}</span>
-            <button className={styles.button} onClick={handlePressHeart(openedImageInfo.id)}>
-              <img src={openedImageInfo.liked_by_user? HeartIconPressed: HeartIconUnpressed} alt={'heart'}/>
+            <span className={styles.likesValue}>{openedImageObj.likes}</span>
+            <button className={styles.button} onClick={handlePressHeart(openedImageObj.id)}>
+              <img src={openedImageObj.liked_by_user? HeartIconPressed: HeartIconUnpressed} alt={'heart'}/>
             </button>
           </div>
         </div>

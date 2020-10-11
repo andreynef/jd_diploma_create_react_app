@@ -15,13 +15,13 @@ import {Auth} from "./components/Auth/Auth";
 // const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
 // const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
-// const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
-// const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
-// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
-
-const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
-const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
+const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
+const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
 const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+
+// const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
+// const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
+// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 // const accessKey= "Awhepytu0JPZujZW7f97BMriVV8gKVO9_i2cM82Z1YU";
 // const secret = "6LfA1BzLZz3Z2_Co9uWJJB4_fkpZvXZAUCxdQEAHP5o";
@@ -59,7 +59,7 @@ const App = () => {
         console.log('setUnsplashState with accessToken from getAccessTokenFromUrlCode is done');
         setAccessTokenToLocalStorage(json.access_token);
         console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
-        // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
+        window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
   };
 
@@ -112,7 +112,7 @@ const App = () => {
   };
 
   const getFirstTenPhotos = ()=>{
-    if (images.length === 0) {//на всякий случай. Если в списке уже есть фотки, то не загружать новые.
+    if (images.length === 0) {//проверка добавлена ибо когда обновится unsplashState (добавится ключ), то он перезапустится (UseEffect) а нам 2й раз загружать фотки в стейт не надобно.
       unsplashState.photos.listPhotos(page, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
         .then(toJson)
         .then(json => {//json это ответ в виде массива обьектов
@@ -205,7 +205,7 @@ const App = () => {
                    />}
           />
           <Route exact path={'/auth'} component={() =>
-                   <Auth getAccessTokenFromUrlCode={getAccessTokenFromUrlCode}/>
+                   <Auth getAccessTokenFromUrlCode={getAccessTokenFromUrlCode} unsplashState={unsplashState}/>
                  }
           />
           <Route exact path={'/cardpage'}

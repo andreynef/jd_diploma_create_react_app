@@ -1,8 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
 import styles from './Auth.module.css';
 
 export function Auth({getAccessTokenFromUrlCode}) {
+
+
+  useEffect(() => {
+    getAccessTokenFromUrlCode();
+  }, []);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 
   return (
     <>

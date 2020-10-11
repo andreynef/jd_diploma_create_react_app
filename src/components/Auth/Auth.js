@@ -16,7 +16,7 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 // const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
-export function Auth({unsplashState, setUnsplashState, setIsAuth, getUserProfile}) {
+export function Auth({unsplashState, setUnsplashState, setIsAuth, setUserProfile}) {
 
   const getAccessToken =()=> {
     const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
@@ -24,17 +24,22 @@ export function Auth({unsplashState, setUnsplashState, setIsAuth, getUserProfile
       .then(toJson)
       .then(json => {
         console.log('setBearerToken is:', json.access_token);
-        setUnsplashState(new Unsplash({
+        setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера
           accessKey: accessKey,// accesskey из настроек вашего приложения
           secret: secret,// Application Secret из настроек вашего приложения
           callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
           bearerToken: json.access_token,//приватный токен юзера
         }));
         console.log('setUnsplashState with token is done');
-        getUserProfile();
-        setIsAuth(true);
-        console.log('setAuth is done');
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
+        unsplashState.currentUser.profile()
+          .then(toJson)
+          .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
+            console.log('unsplash.currentUser.profile() -> json is:', json);
+            setUserProfile(json);
+            setIsAuth(true);
+            console.log('setAuth is done');
+          });
       });
     };
 

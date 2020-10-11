@@ -31,16 +31,15 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [isAuth, setIsAuth] = useState(false);
   const [open, setOpen] = useState(false);
-  const [userId, setUserId] = useState('');
-  const [userName, setUserName] = useState('');
-  const [userAva, setUserAva] = useState(undefined);
+  // const [userId, setUserId] = useState('');
+  // const [userName, setUserName] = useState('');
+  // const [userAva, setUserAva] = useState(undefined);
+  const [userProfile, setUserProfile] = useState('');
 
   const checkLogs =()=> {
      console.log('unsplashState is:', unsplashState);
      console.log('isAuth is:', isAuth);
-     console.log('userId is:', userId);
-     console.log('userName is:', userName);
-     console.log('userAva is:', userAva);
+     console.log('userProfile is:', userProfile);
   };
 
   const getUserProfile =()=> {
@@ -149,11 +148,11 @@ const App = () => {
     <>
       <Header
         toAuthorize={toAuthorize}
-        userId={userId}
-        userName={userName}
+        userId={userProfile.id}
+        userName={userProfile.name}
         setUserId={setUserId}
         setUserName={setUserName}
-        userAva={userAva}
+        userAva={userProfile.profile_image.small}
         setUserAva={setUserAva}
         isAuth={isAuth}
         checkLogs={checkLogs}
@@ -175,7 +174,7 @@ const App = () => {
                      setUnsplashState={setUnsplashState}
                      unsplashState={unsplashState}
                      setIsAuth={setIsAuth}
-                     getUserProfile={getUserProfile}
+                     setUserProfile={setUserProfile}
                    />
                  }
           />

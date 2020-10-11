@@ -6,7 +6,7 @@ import Unsplash, {toJson} from "unsplash-js";
 export function Auth({unsplashState, setUnsplashState}) {
 
   const getAccessTokenFromUrlCode =()=> {
-    if (!unsplashState._bearerToken) {//если в стейте нет ключа
+    if (unsplashState._bearerToken===null) {//если в стейте нет ключа
       console.log('check bearer token in state:', unsplashState._bearerToken);
       const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
     unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена

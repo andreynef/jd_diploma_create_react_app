@@ -31,26 +31,12 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [isAuth, setIsAuth] = useState(false);
   const [open, setOpen] = useState(false);
-  // const [userId, setUserId] = useState('');
-  // const [userName, setUserName] = useState('');
-  // const [userAva, setUserAva] = useState(undefined);
   const [userProfile, setUserProfile] = useState('');
 
   const checkLogs =()=> {
      console.log('unsplashState is:', unsplashState);
      console.log('isAuth is:', isAuth);
      console.log('userProfile is:', userProfile);
-  };
-
-  const getUserProfile =()=> {
-    unsplashState.currentUser.profile()
-      .then(toJson)
-      .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
-        console.log('unsplash.currentUser.profile() -> json is:', json);
-        setUserId(json.id);
-        setUserName(json.name);
-        setUserAva(json.profile_image.small);
-      });
   };
 
   const toAuthorize=()=>{
@@ -62,8 +48,7 @@ const App = () => {
   };
 
   const getFirstTenPhotos = ()=>{
-    console.log(unsplashState);
-    isAuth && getUserProfile();
+    // console.log(unsplashState);
     unsplashState.photos.listPhotos(page, 10, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов
@@ -150,10 +135,7 @@ const App = () => {
         toAuthorize={toAuthorize}
         userId={userProfile.id}
         userName={userProfile.name}
-        setUserId={setUserId}
-        setUserName={setUserName}
         userAva={userProfile.profile_image.small}
-        setUserAva={setUserAva}
         isAuth={isAuth}
         checkLogs={checkLogs}
       />

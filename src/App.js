@@ -59,8 +59,8 @@ const App = () => {
         console.log('setUnsplashState with accessToken is done');
         setAccessTokenToLocalStorage(json.access_token);
         console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
-        setTimeout(setIsAuth(true),5000);
-        // setIsAuth(true);
+        // setTimeout(setIsAuth(true),5000);
+        setIsAuth(true);
         console.log('setIsAuth to true is done:', isAuth);
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });

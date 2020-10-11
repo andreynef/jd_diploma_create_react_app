@@ -65,6 +65,16 @@
 .avatarText:hover{
     color: orange;
 }
+.logoutText {
+    text-decoration: none;
+    color: black;
+    margin-right: 10px;
+    font-family: Roboto;
+    font-size: 14px;
+}
+.logoutText:hover{
+    color: orange;
+}
 
 
 

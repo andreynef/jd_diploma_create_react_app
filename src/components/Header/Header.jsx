@@ -22,7 +22,7 @@ export function Header({toAuthorizePage, isAuth, checkLogs, toLogout, userProfil
           {isAuth===true && (
             <>
               <button className={styles.button} type="button" onClick={toLogout}>
-                <span className={styles.avatarText}>Logout</span>
+                <span className={styles.logoutText}>Logout</span>
               </button>
               <img
                 className={styles.avatarImg}

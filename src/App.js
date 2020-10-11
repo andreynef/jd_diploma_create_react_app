@@ -42,7 +42,7 @@ const App = () => {
   const amountOnPage = 5;
   const [isAuth, setIsAuth] = useState(false);
   const [open, setOpen] = useState(false);
-  const [userProfile, setUserProfile] = useState({});
+  const [userProfile, setUserProfile] = useState('');
 
   const getAccessTokenFromUrlCode =()=> {
     const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
@@ -59,6 +59,8 @@ const App = () => {
         console.log('setUnsplashState with accessToken is done');
         setAccessTokenToLocalStorage(json.access_token);
         console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
+        getUserProfile();
+        console.log('getUserProfile from getAccessTokenFromUrl is done');
         // window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
       });
   };
@@ -81,6 +83,8 @@ const App = () => {
           console.log('json profile answer is:', json);
           setUserProfile(json);
           console.log('setting UserProfile to state is done');
+          setIsAuth(true);
+          console.log('setIsAuth from getUserProfile is done');
         });
     }
     else {//иначе ничего не делать
@@ -101,13 +105,6 @@ const App = () => {
     deleteAccessTokenFromLocalStorage();
   };
 
-  const authCheck= () => {
-    if(userProfile!=={}){
-      setIsAuth(true);
-      console.log('setIsAuth from check to true is done:', isAuth);
-    }
-  };
-
   const toAuthorizePage=()=>{
     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
       "public",// и указываем требуемые разрешения (permissions)
@@ -122,7 +119,6 @@ const App = () => {
         .then(toJson)
         .then(json => {//json это ответ в виде массива обьектов
           setImages([...json]);//установка нов стейта списка фоток (после этой ф).
-          // setImages([...json]);//установка нов стейта списка фоток (после этой ф).
           console.log('getFirstTenPhotos is done')
         });
     }
@@ -186,7 +182,6 @@ const App = () => {
   };
 
   useEffect(() => {
-    authCheck();
     getUserProfile();
     getFirstTenPhotos();
   }, []);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.

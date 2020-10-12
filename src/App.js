@@ -77,6 +77,11 @@ const App = () => {
      console.log('userProfile is:', userProfile);
      console.log('localStorage.accessTokenForUnsplash is:', localStorage.accessTokenForUnsplash);
      console.log('unsplashState._bearerToken is:', unsplashState._bearerToken);
+    const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
+      "public",// и указываем требуемые разрешения (permissions)
+      "write_likes",
+    ]);
+    console.log('unsplashState.auth.getAuthenticationUrl is:', authenticationUrl);
   };
 
   const getUserProfile =()=> {
@@ -94,7 +99,7 @@ const App = () => {
         });
     }
     else {//иначе с вещами на вылет.
-      console.log('getting UserProfile from server is skipped = key is null');
+      console.log('getting UserProfile from server is skipped.  BearerToken in state is:', unsplashState._bearerToken);
     }
   };
 
@@ -116,6 +121,7 @@ const App = () => {
       "public",// и указываем требуемые разрешения (permissions)
       "write_likes",
     ]);
+    alert('going to:', authenticationUrl);
     window.location.assign(authenticationUrl);// Отправляем пользователя на авторизацию сайта Unsplash а потом он пепенаправит пользователя на - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
   };
 
@@ -124,7 +130,7 @@ const App = () => {
     if (unsplashState.users._bearerToken!==undefined){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
       window.location.assign('https://jsdiploma.nef-an.ru');// Отправляем пользователя обратно на гл стр.
     }else{
-      console.log('going to root is skipped. BearerToken in UnsplashState is null or undefined')
+      console.log('going to root is skipped. BearerToken in UnsplashState is:', unsplashState.users._bearerToken)
     }
   }
 

@@ -120,18 +120,22 @@ const App = () => {
   };
 
   const goToRoot = ()=>{
+    console.log('going to root...')
     if (unsplashState.users._bearerToken!==null||undefined){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
       window.location.assign('https://jsdiploma.nef-an.ru');// Отправляем пользователя обратно на гл стр.
+    }else{
+      console.log('going to root is skipped. BearerToken in UnsplashState is null or undefined')
     }
   }
 
   const getFirstTenPhotos = ()=>{
-    if (images.length === 0) {//проверка добавлена ибо когда обновится unsplashState (добавится ключ), то он перезапустится (UseEffect) а нам 2й раз загружать фотки в стейт не надобно.
+    console.log('getting 10 photos...')
+    if (images.length === 0) {//когда обновится unsplashState (добавится ключ), то он перезапустится (UseEffect) а нам 2й раз загружать фотки в стейт не надобно.
       unsplashState.photos.listPhotos(page, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
         .then(toJson)
         .then(json => {//json это ответ в виде массива обьектов
           setImages([...json]);//установка нов стейта списка фоток (после этой ф).
-          console.log('getFirstTenPhotos is done')
+          console.log('getting 10 photos is skipped. There is already something in ImagesState')
         });
     }
   };
@@ -193,9 +197,20 @@ const App = () => {
     };
   };
 
+  const firstLoad=()=>{
+
+  };
+
+  const secondLoad=()=>{
+
+  };
+
+
   useEffect(() => {
+    // firstLoad();//(1.false. 2.true)
+    // secondLoad();//(1.false. 2.true)
     getUserProfile();//(1.false. 2.true) сначала unsplashState без ключа. Сработает вхолостую. (Внутри имеется проверка на наличие ключа). Когда из ф авторизации (getAccessTokenFromUrlCode) установится новый unsplashState то эта ф перезапустится.
-    getFirstTenPhotos();//(1.true 2.true) загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
+    getFirstTenPhotos();//(1.true 2.false) загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
     getAccessTokenFromUrlCode();//(1.false 2.true).
     goToRoot();//(1.false. 2.true) выполнился вхолостую ибо нет ключа в стейте (устанавливается на null при первоначальном рендере). Но далее, когда выполнится обновится unsplashState = выполнится заново и сработает.
   }, [unsplashState]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.

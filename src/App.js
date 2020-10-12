@@ -80,7 +80,6 @@ const App = () => {
   };
 
   const getUserProfile =()=> {
-    console.log('getting UserProfile...');
     console.log('getting UserProfile...btw unsplashState is:', unsplashState);
     if (unsplashState._bearerToken) {//если в стейте есть ключ
       console.log('your app already has tokenAccess key! Sending request...');
@@ -95,7 +94,7 @@ const App = () => {
         });
     }
     else {//иначе с вещами на вылет.
-      console.log('getting UserProfile from server is skipped = no key in state');
+      console.log('getting UserProfile from server is skipped = key is null');
     }
   };
 
@@ -121,9 +120,8 @@ const App = () => {
   };
 
   const goToRoot = ()=>{
-    console.log('going to root...')
     console.log('going to root...checking key in state:', unsplashState.users._bearerToken)
-    if (unsplashState.users._bearerToken!==null||undefined){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
+    if (unsplashState.users._bearerToken!==undefined){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
       window.location.assign('https://jsdiploma.nef-an.ru');// Отправляем пользователя обратно на гл стр.
     }else{
       console.log('going to root is skipped. BearerToken in UnsplashState is null or undefined')
@@ -137,6 +135,7 @@ const App = () => {
         .then(toJson)
         .then(json => {//json это ответ в виде массива обьектов
           setImages([...json]);//установка нов стейта списка фоток (после этой ф).
+          console.log('getting 10 photos is done')
         });
     }else {
       console.log('getting 10 photos is skipped. images.length is:', images.length)
@@ -201,13 +200,13 @@ const App = () => {
     };
   };
 
-  const firstLoad=()=>{
-
-  };
-
-  const secondLoad=()=>{
-
-  };
+  // const firstLoad=()=>{
+  //
+  // };
+  //
+  // const secondLoad=()=>{
+  //
+  // };
 
 
   useEffect(() => {

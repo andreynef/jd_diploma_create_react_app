@@ -122,6 +122,7 @@ const App = () => {
 
   const goToRoot = ()=>{
     console.log('going to root...')
+    console.log('going to root...checking key in state:', unsplashState.users._bearerToken)
     if (unsplashState.users._bearerToken!==null||undefined){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
       window.location.assign('https://jsdiploma.nef-an.ru');// Отправляем пользователя обратно на гл стр.
     }else{

@@ -5,7 +5,7 @@ import loader from '../../../src/assets/images/Gear.gif'
 
 export function CardList({add,images, getClickedImageObj, pressed, setPressed, setLikedId, likePhoto, handleClickHeart, isAuth}) {
   let allCardsArr;
-  if (images.length === 0) {
+  if (!images.length) {
       allCardsArr=<img src={loader} alt={'loader'} className={styles.loader}/>
   } else {
     allCardsArr = images.map((item, i) => {
@@ -36,15 +36,16 @@ export function CardList({add,images, getClickedImageObj, pressed, setPressed, s
         <section className={styles.centralContainer}>
           <ul className={styles.cardList}>
             {allCardsArr}
+            {images.length && <Card add={add} whoIs={'moreButton'}/>}
           </ul>
         </section>
-        <button
-          className={styles.button}
-          type="button"
-          onClick={add}
-        >
-          Загрузить еще
-        </button>
+        {/*<button*/}
+        {/*  className={styles.button}*/}
+        {/*  type="button"*/}
+        {/*  onClick={add}*/}
+        {/*>*/}
+        {/*  Загрузить еще*/}
+        {/*</button>*/}
       </main>
     )
 }

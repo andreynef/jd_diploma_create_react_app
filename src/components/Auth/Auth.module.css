@@ -14,3 +14,7 @@
     cursor: pointer;
     color: orange;
 }
+
+.loader {
+    margin: 200px;
+}

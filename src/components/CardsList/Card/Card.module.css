@@ -7,7 +7,27 @@
     margin: 0 0 20px 0;
     /*position: relative;!*for exit button*!*/
     width: 32%;
+    min-height:390px;
 }
+
+.loadMoreContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto 0;
+}
+
+.loadMoreText {
+    color:white;
+    font-size: 20px;
+    font-family: Roboto;
+}
+
+.loadMoreText:hover {
+    cursor:pointer;
+    color:orange;
+}
+
 @media all and (max-width: 1024px) {
     .card {
         width: 49%;

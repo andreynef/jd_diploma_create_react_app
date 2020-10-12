@@ -30,11 +30,12 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
+  // const [bearerToken, setBearerToken] = useState(JSON.parse(localStorage.getItem('accessTokenForUnsplash')));//берем из локала. Если нет то устанавливается null.
   const [unsplashState, setUnsplashState]= useState(new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-    bearerToken: JSON.parse(localStorage.getItem('accessTokenForUnsplash')),//приватный токен юзера
+    bearerToken: JSON.parse(localStorage.getItem('accessTokenForUnsplash')),//берем из локала. Если нет то устанавливается null.
   }));
   const [images, setImages] = useState([]);//стейт списка фоток
   const [clickedImageObj, setClickedImageObj] = useState({});
@@ -44,24 +45,30 @@ const App = () => {
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState('');
 
-  // const getAccessTokenFromUrlCode =()=> {
-  //   const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
-  //   unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
-  //     .then(toJson)
-  //     .then(json => {
-  //       console.log('json answer from url is:', json);
-  //       setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера. Сработает только при завершении ф контейнера.
-  //         accessKey: accessKey,// accesskey из настроек вашего приложения
-  //         secret: secret,// Application Secret из настроек вашего приложения
-  //         callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-  //         bearerToken: json.access_token,//приватный токен юзера
-  //       }));
-  //       console.log('setUnsplashState with accessToken from getAccessTokenFromUrlCode is done');
-  //       setAccessTokenToLocalStorage(json.access_token);
-  //       console.log('setAccessTokenToLocalStorage from getAccessTokenFromUrl is done');
-  //       window.location.assign('https://jsdiploma.nef-an.ru/');//перенаправить обратно
-  //     });
-  // };
+  const getAccessTokenFromUrlCode =()=> {
+    console.log('getting code from url...');
+    const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
+
+    if (codeFromUrl) {//если код в строке есть.
+      console.log('check codeFromUrl:', codeFromUrl);
+      unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
+        .then(toJson)
+        .then(json => {
+          console.log('json answer from url is:', json);
+          // setAccessTokenToLocalStorage();
+          // console.log('set to local from getAccessTokenFromUrl is done');
+          setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера. Сработает только при завершении ф контейнера.
+            accessKey: unsplashState.users._accessKey,// accesskey из настроек вашего приложения
+            secret: unsplashState._secret,// Application Secret из настроек вашего приложения
+            callbackUrl: unsplashState.users._callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
+            bearerToken: json.access_token,//приватный токен юзера
+          }));
+          console.log('setUnsplashState with bearerToken from getAccessTokenFromUrlCode is done');
+        })
+      }else{
+      console.log('getting Code is skipped');//return false
+      }
+  }
 
   const checkLogs =()=> {
      console.log('unsplashState is:', unsplashState);
@@ -91,9 +98,9 @@ const App = () => {
     }
   };
 
-  // const setAccessTokenToLocalStorage= (accessToken) => {
-  //   localStorage.setItem('accessTokenForUnsplash', JSON.stringify(accessToken));
-  // };
+  const setAccessTokenToLocalStorage= (accessToken) => {
+    localStorage.setItem('accessTokenForUnsplash', JSON.stringify(accessToken));
+  };
 
   const deleteAccessTokenFromLocalStorage= () => {
     localStorage.removeItem('accessTokenForUnsplash');
@@ -104,13 +111,19 @@ const App = () => {
     deleteAccessTokenFromLocalStorage();
   };
 
-  const toAuthorizePage=()=>{
+  const goToAuthorizePage=()=>{
     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
       "public",// и указываем требуемые разрешения (permissions)
       "write_likes",
     ]);
     window.location.assign(authenticationUrl);// Отправляем пользователя на авторизацию сайта Unsplash а потом он пепенаправит пользователя на - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
   };
+
+  const goToRoot = ()=>{
+    if (unsplashState.users._bearerToken!==null||undefined){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
+      window.location.assign('https://jsdiploma.nef-an.ru');// Отправляем пользователя обратно на гл стр.
+    }
+  }
 
   const getFirstTenPhotos = ()=>{
     if (images.length === 0) {//проверка добавлена ибо когда обновится unsplashState (добавится ключ), то он перезапустится (UseEffect) а нам 2й раз загружать фотки в стейт не надобно.
@@ -181,106 +194,53 @@ const App = () => {
   };
 
   useEffect(() => {
-    getUserProfile();//сначала unsplashState без ключа. Сработает пока вхолостую. (Внутри имеется проверка на наличие ключа). Когда из авторизации getAccessTokenFromUrlCode установится новый unsplashState то перезапустит эту ф.
-    getFirstTenPhotos();//загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
+    getUserProfile();//(1.false. 2.true) сначала unsplashState без ключа. Сработает вхолостую. (Внутри имеется проверка на наличие ключа). Когда из ф авторизации (getAccessTokenFromUrlCode) установится новый unsplashState то эта ф перезапустится.
+    getFirstTenPhotos();//(1.true 2.true) загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
+    getAccessTokenFromUrlCode();//(1.false 2.true).
+    goToRoot();//(1.false. 2.true) выполнился вхолостую ибо нет ключа в стейте (устанавливается на null при первоначальном рендере). Но далее, когда выполнится обновится unsplashState = выполнится заново и сработает.
   }, [unsplashState]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 
   return (
+    <>
+      <Header
+        goToAuthorizePage={goToAuthorizePage}
+        checkLogs={checkLogs}
+        toLogout={toLogout}
+        isAuth={isAuth}
+        userProfile={userProfile}
+      />
       <Switch>{/*рендерится в зависимости от Route path*/}
-        <Route exact path={'/auth'} component={() =>
-          <Auth
-            unsplashState={unsplashState}
-            setUnsplashState={setUnsplashState}
-          />
-        }
-        />
         <Route exact path={'/'}
                component={() =>
-                 <>
-                 <Header
-                   toAuthorizePage={toAuthorizePage}
-                   checkLogs={checkLogs}
-                   toLogout={toLogout}
-                   isAuth={isAuth}
-                   userProfile={userProfile}
-                 />
                  <CardList
                    add={addPhotos}
                    handleClickHeart={handleClickHeart}
                    images={images}
                    getClickedImageObj={getClickedImageObj}
                    isAuth={isAuth}
-                 />
-                 <Footer/>
-                 </>
-               }
+                 />}
         />
+        <Route exact path={'/auth'} component={() => <Auth unsplashState={unsplashState}/>}/>
         <Route exact path={'/cardpage'}
                component={() =>
-                 <>
-                 <Header
-                   toAuthorizePage={toAuthorizePage}
-                   checkLogs={checkLogs}
-                   toLogout={toLogout}
-                   isAuth={isAuth}
-                   userProfile={userProfile}
-                 />
                  <CardPage
                    clickedImageObj={clickedImageObj}
                    open={open}
                    handleClickHeart={handleClickHeart}
                    images={images}
                  />
-                 <Footer/>
-                 </>
                }
         />
-        </Switch>
+      </Switch>
+      {isAuth && (
+        <Footer/>
+      )}
+    </>
   );
 }
 
 
-// <>
-//   <Header
-//     toAuthorizePage={toAuthorizePage}
-//     checkLogs={checkLogs}
-//     toLogout={toLogout}
-//     isAuth={isAuth}
-//     userProfile={userProfile}
-//   />
-//   <Switch>{/*рендерится в зависимости от Route path*/}
-//     <Route exact path={'/'}
-//            component={() =>
-//              <CardList
-//                add={addPhotos}
-//                handleClickHeart={handleClickHeart}
-//                images={images}
-//                getClickedImageObj={getClickedImageObj}
-//                isAuth={isAuth}
-//              />}
-//     />
-//     <Route exact path={'/auth'} component={() =>
-//       <Auth
-//         unsplashState={unsplashState}
-//         setUnsplashState={setUnsplashState}
-//       />
-//     }
-//     />
-//     <Route exact path={'/cardpage'}
-//            component={() =>
-//              <CardPage
-//                clickedImageObj={clickedImageObj}
-//                open={open}
-//                handleClickHeart={handleClickHeart}
-//                images={images}
-//              />
-//            }
-//     />
-//   </Switch>
-//   {isAuth && (
-//     <Footer/>
-//   )}
-// </>
+
 
 // <InfiniteScroll
 //   dataLength={images.length}

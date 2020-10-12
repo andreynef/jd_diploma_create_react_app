@@ -66,7 +66,7 @@ const App = () => {
           console.log('setUnsplashState with bearerToken from getAccessTokenFromUrlCode is done');
         })
       }else{
-      console.log('getting Code is skipped');//return false
+        console.log('getting Code is skipped. codeFromUrl is:',codeFromUrl);//return false
       }
   }
 
@@ -81,6 +81,7 @@ const App = () => {
 
   const getUserProfile =()=> {
     console.log('getting UserProfile...');
+    console.log('getting UserProfile...btw unsplashState is:', unsplashState);
     if (unsplashState._bearerToken) {//если в стейте есть ключ
       console.log('your app already has tokenAccess key! Sending request...');
       unsplashState.currentUser.profile()
@@ -135,9 +136,11 @@ const App = () => {
         .then(toJson)
         .then(json => {//json это ответ в виде массива обьектов
           setImages([...json]);//установка нов стейта списка фоток (после этой ф).
-          console.log('getting 10 photos is skipped. There is already something in ImagesState')
         });
+    }else {
+      console.log('getting 10 photos is skipped. images.length is:', images.length)
     }
+
   };
 
   const addPhotos = () => {

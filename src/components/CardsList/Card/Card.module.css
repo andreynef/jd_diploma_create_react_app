@@ -13,9 +13,20 @@
 
 .loadMoreContainer {
     display: flex;
+    flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
-    margin: auto 0;
+    width:100%;
+    height:100%;
+}
+
+.loadMoreContainer:hover {
+    cursor:pointer;
+    color:orange;
+}
+
+.loadMoreContainer:hover span{
+    color:orange;
 }
 
 .loadMoreText {
@@ -24,10 +35,7 @@
     font-family: Roboto;
 }
 
-.loadMoreText:hover {
-    cursor:pointer;
-    color:orange;
-}
+
 
 @media all and (max-width: 1024px) {
     .card {

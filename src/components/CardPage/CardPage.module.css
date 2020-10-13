@@ -1,36 +1,33 @@
 .cardPage {
-    background-color: #f4f4f4;
+    background-color: rgba(0,0,0,0.7);
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
     display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
     justify-content: center;
-    font-family: Roboto;
 }
+
 .centralContainer {
     max-width: 1024px;
+    height: 80%;
     display: flex;
     flex-flow: row nowrap;
-    position: relative;/*для exit*/
 }
-
-.exitButton {
-    position: absolute;
-    top:20px;
-    right:20px;
-}
-.exitImgBlack{
-    width: 20px;
- }
-
-.exitImgWhite{
-    width: 20px;
-    display: none;
- }
 
 .imageContainer {
+    overflow: hidden;
     width:80%;
 }
 
 .imageContainer img {
+    heiht:100%;
     width:100%;
+    object-fit: cover;
+    margin:auto 0;
+    display: block;
 }
 
 .infoContainer {
@@ -97,6 +94,26 @@
     cursor:pointer;
 }
 
+.exitButton {
+    position: absolute;
+    top:30px;
+    right:30px;
+    /*height: 300px;*/
+    margin:0;
+    padding:0;
+    border:none;
+    outline:none;
+    background-color: transparent;
+}
+
+.exitButton:hover {
+    cursor: pointer;
+}
+
+.exitImgWhite{
+    width: 30px;
+}
+
 @media all and (max-width: 1024px) {
     .imageContainer{
         width: 70%;
@@ -116,14 +133,14 @@
         width: 100%;
     }
 
-    .exitImgBlack{
-        width: 20px;
-        display:none;
-    }
+    /*.exitImgBlack{*/
+    /*    width: 20px;*/
+    /*    display:none;*/
+    /*}*/
 
-    .exitImgWhite{
-        width: 20px;
-        display: unset;
-    }
+    /*.exitImgWhite{*/
+    /*    width: 20px;*/
+    /*    display: unset;*/
+    /*}*/
 
 }

@@ -20,6 +20,7 @@
 
 .loader {
     margin: 200px;
+    width:100px;
 }
 .button {
     background-color: orange;

@@ -1,6 +1,13 @@
-.previewContainer {
-    /*position: relative;*/
+.previewContainerButton {
     height: 300px;
+    margin:0;
+    padding:0;
+    border:none;
+    outline:none;
+}
+
+.previewContainerButton:hover{
+    cursor: pointer;
 }
 
 .previewImg {

@@ -156,7 +156,7 @@
 //     setPage(page + 1);//на последок сохраняем стейт последней запрашиваемой страницы.
 //   };
 //
-//   const getClickedImageObj = (id) => {//повешен на preview
+//   const handlePreviewClick = (id) => {//повешен на preview
 //     const clickedImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
 //     setClickedImageObj(clickedImageObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
 //     setOpen(true);//установить стейт булинь статуса открытости картинки
@@ -222,7 +222,7 @@
 //                    add={addPhotos}
 //                    handleClickHeart={handleClickHeart}
 //                    images={images}
-//                    getClickedImageObj={getClickedImageObj}
+//                    handlePreviewClick={handlePreviewClick}
 //                    isAuth={isAuth}
 //                  />}
 //         />

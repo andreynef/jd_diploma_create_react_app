@@ -10,7 +10,7 @@ export function Controls({likes, pressed, setPressed, setLikedId, likePhoto, id,
     <div className={styles.controls}>
       <div className={styles.likesCounter}>
         <span className={styles.likesValue}>{likes}</span>
-        <button className={styles.button} onClick={()=>isAuth ? handleClickHeart(id):false}>
+        <button className={styles.button} onClick={()=>handleClickHeart(id)}>
           <img src={isLiked? HeartIconPressed : HeartIconUnpressed} alt={'heart'}/>
         </button>
       </div>

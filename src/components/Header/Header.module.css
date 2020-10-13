@@ -64,6 +64,7 @@
 }
 .avatarText:hover{
     color: orange;
+    cursor: pointer;
 }
 .logoutText {
     text-decoration: none;

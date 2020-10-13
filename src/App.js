@@ -6,6 +6,7 @@ import {Header} from "./components/Header/Header";
 import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
+import { disablePageScroll, enablePageScroll } from 'scroll-lock';
 
 // 'xGHYVNYkr6A' id foto to like
 
@@ -38,11 +39,11 @@ const App = () => {
   const AMOUNT_ON_PAGE = 5;
 
   const [images, setImages] = useState([]);//стейт списка фоток
-  const [clickedImageObj, setClickedImageObj] = useState({});
-  const [page, setPage] = useState(1);
-  const [isAuth, setIsAuth] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [userProfile, setUserProfile] = useState('');
+  const [clickedImageObj, setClickedImageObj] = useState({});//обьект на кот ткнули
+  const [isOpen, setIsOpen] = useState(false);//стейт отображения картинки в подробном виде
+  const [page, setPage] = useState(1);//для слежки посл открытой страницы из запроса
+  const [isAuth, setIsAuth] = useState(false);//статус авторизации
+  const [userProfile, setUserProfile] = useState('');//информация о пользователе
 
   const getBearerTokenFromUrlCode =()=> {
     console.log('getting code from url...');
@@ -135,16 +136,6 @@ const App = () => {
 
   };
 
-  const getExistingPhotos = ()=>{
-    console.log('getting existing photos...')
-    if (images.length === 0) {//только когда список пуст.
-    }else {
-      console.log('getting 10 photos is skipped. images.length is:', images.length)
-    }
-
-  };
-
-
   const addPhotos = () => {
     unsplashState.photos.listPhotos(page+1, AMOUNT_ON_PAGE, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
@@ -158,21 +149,24 @@ const App = () => {
       });
   };
 
-  const getClickedImageObj = (id) => {//повешен на preview
-    console.log(`getting image obj...id:`, id);
+  const handlePreviewClick = (id) => {//повешен на preview
+    console.log(`preview is clicked. getting image obj...id:`, id);
 
     const clickedImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
     console.log(`clickedImageObj is:`, clickedImageObj);
 
     setClickedImageObj(clickedImageObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
-    // setIsOpen(true);//установить стейт булинь статуса открытости картинки
     console.log(`setClickedImageObj is done`);
+    setIsOpen(true);//установить стейт булинь статуса открытости картинки
+    console.log(`setIsDone is done - end of handlePreviewClick function. `);
   };
 
   const likePhotoRequest =(id)=> {
     unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде одного обьекта {photo:{}, user:{}}
+        // setIsHeartPressed(true);//установить стейт лайкнутого айди -> сработает ререндер приложения и появятся свежие данные в листе.
+
       })
   };
 
@@ -180,40 +174,58 @@ const App = () => {
     unsplashState.photos.unlikePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
       .then(json => {//json это ответ в виде одного обьекта {photo:{}, user:{}}
+        // setIsHeartPressed(true);//установить стейт лайкнутого айди -> сработает ререндер приложения и появятся свежие данные в листе.
       })
   };
 
   const handleClickHeart = (id) => {
-    const clickedImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
-    const clickedImageLikes = clickedImageObj.likes;//вытащить число лайков из обьекта для дальнейшего их изменения ниже.
+    console.log('handleClickHeart started...')
+    const heartObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
+    const heartObjLikesAmount = heartObj.likes;//вытащить число лайков из обьекта для дальнейшего их изменения ниже.
+
     if(isAuth) {
-      if (clickedImageObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
-        likePhotoRequest(id);//...то запрос на сервер на лайк
-        const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
+      console.log('heartClick is in process... isAuth is:', isAuth)
+      if (heartObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
+        likePhotoRequest(id);//...то запрос на сервер на лайк.
+
+        const localFilteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
           item.id === id
-            ? (item.liked_by_user=true, item.likes=clickedImageLikes+1)
+            ? (item.liked_by_user=true, item.likes=heartObjLikesAmount+1)
             : item
         );
-        setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
+        setImages(localFilteredImages);//установить нов фильтрованый список с измененным итемом.
       } else {//иначе, тобишь true...
         unlikePhotoRequest(id);//...запрос на сервер на анлайк
-        const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
+        const localFilteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
           item.id === id
-            ? (item.liked_by_user=false, item.likes=clickedImageLikes-1)
+            ? (item.liked_by_user=false, item.likes=heartObjLikesAmount-1)
             : item
         );
-        setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
+        setImages(localFilteredImages);//установить нов фильтрованый список с измененным итемом.
       };
     }else{
-      console.log('no access. isAuth is:', isAuth)
+      console.log('heartClick failed. isAuth is:', isAuth)
     }
   };
+
+  const toggleScroll = ()=>{
+    if(isOpen){
+      disablePageScroll();
+    }else{
+      enablePageScroll();
+    }
+  }
+
 
   useEffect(() => {
     getBearerTokenFromUrlCode();//(is it auth location? true  -> setBearerTokenToLocalStorage and reload).
     getUserProfile();//(is unsplashState has code? true->setUserProfile,setIsAuth). Сначала bearerToken без ключа. Сработает вхолостую. (Внутри имеется проверка на наличие ключа). Когда из ф авторизации (getBearerTokenFromUrlCode) установится новый bearerToken то эта ф перезапустится.
     getFirstTenPhotos();//(are images empty? true  -> setImages). Загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
   }, []);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
+
+  useEffect(() => {
+    toggleScroll();
+  }, [isOpen]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 
 
   return (
@@ -232,27 +244,35 @@ const App = () => {
                    add={addPhotos}
                    handleClickHeart={handleClickHeart}
                    images={images}
-                   getClickedImageObj={getClickedImageObj}
+                   handlePreviewClick={handlePreviewClick}
                    isAuth={isAuth}
-                   setIsOpen={setIsOpen}
                  />}
         />
         <Route exact path={'/auth'} component={() => <Auth unsplashState={unsplashState}/>}/>
-        <Route exact path={'/cardpage'}
-               component={() =>
-                 <CardPage
-                   clickedImageObj={clickedImageObj}
-                   handleClickHeart={handleClickHeart}
-                   images={images}
-                   isAuth={isAuth}
-                   // isOpen={isOpen}
-                 />
-               }
-        />
+        {/*<Route exact path={'/cardpage'}*/}
+        {/*       component={() =>*/}
+        {/*         <CardPage*/}
+        {/*           clickedImageObj={clickedImageObj}*/}
+        {/*           handleClickHeart={handleClickHeart}*/}
+        {/*           images={images}*/}
+        {/*           isAuth={isAuth}*/}
+        {/*         />*/}
+        {/*       }*/}
+        {/*/>*/}
       </Switch>
-      {isAuth && (
-        <Footer/>
-      )}
+      {isOpen &&(
+        <>
+          <CardPage
+            clickedImageObj={clickedImageObj}
+            handleClickHeart={handleClickHeart}
+            images={images}
+            isAuth={isAuth}
+            setIsOpen={setIsOpen}
+            isOpen={isOpen}
+          />
+          <Footer/>
+        </>
+        )}
     </>
   );
 }

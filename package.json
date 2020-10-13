@@ -11,6 +11,7 @@
     "react-scripts": "2.1.1",
     "redux": "^4.0.1",
     "rfdc": "^1.1.4",
+    "scroll-lock": "^2.1.4",
     "unsplash-js": "^6.3.0"
   },
   "scripts": {

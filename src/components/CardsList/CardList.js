@@ -3,7 +3,8 @@ import styles from './CardList.module.css';
 import {Card} from "./Card/Card";
 import loader from '../../../src/assets/images/Gear.gif'
 
-export function CardList({add,images, getClickedImageObj, pressed, setPressed, setLikedId, likePhoto, handleClickHeart, isAuth, setIsOpen}) {
+export function CardList({add,images, handlePreviewClick, pressed, setPressed, setLikedId, likePhoto, handleClickHeart, isAuth, setIsOpen}) {
+  const loadMoreBtn = images.length ? <Card add={add} whoIs={'moreButton'}/> : null;
   let cardList;
 
   if (!images.length) {
@@ -20,7 +21,7 @@ export function CardList({add,images, getClickedImageObj, pressed, setPressed, s
             likes={item.likes}
             url={item.urls.thumb}
             ava={item.user.profile_image.small}
-            getClickedImageObj={getClickedImageObj}
+            handlePreviewClick={handlePreviewClick}
             handleClickHeart={handleClickHeart}
             isLiked={item.liked_by_user}
             isAuth={isAuth}
@@ -34,7 +35,7 @@ export function CardList({add,images, getClickedImageObj, pressed, setPressed, s
         <section className={styles.centralContainer}>
           <ul className={styles.cardList}>
             {cardList}
-            {images.length && <Card add={add} whoIs={'moreButton'}/>}
+            {loadMoreBtn}
           </ul>
         </section>
         {/*<button*/}

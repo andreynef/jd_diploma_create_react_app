@@ -36,7 +36,7 @@ const App = () => {
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
     bearerToken: bearerToken,//берем из локала. Если нет то устанавливается null.
   });
-  const AMOUNT_ON_PAGE = 5;
+  const AMOUNT_ON_PAGE = 10;
 
   const [images, setImages] = useState([]);//стейт списка фоток
   const [clickedImageObj, setClickedImageObj] = useState({});//обьект на кот ткнули

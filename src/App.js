@@ -28,8 +28,7 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
-  const [bearerToken, setBearerToken] = useState(JSON.parse(localStorage.getItem('accessTokenForUnsplash')));//берем из локала. Если нет то устанавливается null.
-  // const [isAuthUrl, setIsAuthUrl] = useState(false);//
+  const [bearerToken, setBearerToken] = useState(JSON.parse(localStorage.getItem('accessTokenForUnsplash')));//берем из локала. Если нет то устанавливается на null.
   const [unsplashState, setUnsplashState]= useState(new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
@@ -79,8 +78,8 @@ const App = () => {
   };
 
   const getUserProfile =()=> {
-    console.log('getting UserProfile...unsplashState._bearerToken is:', unsplashState._bearerToken);
-    if (unsplashState._bearerToken) {//если в стейте есть ключ
+    console.log('getting UserProfile...bearerToken is:', bearerToken);
+    if (bearerToken) {//если в стейте есть ключ
       console.log('your app already has tokenAccess key! Sending request...');
       unsplashState.currentUser.profile()
         .then(toJson)
@@ -93,7 +92,7 @@ const App = () => {
         });
     }
     else {//иначе с вещами на вылет.
-      console.log('getting UserProfile from server is skipped.  UnsplashState._bearerToken is:', unsplashState._bearerToken);
+      console.log('getting UserProfile from server is skipped.  bearerToken is:', bearerToken);
     }
   };
 
@@ -120,7 +119,7 @@ const App = () => {
 
   const toReload = ()=>{
     console.log('reloading...bearerToken is:', bearerToken)
-    if (bearerToken!==undefined){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
+    if (bearerToken){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
       window.location.assign('https://jsdiploma.nef-an.ru');// Перезагружаем гл страницу.
     }else{
       console.log('reloading is skipped. bearerToken is:', bearerToken)

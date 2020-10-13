@@ -6,8 +6,6 @@ import {Header} from "./components/Header/Header";
 import {Footer} from "./components/Footer/Footer";
 import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
-// import { clone } from "ramda";
-// const fastClone = require('rfdc')(); // Returns the deep copy function
 
 // 'xGHYVNYkr6A' id foto to like
 
@@ -30,12 +28,13 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
-  // const [bearerToken, setBearerToken] = useState(JSON.parse(localStorage.getItem('accessTokenForUnsplash')));//берем из локала. Если нет то устанавливается null.
+  const [bearerToken, setBearerToken] = useState(JSON.parse(localStorage.getItem('accessTokenForUnsplash')));//берем из локала. Если нет то устанавливается null.
+  // const [isAuthUrl, setIsAuthUrl] = useState(false);//
   const [unsplashState, setUnsplashState]= useState(new Unsplash({
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-    bearerToken: JSON.parse(localStorage.getItem('accessTokenForUnsplash')),//берем из локала. Если нет то устанавливается null.
+    bearerToken: bearerToken,//берем из локала. Если нет то устанавливается null.
   }));
   const [images, setImages] = useState([]);//стейт списка фоток
   const [clickedImageObj, setClickedImageObj] = useState({});
@@ -45,7 +44,7 @@ const App = () => {
   const [open, setOpen] = useState(false);
   const [userProfile, setUserProfile] = useState('');
 
-  const getAccessTokenFromUrlCode =()=> {
+  const getBearerTokenFromUrlCode =()=> {
     console.log('getting code from url...');
     const codeFromUrl = window.location.search.split('code=')[1];// Считываем GET-параметр code из URL// www.example.com/auth?code=abcdef123456...
 
@@ -55,18 +54,13 @@ const App = () => {
         .then(toJson)
         .then(json => {
           console.log('json answer from url is:', json);
-          // setAccessTokenToLocalStorage();
-          // console.log('set to local from getAccessTokenFromUrl is done');
-          setUnsplashState(new Unsplash({//создать новый стейт Unsplash но уже с кодом юзера. Сработает только при завершении ф контейнера.
-            accessKey: unsplashState.users._accessKey,// accesskey из настроек вашего приложения
-            secret: unsplashState._secret,// Application Secret из настроек вашего приложения
-            callbackUrl: unsplashState.users._callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
-            bearerToken: json.access_token,//приватный токен юзера
-          }));
-          console.log('setUnsplashState with bearerToken from getAccessTokenFromUrlCode is done');
+          setBearerTokenToLocalStorage();
+          console.log('set to local from getBearerTokenFromUrlCode is done');
+          setBearerToken(json.access_token);
+          console.log('setBearerToken from getBearerTokenFromUrlCode is done');
         })
       }else{
-        console.log('getting Code is skipped. codeFromUrl is:',codeFromUrl);//return false
+        console.log('getting code is skipped. codeFromUrl is:',codeFromUrl);//return false
       }
   }
 
@@ -85,7 +79,7 @@ const App = () => {
   };
 
   const getUserProfile =()=> {
-    console.log('getting UserProfile...btw unsplashState is:', unsplashState);
+    console.log('getting UserProfile...unsplashState._bearerToken is:', unsplashState._bearerToken);
     if (unsplashState._bearerToken) {//если в стейте есть ключ
       console.log('your app already has tokenAccess key! Sending request...');
       unsplashState.currentUser.profile()
@@ -99,11 +93,11 @@ const App = () => {
         });
     }
     else {//иначе с вещами на вылет.
-      console.log('getting UserProfile from server is skipped.  BearerToken in state is:', unsplashState._bearerToken);
+      console.log('getting UserProfile from server is skipped.  UnsplashState._bearerToken is:', unsplashState._bearerToken);
     }
   };
 
-  const setAccessTokenToLocalStorage= (accessToken) => {
+  const setBearerTokenToLocalStorage= (accessToken) => {
     localStorage.setItem('accessTokenForUnsplash', JSON.stringify(accessToken));
   };
 
@@ -121,22 +115,21 @@ const App = () => {
       "public",// и указываем требуемые разрешения (permissions)
       "write_likes",
     ]);
-    alert('going to:', authenticationUrl);
     window.location.assign(authenticationUrl);// Отправляем пользователя на авторизацию сайта Unsplash а потом он пепенаправит пользователя на - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
   };
 
-  const goToRoot = ()=>{
-    console.log('going to root...checking key in state:', unsplashState.users._bearerToken)
-    if (unsplashState.users._bearerToken!==undefined){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
-      window.location.assign('https://jsdiploma.nef-an.ru');// Отправляем пользователя обратно на гл стр.
+  const toReload = ()=>{
+    console.log('reloading...bearerToken is:', bearerToken)
+    if (bearerToken!==undefined){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
+      window.location.assign('https://jsdiploma.nef-an.ru');// Перезагружаем гл страницу.
     }else{
-      console.log('going to root is skipped. BearerToken in UnsplashState is:', unsplashState.users._bearerToken)
+      console.log('reloading is skipped. bearerToken is:', bearerToken)
     }
   }
 
   const getFirstTenPhotos = ()=>{
     console.log('getting 10 photos...')
-    if (images.length === 0) {//когда обновится unsplashState (добавится ключ), то он перезапустится (UseEffect) а нам 2й раз загружать фотки в стейт не надобно.
+    if (images.length === 0) {//когда обновится unsplashState (добавится ключ), то он перезапустится (UseEffect) а нам 2й раз загружать фотки в стейт не надо.
       unsplashState.photos.listPhotos(page, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
         .then(toJson)
         .then(json => {//json это ответ в виде массива обьектов
@@ -206,23 +199,15 @@ const App = () => {
     };
   };
 
-  // const firstLoad=()=>{
-  //
-  // };
-  //
-  // const secondLoad=()=>{
-  //
-  // };
-
+  useEffect(() => {
+    getBearerTokenFromUrlCode();//(is it auth location? true  -> setBearerToken).
+    getUserProfile();//(is unsplashState has code? true->setUserProfile,setIsAuth). Сначала bearerToken без ключа. Сработает вхолостую. (Внутри имеется проверка на наличие ключа). Когда из ф авторизации (getBearerTokenFromUrlCode) установится новый bearerToken то эта ф перезапустится.
+    getFirstTenPhotos();//(are images empty? true  -> setImages). Загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
+  }, []);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 
   useEffect(() => {
-    // firstLoad();//(1.false. 2.true)
-    // secondLoad();//(1.false. 2.true)
-    getUserProfile();//(1.false. 2.true) сначала unsplashState без ключа. Сработает вхолостую. (Внутри имеется проверка на наличие ключа). Когда из ф авторизации (getAccessTokenFromUrlCode) установится новый unsplashState то эта ф перезапустится.
-    getFirstTenPhotos();//(1.true 2.false) загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
-    getAccessTokenFromUrlCode();//(1.false 2.true).
-    goToRoot();//(1.false. 2.true) выполнился вхолостую ибо нет ключа в стейте (устанавливается на null при первоначальном рендере). Но далее, когда выполнится обновится unsplashState = выполнится заново и сработает.
-  }, [unsplashState]);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
+    toReload();//(is bearerToken has code? true -> reload all app). Выполнится вхолостую ибо нет ключа в стейте (устанавливается на null при первоначальном рендере). Но далее, когда обновится bearerToken = выполнится заново и сработает.
+  }, [bearerToken]);
 
   return (
     <>

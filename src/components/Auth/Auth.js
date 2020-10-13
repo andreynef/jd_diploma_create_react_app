@@ -21,7 +21,7 @@ export function Auth({unsplashState}) {
         // <>
         //   <span> you are authorized</span>
         //   {/*<Link to={'/'}>*/}
-        //   {/*    <button className={styles.button} onClick={getAccessTokenFromUrlCode}>Now you are authorized. Click here to get back to home page </button>*/}
+        //   {/*    <button className={styles.button} onClick={getBearerTokenFromUrlCode}>Now you are authorized. Click here to get back to home page </button>*/}
         //   {/*</Link>*/}
         // </>
 

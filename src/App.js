@@ -55,8 +55,10 @@ const App = () => {
           console.log('json answer from url is:', json);
           setBearerTokenToLocalStorage();
           console.log('set to local from getBearerTokenFromUrlCode is done');
-          setBearerToken(json.access_token);
-          console.log('setBearerToken from getBearerTokenFromUrlCode is done');
+          // setBearerToken(json.access_token);
+          toReload();
+          // console.log('setBearerToken from getBearerTokenFromUrlCode is done');
+          console.log('reloading from getBearerTokenFromUrlCode is done');
         })
       }else{
         console.log('getting code is skipped. codeFromUrl is:',codeFromUrl);//return false
@@ -199,14 +201,14 @@ const App = () => {
   };
 
   useEffect(() => {
-    getBearerTokenFromUrlCode();//(is it auth location? true  -> setBearerToken).
+    getBearerTokenFromUrlCode();//(is it auth location? true  -> setBearerTokenToLocalStorage, toReload).
     getUserProfile();//(is unsplashState has code? true->setUserProfile,setIsAuth). Сначала bearerToken без ключа. Сработает вхолостую. (Внутри имеется проверка на наличие ключа). Когда из ф авторизации (getBearerTokenFromUrlCode) установится новый bearerToken то эта ф перезапустится.
     getFirstTenPhotos();//(are images empty? true  -> setImages). Загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
   }, []);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 
-  useEffect(() => {
-    toReload();//(is bearerToken has code? true -> reload all app). Выполнится вхолостую ибо нет ключа в стейте (устанавливается на null при первоначальном рендере). Но далее, когда обновится bearerToken = выполнится заново и сработает.
-  }, [bearerToken]);
+  // useEffect(() => {
+  //   toReload();//(is bearerToken has code? true -> reload all app). Выполнится вхолостую ибо нет ключа в стейте (устанавливается на null при первоначальном рендере). Но далее, когда обновится bearerToken = выполнится заново и сработает.
+  // }, [bearerToken]);
 
   return (
     <>

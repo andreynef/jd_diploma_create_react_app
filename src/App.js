@@ -270,9 +270,12 @@ const App = () => {
             setIsOpen={setIsOpen}
             isOpen={isOpen}
           />
-          <Footer/>
         </>
         )}
+      {isOpen &&(
+        <Footer/>
+      )}
+
     </>
   );
 }

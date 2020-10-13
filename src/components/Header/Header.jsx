@@ -2,6 +2,11 @@ import React from 'react';
 import styles from './Header.module.css';
 
 export function Header({goToAuthorizePage, isAuth, checkLogs, toLogout, userProfile}) {
+  const userName=capitalizeFirstLetter(`${userProfile.first_name}`);
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   return (
     <header className={styles.headerContainer}>
@@ -15,7 +20,7 @@ export function Header({goToAuthorizePage, isAuth, checkLogs, toLogout, userProf
             type="button"
             onClick={checkLogs}
           >
-            show stats in console
+            dev button (show states in console)
           </button>
         </div>
         <div className={styles.userContainer}>
@@ -30,7 +35,7 @@ export function Header({goToAuthorizePage, isAuth, checkLogs, toLogout, userProf
                 alt="avatar"
               />
               <button className={styles.button} type="button">
-                <a className={styles.avatarText} href={userProfile.links.html}> {userProfile.name}</a>
+                <a className={styles.avatarText} href={userProfile.links.html}> {userName}</a>
               </button>
             </>
           )}

@@ -9,13 +9,13 @@ import {Auth} from "./components/Auth/Auth";
 
 // 'xGHYVNYkr6A' id foto to like
 
-// const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
-// const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
-// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
-
-const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
-const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
+const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
+const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
 const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+
+// const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
+// const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
+// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 // const accessToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//если есть в локале то берем оттуда иначе undefined
 
 // const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
@@ -28,19 +28,20 @@ const callbackUrl="https://jsdiploma.nef-an.ru/auth";
 
 
 const App = () => {
-  const [bearerToken, setBearerToken] = useState(JSON.parse(localStorage.getItem('accessTokenForUnsplash')));//берем из локала. Если нет то устанавливается на null.
-  const [unsplashState, setUnsplashState]= useState(new Unsplash({
+  const bearerToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//берем из локала. Если нет то устанавливается на null.
+  const unsplashState = new Unsplash({//с ключом или без неважно. Будет использоваться только один unsplash без обновлений.
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
     bearerToken: bearerToken,//берем из локала. Если нет то устанавливается null.
-  }));
+  });
+  const AMOUNT_ON_PAGE = 5;
+
   const [images, setImages] = useState([]);//стейт списка фоток
   const [clickedImageObj, setClickedImageObj] = useState({});
   const [page, setPage] = useState(1);
-  const amountOnPage = 5;
   const [isAuth, setIsAuth] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [userProfile, setUserProfile] = useState('');
 
   const getBearerTokenFromUrlCode =()=> {
@@ -119,19 +120,10 @@ const App = () => {
     window.location.assign(authenticationUrl);// Отправляем пользователя на авторизацию сайта Unsplash а потом он пепенаправит пользователя на - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
   };
 
-  const toReload = ()=>{
-    // console.log('reloading...bearerToken is:', bearerToken)
-    // if (bearerToken){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
-      window.location.assign('https://jsdiploma.nef-an.ru');// Перезагружаем гл страницу.
-    // }else{
-    //   console.log('reloading is skipped. bearerToken is:', bearerToken)
-    // }
-  }
-
   const getFirstTenPhotos = ()=>{
     console.log('getting 10 photos...')
-    if (images.length === 0) {//когда обновится unsplashState (добавится ключ), то он перезапустится (UseEffect) а нам 2й раз загружать фотки в стейт не надо.
-      unsplashState.photos.listPhotos(page, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+    if (images.length === 0) {//только когда список пуст.
+      unsplashState.photos.listPhotos(page, AMOUNT_ON_PAGE, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
         .then(toJson)
         .then(json => {//json это ответ в виде массива обьектов
           setImages([...json]);//установка нов стейта списка фоток (после этой ф).
@@ -143,8 +135,18 @@ const App = () => {
 
   };
 
+  const getExistingPhotos = ()=>{
+    console.log('getting existing photos...')
+    if (images.length === 0) {//только когда список пуст.
+    }else {
+      console.log('getting 10 photos is skipped. images.length is:', images.length)
+    }
+
+  };
+
+
   const addPhotos = () => {
-    unsplashState.photos.listPhotos(page+1, amountOnPage, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+    unsplashState.photos.listPhotos(page+1, AMOUNT_ON_PAGE, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
       .then(toJson)
       .then(json => {//json это ответ в виде массива обьектов в количестве указанном в переменной amountOfItemsOnPage.
         const newImagesArr = [...images, ...json];//создаем новый массив добавляя к старым новые фотки.
@@ -152,15 +154,19 @@ const App = () => {
         // const newCleanArr2 = newDirtyArr.filter((item,index)=>newDirtyArr.indexOf(item===index));//способ 2 через filter
         // const newCleanArr3 = newDirtyArr.reduce((unique,item)=>unique.includes((item) ? unique:[...unique, item], []));//способ 3 через reduce
         setImages(newImagesArr);//обновляем стейт списка картинок.
+        setPage(page + 1);//сохраняем стейт последней запрашиваемой страницы.
       });
-    setPage(page + 1);//на последок сохраняем стейт последней запрашиваемой страницы.
   };
 
   const getClickedImageObj = (id) => {//повешен на preview
+    console.log(`getting image obj...id:`, id);
+
     const clickedImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
+    console.log(`clickedImageObj is:`, clickedImageObj);
+
     setClickedImageObj(clickedImageObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
-    setOpen(true);//установить стейт булинь статуса открытости картинки
-      console.log(`setOpen is done`);
+    setIsOpen(true);//установить стейт булинь статуса открытости картинки
+    console.log(`setClickedImageObj is done`);
   };
 
   const likePhotoRequest =(id)=> {
@@ -180,35 +186,35 @@ const App = () => {
   const handleClickHeart = (id) => {
     const clickedImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
     const clickedImageLikes = clickedImageObj.likes;//вытащить число лайков из обьекта для дальнейшего их изменения ниже.
-
-    if (clickedImageObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
-      likePhotoRequest(id);//...то запрос на сервер на лайк
-      const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
-        item.id === id
-          ? (item.liked_by_user=true, item.likes=clickedImageLikes+1)
-          : item
-      );
-      setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
-    } else {//иначе, тобишь true...
-      unlikePhotoRequest(id);//...запрос на сервер на анлайк
-      const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
-        item.id === id
-          ? (item.liked_by_user=false, item.likes=clickedImageLikes-1)
-          : item
-      );
-      setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
-    };
+    if(isAuth) {
+      if (clickedImageObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
+        likePhotoRequest(id);//...то запрос на сервер на лайк
+        const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
+          item.id === id
+            ? (item.liked_by_user=true, item.likes=clickedImageLikes+1)
+            : item
+        );
+        setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
+      } else {//иначе, тобишь true...
+        unlikePhotoRequest(id);//...запрос на сервер на анлайк
+        const filteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
+          item.id === id
+            ? (item.liked_by_user=false, item.likes=clickedImageLikes-1)
+            : item
+        );
+        setImages(filteredImages);//установить нов фильтрованый список с измененным итемом.
+      };
+    }else{
+      console.log('no access. isAuth is:', isAuth)
+    }
   };
 
   useEffect(() => {
-    getBearerTokenFromUrlCode();//(is it auth location? true  -> setBearerTokenToLocalStorage, toReload).
+    getBearerTokenFromUrlCode();//(is it auth location? true  -> setBearerTokenToLocalStorage and reload).
     getUserProfile();//(is unsplashState has code? true->setUserProfile,setIsAuth). Сначала bearerToken без ключа. Сработает вхолостую. (Внутри имеется проверка на наличие ключа). Когда из ф авторизации (getBearerTokenFromUrlCode) установится новый bearerToken то эта ф перезапустится.
     getFirstTenPhotos();//(are images empty? true  -> setImages). Загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
   }, []);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 
-  // useEffect(() => {
-  //   toReload();//(is bearerToken has code? true -> reload all app). Выполнится вхолостую ибо нет ключа в стейте (устанавливается на null при первоначальном рендере). Но далее, когда обновится bearerToken = выполнится заново и сработает.
-  // }, [bearerToken]);
 
   return (
     <>
@@ -228,6 +234,7 @@ const App = () => {
                    images={images}
                    getClickedImageObj={getClickedImageObj}
                    isAuth={isAuth}
+                   setIsOpen={setIsOpen}
                  />}
         />
         <Route exact path={'/auth'} component={() => <Auth unsplashState={unsplashState}/>}/>
@@ -235,9 +242,10 @@ const App = () => {
                component={() =>
                  <CardPage
                    clickedImageObj={clickedImageObj}
-                   open={open}
                    handleClickHeart={handleClickHeart}
                    images={images}
+                   isAuth={isAuth}
+                   isOpen={isOpen}
                  />
                }
         />

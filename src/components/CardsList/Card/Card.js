@@ -17,7 +17,7 @@ export function Card({add,url, created, likes, handleClickHeart, profile, name, 
         <>
           <Info created={created} profile={profile} name={name} ava={ava} description={description}/>
           <Link to={'/cardpage'} onClick={()=>getClickedImageObj(id)} >
-          <Preview url={url}/>
+            <Preview url={url}/>
           </Link>
           <Controls likes={likes} handleClickHeart={handleClickHeart} isLiked={isLiked} pressed={pressed} setPressed={setPressed} setLikedId={setLikedId} likePhoto={likePhoto} id={id} isAuth={isAuth}/>
         </>

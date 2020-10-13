@@ -3,12 +3,13 @@ import styles from './CardList.module.css';
 import {Card} from "./Card/Card";
 import loader from '../../../src/assets/images/Gear.gif'
 
-export function CardList({add,images, getClickedImageObj, pressed, setPressed, setLikedId, likePhoto, handleClickHeart, isAuth}) {
-  let allCardsArr;
+export function CardList({add,images, getClickedImageObj, pressed, setPressed, setLikedId, likePhoto, handleClickHeart, isAuth, setIsOpen}) {
+  let cardList;
+
   if (!images.length) {
-      allCardsArr=<img src={loader} alt={'loader'} className={styles.loader}/>
+    cardList=<img src={loader} alt={'loader'} className={styles.loader}/>
   } else {
-    allCardsArr = images.map((item, i) => {
+    cardList = images.map((item, i) => {
       return (
           <Card
             key={item.id}
@@ -19,14 +20,11 @@ export function CardList({add,images, getClickedImageObj, pressed, setPressed, s
             likes={item.likes}
             url={item.urls.thumb}
             ava={item.user.profile_image.small}
-            description={item.alt_description}
             getClickedImageObj={getClickedImageObj}
-            pressed={pressed}
-            setPressed={setPressed}
-            setLikedId={setLikedId}
             handleClickHeart={handleClickHeart}
             isLiked={item.liked_by_user}
             isAuth={isAuth}
+            setIsOpen={setIsOpen}
           />
       )
     })}
@@ -35,7 +33,7 @@ export function CardList({add,images, getClickedImageObj, pressed, setPressed, s
       <main className={styles.mainContainer}>
         <section className={styles.centralContainer}>
           <ul className={styles.cardList}>
-            {allCardsArr}
+            {cardList}
             {images.length && <Card add={add} whoIs={'moreButton'}/>}
           </ul>
         </section>

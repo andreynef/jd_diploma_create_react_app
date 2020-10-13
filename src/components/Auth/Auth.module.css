@@ -1,18 +1,35 @@
 
-.button {
-    margin: 200px auto;
-    font-size: 16px;
-    background-color: transparent;
-    outline: none;
-    border:none;
+/*.button {*/
+/*    margin: 200px auto;*/
+/*    font-size: 16px;*/
+/*    background-color: transparent;*/
+/*    outline: none;*/
+/*    border:none;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    height: 100%;*/
+/*}*/
+
+/*.button:hover {*/
+/*    cursor: pointer;*/
+/*    color: orange;*/
+/*}*/
+
+.authContainer {
     display: flex;
-    justify-content: center;
-    height: 100%;
+    flex-flow: column nowrap;
+    align-items: center;
 }
 
-.button:hover {
-    cursor: pointer;
-    color: orange;
+.authTextContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.authText {
+    font-family: Roboto;
+    font-size: 20px;
+    padding:20px 0;
 }
 
 .loader {

@@ -56,7 +56,7 @@ const App = () => {
           setBearerTokenToLocalStorage(json.access_token);
           console.log('set to local from getBearerTokenFromUrlCode is done');
           // setBearerToken(json.access_token);
-          toReload();
+          window.location.assign('https://jsdiploma.nef-an.ru');// Перезагружаем гл страницу.
           // console.log('setBearerToken from getBearerTokenFromUrlCode is done');
           console.log('reloading from getBearerTokenFromUrlCode is done');
         })
@@ -120,12 +120,12 @@ const App = () => {
   };
 
   const toReload = ()=>{
-    console.log('reloading...bearerToken is:', bearerToken)
-    if (bearerToken){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
+    // console.log('reloading...bearerToken is:', bearerToken)
+    // if (bearerToken){// = в перв раз false тк при первоначальном рендере устанавливается на null. Второй раз будет true тк будет установлен ключ. UseEffect.
       window.location.assign('https://jsdiploma.nef-an.ru');// Перезагружаем гл страницу.
-    }else{
-      console.log('reloading is skipped. bearerToken is:', bearerToken)
-    }
+    // }else{
+    //   console.log('reloading is skipped. bearerToken is:', bearerToken)
+    // }
   }
 
   const getFirstTenPhotos = ()=>{

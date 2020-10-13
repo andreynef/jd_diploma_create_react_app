@@ -14,7 +14,7 @@ export function CardPage({handleClickHeart, clickedImageObj, isOpen}) {
 
   return (
     <div className={styles.cardPage}>
-      {isOpen && (
+      {/*{isOpen && (*/}
         <div className={styles.centralContainer}>
           <div className={styles.imageContainer}>
             <img
@@ -46,7 +46,7 @@ export function CardPage({handleClickHeart, clickedImageObj, isOpen}) {
             <img src={cross2} alt={'exit'} className={styles.exitImgWhite}/>
           </Link>
         </div>
-      )}
+      {/*)}*/}
 
     </div>
   )

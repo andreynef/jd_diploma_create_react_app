@@ -165,7 +165,7 @@ const App = () => {
     console.log(`clickedImageObj is:`, clickedImageObj);
 
     setClickedImageObj(clickedImageObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
-    setIsOpen(true);//установить стейт булинь статуса открытости картинки
+    // setIsOpen(true);//установить стейт булинь статуса открытости картинки
     console.log(`setClickedImageObj is done`);
   };
 
@@ -245,7 +245,7 @@ const App = () => {
                    handleClickHeart={handleClickHeart}
                    images={images}
                    isAuth={isAuth}
-                   isOpen={isOpen}
+                   // isOpen={isOpen}
                  />
                }
         />

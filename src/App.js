@@ -53,7 +53,7 @@ const App = () => {
         .then(toJson)
         .then(json => {
           console.log('json answer from url is:', json);
-          setBearerTokenToLocalStorage();
+          setBearerTokenToLocalStorage(json.access_token);
           console.log('set to local from getBearerTokenFromUrlCode is done');
           // setBearerToken(json.access_token);
           toReload();
@@ -98,8 +98,8 @@ const App = () => {
     }
   };
 
-  const setBearerTokenToLocalStorage= (accessToken) => {
-    localStorage.setItem('accessTokenForUnsplash', JSON.stringify(accessToken));
+  const setBearerTokenToLocalStorage= (bearerToken) => {
+    localStorage.setItem('accessTokenForUnsplash', JSON.stringify(bearerToken));
   };
 
   const deleteAccessTokenFromLocalStorage= () => {

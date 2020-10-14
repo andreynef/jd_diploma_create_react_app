@@ -14,15 +14,12 @@ export function Header({goToAuthorizePage, isAuth, checkLogs, toLogout, userProf
         <div className={styles.logoContainer}>
           <img src={'https://www.flaticon.com/svg/static/icons/svg/1/1394.svg'} alt={'logo'}/>
         </div>
-        <div className={styles.authButtonContainer}>
-          <button
-            className={styles.buttonCheck}
-            type="button"
-            onClick={checkLogs}
-          >
-            dev button (show states in console)
-          </button>
-        </div>
+          {/*<button*/}
+          {/*  type="button"*/}
+          {/*  onClick={checkLogs}*/}
+          {/*>*/}
+          {/*  dev button (show states in console)*/}
+          {/*</button>*/}
         <div className={styles.userContainer}>
           {isAuth && (
             <>

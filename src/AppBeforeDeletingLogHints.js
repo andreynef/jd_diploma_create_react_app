@@ -29,7 +29,7 @@
 //
 // const App = () => {
 //   const bearerToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//берем из локала. Если нет то устанавливается на null.
-//   const unsplashState = new Unsplash({//с ключом или без неважно. Будет использоваться только один unsplash без обновлений.
+//   const unsplash = new Unsplash({//с ключом или без неважно. Будет использоваться только один unsplash без обновлений.
 //     accessKey: accessKey,// accesskey из настроек вашего приложения
 //     secret: secret,// Application Secret из настроек вашего приложения
 //     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
@@ -50,7 +50,7 @@
 //
 //     if (codeFromUrl) {//если код в строке есть.
 //       console.log('check codeFromUrl:', codeFromUrl);
-//       unsplashState.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
+//       unsplash.auth.userAuthentication(codeFromUrl)//отправляем запрос на получение токена
 //         .then(toJson)
 //         .then(json => {
 //           console.log('json answer from url is:', json);
@@ -67,24 +67,24 @@
 //   }
 //
 //   const checkLogs =()=> {
-//      console.log('unsplashState is:', unsplashState);
+//      console.log('unsplash is:', unsplash);
 //      console.log('images State is:', images);
 //      console.log('isAuth is:', isAuth);
 //      console.log('userProfile is:', userProfile);
 //      console.log('localStorage.accessTokenForUnsplash is:', localStorage.accessTokenForUnsplash);
-//      console.log('unsplashState._bearerToken is:', unsplashState._bearerToken);
-//     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
+//      console.log('unsplash._bearerToken is:', unsplash._bearerToken);
+//     const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
 //       "public",// и указываем требуемые разрешения (permissions)
 //       "write_likes",
 //     ]);
-//     console.log('unsplashState.auth.getAuthenticationUrl is:', authenticationUrl);
+//     console.log('unsplash.auth.getAuthenticationUrl is:', authenticationUrl);
 //   };
 //
 //   const getUserProfile =()=> {
 //     console.log('getting UserProfile...bearerToken is:', bearerToken);
 //     if (bearerToken) {//если в стейте есть ключ
 //       console.log('your app already has tokenAccess key! Sending request...');
-//       unsplashState.currentUser.profile()
+//       unsplash.currentUser.profile()
 //         .then(toJson)
 //         .then(json => {// json обьект = {id: "Rc7GH-2FKsU", name: "andrey nefedyev", first_name: "andrey"}
 //           console.log('json profile answer is:', json);
@@ -113,7 +113,7 @@
 //   };
 //
 //   const goToAuthorizePage=()=>{
-//     const authenticationUrl = unsplashState.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
+//     const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
 //       "public",// и указываем требуемые разрешения (permissions)
 //       "write_likes",
 //     ]);
@@ -123,7 +123,7 @@
 //   const getFirstTenPhotos = ()=>{
 //     console.log('getting 10 photos...')
 //     if (images.length === 0) {//только когда список пуст.
-//       unsplashState.photos.listPhotos(page, AMOUNT_ON_PAGE, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+//       unsplash.photos.listPhotos(page, AMOUNT_ON_PAGE, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
 //         .then(toJson)
 //         .then(json => {//json это ответ в виде массива обьектов
 //           setImages([...json]);//установка нов стейта списка фоток (после этой ф).
@@ -136,7 +136,7 @@
 //   };
 //
 //   const addPhotos = () => {
-//     unsplashState.photos.listPhotos(page+1, AMOUNT_ON_PAGE, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
+//     unsplash.photos.listPhotos(page+1, AMOUNT_ON_PAGE, "latest")// метод из библиотеки https://github.com/unsplash/unsplash-js#photos. photos.listPhotos(page, perPage, orderBy)
 //       .then(toJson)
 //       .then(json => {//json это ответ в виде массива обьектов в количестве указанном в переменной amountOfItemsOnPage.
 //         const newImagesArr = [...images, ...json];//создаем новый массив добавляя к старым новые фотки.
@@ -156,14 +156,14 @@
 //   };
 //
 //   const likePhotoRequest =(id)=> {
-//     unsplashState.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
+//     unsplash.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
 //       .then(toJson)
 //       .then(json => {//json это ответ в виде одного обьекта {photo:{}, user:{}}
 //       })
 //   };
 //
 //   const unlikePhotoRequest =(id)=> {
-//     unsplashState.photos.unlikePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
+//     unsplash.photos.unlikePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
 //       .then(toJson)
 //       .then(json => {//json это ответ в виде одного обьекта {photo:{}, user:{}}
 //       })
@@ -194,8 +194,8 @@
 //
 //   useEffect(() => {
 //     getBearerTokenFromUrlCode();//(is it auth location? true  -> setBearerTokenToLocalStorage and reload).
-//     getUserProfile();//(is unsplashState has code? true->setUserProfile,setIsAuth). Сначала bearerToken без ключа. Сработает вхолостую. (Внутри имеется проверка на наличие ключа). Когда из ф авторизации (getBearerTokenFromUrlCode) установится новый bearerToken то эта ф перезапустится.
-//     getFirstTenPhotos();//(are images empty? true  -> setImages). Загрузит первые фотки, независимо от ключа ибо unsplashState хоть урезанный но есть.
+//     getUserProfile();//(is unsplash has code? true->setUserProfile,setIsAuth). Сначала bearerToken без ключа. Сработает вхолостую. (Внутри имеется проверка на наличие ключа). Когда из ф авторизации (getBearerTokenFromUrlCode) установится новый bearerToken то эта ф перезапустится.
+//     getFirstTenPhotos();//(are images empty? true  -> setImages). Загрузит первые фотки, независимо от ключа ибо unsplash хоть урезанный но есть.
 //   }, []);//= componentDidMount, componentWillUpdate. Выполняется 1 раз при монтаже и кажд раз при изменении []. Если в [] пусто то просто 1 раз при монтаже.
 //
 //   return (
@@ -218,7 +218,7 @@
 //                    isAuth={isAuth}
 //                  />}
 //         />
-//         <Route exact path={'/auth'} component={() => <Auth unsplashState={unsplashState}/>}/>
+//         <Route exact path={'/auth'} component={() => <Auth unsplash={unsplash}/>}/>
 //         <Route exact path={'/cardpage'}
 //                component={() =>
 //                  <CardPage

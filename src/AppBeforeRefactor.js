@@ -4,7 +4,7 @@
 // import {Route, Switch} from "react-router-dom";
 // import {Header} from "./components/Header/Header";
 // import {Footer} from "./components/Footer/Footer";
-// import {CardPage} from "./components/CardPage/CardPage";
+// import {PlaceholderCardPage} from "./components/PlaceholderCardPage/PlaceholderCardPage";
 // import {Auth} from "./components/Auth/Auth";
 //
 // // 'xGHYVNYkr6A' id foto to like
@@ -65,7 +65,7 @@
 //     }
 //   }
 //
-//   const checkLogs =()=> {
+//   const devCheckLogsBtn =()=> {
 //     console.log('unsplash is:', unsplash);
 //     console.log('images State is:', images);
 //     console.log('isAuth is:', isAuth);
@@ -156,7 +156,7 @@
 //     setPage(page + 1);//на последок сохраняем стейт последней запрашиваемой страницы.
 //   };
 //
-//   const handlePreviewClick = (id) => {//повешен на preview
+//   const handleClickPreview = (id) => {//повешен на preview
 //     const clickedImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
 //     setClickedImageObj(clickedImageObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
 //     setOpen(true);//установить стейт булинь статуса открытости картинки
@@ -210,7 +210,7 @@
 //     <>
 //       <Header
 //         goToAuthorizePage={goToAuthorizePage}
-//         checkLogs={checkLogs}
+//         devCheckLogsBtn={devCheckLogsBtn}
 //         toLogout={toLogout}
 //         isAuth={isAuth}
 //         userProfile={userProfile}
@@ -222,14 +222,14 @@
 //                    add={addPhotos}
 //                    handleClickHeart={handleClickHeart}
 //                    images={images}
-//                    handlePreviewClick={handlePreviewClick}
+//                    handleClickPreview={handleClickPreview}
 //                    isAuth={isAuth}
 //                  />}
 //         />
 //         <Route exact path={'/auth'} component={() => <Auth unsplash={unsplash}/>}/>
 //         <Route exact path={'/cardpage'}
 //                component={() =>
-//                  <CardPage
+//                  <PlaceholderCardPage
 //                    clickedImageObj={clickedImageObj}
 //                    open={open}
 //                    handleClickHeart={handleClickHeart}

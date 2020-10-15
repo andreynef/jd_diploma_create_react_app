@@ -19,8 +19,10 @@
 }
 
 .loader {
-    margin: 200px;
     width:100px;
+    position:absolute;
+    top:30%;
+    left:46%;
 }
 .button {
     background-color: orange;

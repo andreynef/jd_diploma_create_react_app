@@ -8,46 +8,28 @@ import {CardPage} from "./components/CardPage/CardPage";
 import {Auth} from "./components/Auth/Auth";
 import { disablePageScroll, enablePageScroll } from 'scroll-lock';
 
-// 'xGHYVNYkr6A' id foto to like
-
 const accessKey = process.env.REACT_APP_ACCESSKEY;//ключ прячем в рут(файл .env) чтобы никто не мог его прочитать.
 const secret = process.env.REACT_APP_SECRET;
 const callbackUrl = process.env.REACT_APP_CALLBACKURL;
-
-// const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
-// const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
-// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
-
-// const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
-// const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
-// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
-// const accessToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//если есть в локале то берем оттуда иначе undefined
-
-// const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
-// const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
-// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
-
-// const accessKey= "Awhepytu0JPZujZW7f97BMriVV8gKVO9_i2cM82Z1YU";
-// const secret = "6LfA1BzLZz3Z2_Co9uWJJB4_fkpZvXZAUCxdQEAHP5o";
-// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
-
+const bearerToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//берем из локала. Если нет то устанавливается на null.
+const AMOUNT_ON_PAGE = 10;
+const INITIAL_PAGE = 100;
 
 const App = () => {
-  const bearerToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//берем из локала. Если нет то устанавливается на null.
   const unsplash = new Unsplash({//с ключом или без неважно. Будет использоваться только один unsplash без обновлений.
     accessKey: accessKey,// accesskey из настроек вашего приложения
     secret: secret,// Application Secret из настроек вашего приложения
     callbackUrl: callbackUrl,// Полный адрес страницы авторизации приложения (Redirect URI). Важно: этот адрес обязательно должен быть указан в настройках приложения на сайте Unsplash API/Developers
     bearerToken: bearerToken,//берем из локала. Если нет то устанавливается null.
   });
-  const AMOUNT_ON_PAGE = 10;
 
   const [images, setImages] = useState([]);//стейт списка фоток
   const [clickedImageObj, setClickedImageObj] = useState({});//обьект на кот ткнули
   const [isCardOpened, setIsCardOpened] = useState(false);//стейт отображения картинки в подробном виде
-  const [page, setPage] = useState(1);//для слежки посл открытой страницы из запроса
+  const [page, setPage] = useState(INITIAL_PAGE);//для слежки посл открытой страницы из запроса
   const [isAuth, setIsAuth] = useState(false);//статус авторизации
   const [userProfile, setUserProfile] = useState('');//информация о пользователе
+  const [isHeartError, setIsHeartError] = useState(false);//информация о пользователе
 
   const getBearerTokenFromUrlCode =()=> {
     console.log('getting code from url...');
@@ -71,19 +53,20 @@ const App = () => {
       }
   }
 
-  // const checkLogs =()=> {
-  //    console.log('unsplash is:', unsplash);
-  //    console.log('images State is:', images);
-  //    console.log('isAuth is:', isAuth);
-  //    console.log('userProfile is:', userProfile);
-  //    console.log('localStorage.accessTokenForUnsplash is:', localStorage.accessTokenForUnsplash);
-  //    console.log('unsplash._bearerToken is:', unsplash._bearerToken);
-  //   const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
-  //     "public",// и указываем требуемые разрешения (permissions)
-  //     "write_likes",
-  //   ]);
-  //   console.log('unsplash.auth.getAuthenticationUrl is:', authenticationUrl);
-  // };
+  const devCheckLogsBtn =()=> {
+     // console.log('unsplash is:', unsplash);
+     // console.log('images State is:', images);
+     // console.log('isAuth is:', isAuth);
+     console.log('clickedImageObj is:', clickedImageObj);
+     // console.log('userProfile is:', userProfile);
+     // console.log('localStorage.accessTokenForUnsplash is:', localStorage.accessTokenForUnsplash);
+     // console.log('unsplash._bearerToken is:', unsplash._bearerToken);
+    // const authenticationUrl = unsplash.auth.getAuthenticationUrl([// Генерируем адрес страницы аутентификации на unsplash.com
+    //   "public",// и указываем требуемые разрешения (permissions)
+    //   "write_likes",
+    // ]);
+    // console.log('unsplash.auth.getAuthenticationUrl is:', authenticationUrl);
+  };
 
   const getUserProfile =()=> {
     console.log('getting UserProfile...bearerToken is:', bearerToken);
@@ -153,18 +136,6 @@ const App = () => {
       });
   };
 
-  const handlePreviewClick = (id) => {//повешен на preview
-    console.log(`preview is clicked. getting image obj...id:`, id);
-
-    const clickedImageObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
-    console.log(`clickedImageObj is:`, clickedImageObj);
-
-    setClickedImageObj(clickedImageObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
-    console.log(`setClickedImageObj is done`);
-    setIsCardOpened(true);//установить стейт булинь статуса открытости картинки
-    console.log(`setIsDone is done - end of handlePreviewClick function. `);
-  };
-
   const likePhotoRequest =(id)=> {
     unsplash.photos.likePhoto(id)// метод из библиотеки https://github.com/unsplash/unsplash-js#photos
       .then(toJson)
@@ -181,18 +152,29 @@ const App = () => {
       })
   };
 
-  const handleClickHeart = (id) => {//
-    console.log('handleClickHeart started...')
-    const heartObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
-    const heartObjLikesAmount = heartObj.likes;//вытащить число лайков из обьекта для дальнейшего их изменения ниже.
+  const handleClickPreview = (id) => {//повешен на preview
+    console.log(`preview is clicked. getting image obj...id:`, id);
+    const clickedObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
+    console.log(`clickedImageObj is:`, clickedObj);
+    setClickedImageObj(clickedObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
+    console.log(`setClickedImageObj is done`);
+    setIsCardOpened(true);//установить стейт булинь статуса открытости картинки
+    console.log(`setIsDone is done - end of handleClickPreview function. `);
+  };
+
+  const handleClickHeart = (id) => {
+    console.log('heart is clicked. getting image obj...id:', id);
+    const clickedObj = images.find(item => item.id === id);//найти итем с нужным айди в стейте
+    setClickedImageObj(clickedObj);//установить стейт открытой картинки, кот потом будет передавать всю инфу при детальном просмотре.
+    const clickedObjLikesAmount = clickedObj.likes;//вытащить число лайков из обьекта для дальнейшего их изменения ниже.
 
     if(isAuth) {
       console.log('heartClick is in process... isAuth is:', isAuth)
-      if (heartObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
+      if (clickedObj.liked_by_user === false) {//если у выбранного итема стоит like=false...
         likePhotoRequest(id);//...то запрос на сервер на лайк.
         const localFilteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
           item.id === id
-            ? (item.liked_by_user=true, item.likes=heartObjLikesAmount+1)
+            ? (item.liked_by_user=true, item.likes=clickedObjLikesAmount+1)
             : item
         );
         setImages(localFilteredImages);//установить нов фильтрованый список с измененным итемом.
@@ -200,15 +182,17 @@ const App = () => {
         unlikePhotoRequest(id);//...запрос на сервер на анлайк
         const localFilteredImages = images.filter(item =>//создать копию стейта списка изменяя нужные данные у одного выбранного элемента
           item.id === id
-            ? (item.liked_by_user=false, item.likes=heartObjLikesAmount-1)
+            ? (item.liked_by_user=false, item.likes=clickedObjLikesAmount-1)
             : item
         );
         setImages(localFilteredImages);//установить нов фильтрованый список с измененным итемом.
       };
     }else{
-      console.log('heartClick failed. isAuth is:', isAuth)
-    }
-  };
+      console.log('heartClick failed. isAuth is:', isAuth);
+      setIsHeartError(true);
+      setTimeout(()=>setIsHeartError(false), 2000);
+    };
+  }
 
   const toggleScroll = ()=>{
     if(isCardOpened){
@@ -237,6 +221,7 @@ const App = () => {
         toLogout={toLogout}
         isAuth={isAuth}
         userProfile={userProfile}
+        // devCheckLogsBtn={devCheckLogsBtn}
       />
       <Switch>{/*рендерится в зависимости от Route path*/}
         <Route exact path={'/'}
@@ -245,20 +230,28 @@ const App = () => {
                    add={addPhotos}
                    handleClickHeart={handleClickHeart}
                    images={images}
-                   handlePreviewClick={handlePreviewClick}
+                   handleClickPreview={handleClickPreview}
                    isAuth={isAuth}
+                   isHeartError={isHeartError}
+                   setIsHeartError={setIsHeartError}
+                   clickedImageObj={clickedImageObj}
                  />}
         />
         <Route exact path={'/auth'} component={() => <Auth unsplash={unsplash}/>}/>
+        <Route exact path={'/cardpage'}
+               component={() =>
+                 <CardPage
+                   clickedImageObj={clickedImageObj}
+                   handleClickHeart={handleClickHeart}
+                   images={images}
+                   isAuth={isAuth}
+                   setIsCardOpened={setIsCardOpened}
+                   isCardOpened={isCardOpened}
+                   isHeartError={isHeartError}
+                 />
+               }
+        />
       </Switch>
-      <CardPage
-        clickedImageObj={clickedImageObj}
-        handleClickHeart={handleClickHeart}
-        images={images}
-        isAuth={isAuth}
-        setIsCardOpened={setIsCardOpened}
-        isCardOpened={isCardOpened}
-      />
       <Footer isCardOpened={isCardOpened}/>
 
     </>

@@ -1,19 +1,31 @@
-.controls {
-    align-items: center;
+.controlsContainer {
     padding: 10px 20px;
-
+    display: flex;
+    flex-flow: row nowrap;
 }
 
-.likesCounter {
+.likesContainer {
     display:flex;
     flex-flow: row nowrap;
     justify-content: space-between;
     align-items: center;
-    width: 50px;
+    /*width: 50px;*/
+
 }
 .likesValue {
     color: white;
 }
+
+.errorContainer {
+    margin-left:10px;
+}
+
+.errorValue {
+    color: red;
+    font-size: 12px;
+}
+
+
 
 .button {
     background-color: transparent;

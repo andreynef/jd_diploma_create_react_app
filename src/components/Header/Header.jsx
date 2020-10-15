@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Header.module.css';
 
-export function Header({goToAuthorizePage, isAuth, checkLogs, toLogout, userProfile}) {
+export function Header({goToAuthorizePage, isAuth, devCheckLogsBtn, toLogout, userProfile}) {
   const userName=capitalizeFirstLetter(`${userProfile.first_name}`);
 
   function capitalizeFirstLetter(string) {
@@ -14,12 +14,14 @@ export function Header({goToAuthorizePage, isAuth, checkLogs, toLogout, userProf
         <div className={styles.logoContainer}>
           <img src={'https://www.flaticon.com/svg/static/icons/svg/1/1394.svg'} alt={'logo'}/>
         </div>
-          {/*<button*/}
-          {/*  type="button"*/}
-          {/*  onClick={checkLogs}*/}
-          {/*>*/}
-          {/*  dev button (show states in console)*/}
-          {/*</button>*/}
+        {devCheckLogsBtn &&(
+          <button
+          type="button"
+          onClick={devCheckLogsBtn}
+          >
+          dev button (show states in console)
+          </button>
+        )}
         <div className={styles.userContainer}>
           {isAuth && (
             <>

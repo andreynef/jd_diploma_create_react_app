@@ -3,21 +3,24 @@ import styles from './CardPage.module.css';
 import cross2 from '../../assets/images/cross2.svg';
 import HeartIconPressed from "../../assets/images/HeartIconPressed.svg";
 import HeartIconUnpressed from "../../assets/images/HeartIconUnpressed.svg";
+import ProgressiveImage from "react-progressive-graceful-image";
+import {Link} from "react-router-dom";
 
-export function CardPage({handleClickHeart, clickedImageObj, setIsCardOpened, isCardOpened}) {
+export function CardPage({handleClickHeart, clickedImageObj, setIsCardOpened, isCardOpened, isHeartError}) {
 
   const date = isCardOpened ? clickedImageObj.created_at.slice(0,10):null;//срезать лишние цифры из даты
-
   return (
     <>
-      {isCardOpened &&(
+      {/*{isCardOpened &&(*/}
         <div className={styles.cardPage}>
           <div className={styles.centralContainer}>
               <div className={styles.imageContainer}>
-                <img
+                <ProgressiveImage//загрузчик из https://www.npmjs.com/package/react-progressive-graceful-image
                   src={clickedImageObj.urls.regular}
-                  alt={clickedImageObj.alt_description}
-                />
+                  placeholder={clickedImageObj.urls.thumb}
+                >
+                  {src => <img src={src} alt={clickedImageObj.alt_description} />}
+                </ProgressiveImage>
               </div>
               <div className={styles.infoContainer}>
                 <div className={styles.metaContainer}>
@@ -36,14 +39,20 @@ export function CardPage({handleClickHeart, clickedImageObj, setIsCardOpened, is
                   <button className={styles.button} onClick={()=>handleClickHeart(clickedImageObj.id)}>
                     <img src={clickedImageObj.liked_by_user? HeartIconPressed: HeartIconUnpressed} alt={'heart'}/>
                   </button>
+                  {isHeartError && (
+                    <div className={styles.errorContainer}>
+                      <span className={styles.errorValue}>You are not authorized</span>
+                    </div>
+                  )}
+
                 </div>
               </div>
-            <button onClick={()=>setIsCardOpened(false)} className={styles.exitButton}>
-              <img src={cross2} alt={'exit'} className={styles.exitImgWhite} />
-            </button>
+            <Link className={styles.exitButton} to={'/'} onClick={()=>setIsCardOpened(false)}>
+                <img src={cross2} alt={'exit'} className={styles.exitImgWhite} />
+            </Link>
           </div>
       </div>
-      )}
+      {/*)}*/}
     </>
   )
 }

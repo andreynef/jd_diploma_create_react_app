@@ -12,8 +12,6 @@
 
 .centralContainer {
     max-width: 1024px;
-    width: 80%;
-    /*min-width: 50%;*/
     height: 80%;
     display: flex;
     flex-flow: row nowrap;
@@ -22,28 +20,19 @@
 .imageContainer {
     overflow: hidden;
     width:80%;
-    /*min-width:300px;*/
+    height:80%;
 }
 
 .imageContainer img {
-    height:100%;
+    heiht:100%;
     width:100%;
     object-fit: cover;
     margin:auto 0;
     display: block;
 }
-.errorContainer {
-    margin-left:10px;
-}
-
-.errorValue {
-    color: red;
-    font-size: 12px;
-}
 
 .infoContainer {
     width: 20%;
-    /*min-width: 20%;*/
     background-color: white;
     display: flex;
     flex-flow: column nowrap;
@@ -73,6 +62,7 @@
     width: 30px;
     height: 30px;
     border-radius: 30px;
+    background-color: grey;
 }
 
 .avatarText {

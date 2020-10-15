@@ -2,13 +2,23 @@ import React from 'react';
 import styles from './CardList.module.css';
 import {Card} from "./Card/Card";
 import loader from '../../../src/assets/images/Gear.gif'
+import {PlaceholderCard} from "./PlaceholderCard/PlaceholderCard";
 
-export function CardList({add,images, handlePreviewClick, pressed, setPressed, setLikedId, likePhoto, handleClickHeart, isAuth, setIsCardOpened}) {
+export function CardList({add,clickedImageObj,images, handleClickPreview, pressed, setPressed, setLikedId, likePhoto, handleClickHeart, isAuth, setIsCardOpened, isHeartError, setIsHeartError}) {
   const loadMoreBtn = images.length ? <Card add={add} whoIs={'moreButton'}/> : null;
   let cardList;
 
   if (!images.length) {
-    cardList=<img src={loader} alt={'loader'} className={styles.loader}/>
+    cardList=
+      <>
+        <img src={loader} alt={'loader'} className={styles.loader}/>
+        <PlaceholderCard/>
+        <PlaceholderCard/>
+        <PlaceholderCard/>
+        <PlaceholderCard/>
+        <PlaceholderCard/>
+        <PlaceholderCard/>
+      </>
   } else {
     cardList = images.map((item, i) => {
       return (
@@ -21,11 +31,14 @@ export function CardList({add,images, handlePreviewClick, pressed, setPressed, s
             likes={item.likes}
             url={item.urls.thumb}
             ava={item.user.profile_image.small}
-            handlePreviewClick={handlePreviewClick}
+            handleClickPreview={handleClickPreview}
             handleClickHeart={handleClickHeart}
             isLiked={item.liked_by_user}
             isAuth={isAuth}
             setIsCardOpened={setIsCardOpened}
+            setIsHeartError={setIsHeartError}
+            isHeartError={isHeartError}
+            clickedImageObj={clickedImageObj}
           />
       )
     })}

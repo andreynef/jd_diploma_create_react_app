@@ -11,20 +11,20 @@
 //
 // // const accessKey= "sQ_OK-FHQD1dS6L4h98HkNOr-HHHKRE8KuUPVf9BXAw";
 // // const secret = "Eu_hWiHa3mUGcHyGtq2Idfj_gGCGYq6Jp0mv1ZL_kjA";
-// // const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+// // const callbackUrl="https://insta.nef-an.ru/auth";
 //
 // const accessKey= "xCCc0l4N7uCUZqW8-2ul9aL-jZdSq5DU5CxoTlvYccU";
 // const secret = "bPf1_xm6rpCWU_i3E1xJg26vgFYdbrChRJL93ICuH5k";
-// const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+// const callbackUrl="https://insta.nef-an.ru/auth";
 // // const accessToken = JSON.parse(localStorage.getItem('accessTokenForUnsplash'));//если есть в локале то берем оттуда иначе undefined
 //
 // // const accessKey= "S1Nhql7F6MIMl3zRV2tEmyn_523yixt2QW_nfuz751c";
 // // const secret = "gRkmQ9LdQDXHw6LnTQPlk67suNqrE_ASY2Vy8JD7nrg";
-// // const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+// // const callbackUrl="https://insta.nef-an.ru/auth";
 //
 // // const accessKey= "Awhepytu0JPZujZW7f97BMriVV8gKVO9_i2cM82Z1YU";
 // // const secret = "6LfA1BzLZz3Z2_Co9uWJJB4_fkpZvXZAUCxdQEAHP5o";
-// // const callbackUrl="https://jsdiploma.nef-an.ru/auth";
+// // const callbackUrl="https://insta.nef-an.ru/auth";
 //
 //
 // const App = () => {
@@ -57,7 +57,7 @@
 //           setBearerTokenToLocalStorage(json.access_token);
 //           console.log('set to local from getBearerTokenFromUrlCode is done');
 //           // setBearerToken(json.access_token);
-//           window.location.assign('https://jsdiploma.nef-an.ru');// Перезагружаем гл страницу.
+//           window.location.assign('https://insta.nef-an.ru');// Перезагружаем гл страницу.
 //           // console.log('setBearerToken from getBearerTokenFromUrlCode is done');
 //           console.log('reloading from getBearerTokenFromUrlCode is done');
 //         })
@@ -117,7 +117,7 @@
 //       "public",// и указываем требуемые разрешения (permissions)
 //       "write_likes",
 //     ]);
-//     window.location.assign(authenticationUrl);// Отправляем пользователя на авторизацию сайта Unsplash а потом он пепенаправит пользователя на - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
+//     window.location.assign(authenticationUrl);// Отправляем пользователя на авторизацию сайта Unsplash а потом он пепенаправит пользователя на - callbackUrl: "https://insta.nef-an.ru/auth"
 //   };
 //
 //   const getFirstTenPhotos = ()=>{

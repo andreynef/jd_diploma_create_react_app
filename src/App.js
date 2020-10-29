@@ -44,7 +44,7 @@ const App = () => {
           setBearerTokenToLocalStorage(json.access_token);
           console.log('set to local from getBearerTokenFromUrlCode is done');
           // setBearerToken(json.access_token);
-          window.location.assign('https://jsdiploma.nef-an.ru');// Перезагружаем гл страницу.
+          window.location.assign('https://insta.nef-an.ru');// Перезагружаем гл страницу.
           // console.log('setBearerToken from getBearerTokenFromUrlCode is done');
           console.log('reloading from getBearerTokenFromUrlCode is done');
         })
@@ -105,7 +105,7 @@ const App = () => {
       "public",// и указываем требуемые разрешения (permissions)
       "write_likes",
     ]);
-    window.location.assign(authenticationUrl);// Отправляем пользователя на авторизацию сайта Unsplash а потом он пепенаправит пользователя на - callbackUrl: "https://jsdiploma.nef-an.ru/auth"
+    window.location.assign(authenticationUrl);// Отправляем пользователя на авторизацию сайта Unsplash а потом он пепенаправит пользователя на - callbackUrl: "https://insta.nef-an.ru/auth"
   };
 
   const getFirstTenPhotos = ()=>{
